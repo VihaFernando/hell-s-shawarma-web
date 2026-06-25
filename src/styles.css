@@ -1,0 +1,145 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@font-face {
+  font-family: "Capture it";
+  src: url("./assets/fonts/Capture it.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-flame: var(--flame);
+  --color-ember: var(--ember);
+  --font-display: "Capture it", sans-serif;
+  --font-body: "Oswald", sans-serif;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.08 0.01 30);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.12 0.015 30);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.12 0.015 30);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.62 0.24 28);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.15 0.01 30);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.18 0.01 30);
+  --muted-foreground: oklch(0.72 0.02 30);
+  --accent: oklch(0.7 0.22 50);
+  --accent-foreground: oklch(0.08 0 0);
+  --destructive: oklch(0.62 0.24 28);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.22 0.02 30);
+  --input: oklch(0.22 0.02 30);
+  --ring: oklch(0.62 0.24 28);
+  --flame: oklch(0.62 0.24 28);
+  --ember: oklch(0.7 0.22 50);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    background-color: #0a0a0a;
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+
+@utility glass-dark {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@utility brush-stroke {
+  background: #ff3b14;
+  clip-path: polygon(0% 15%, 2% 5%, 98% 0%, 100% 12%, 99% 85%, 97% 98%, 2% 100%, 0% 88%);
+  transform: rotate(-1.5deg);
+}
+
+@utility glow-flame {
+  box-shadow: 0 0 0 1px rgba(255, 59, 20, 0.4), 0 10px 40px -10px rgba(255, 59, 20, 0.6), 0 0 60px -20px rgba(255, 106, 0, 0.5);
+}
+
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100vh) translateX(var(--drift, 20px));
+    opacity: 0;
+  }
+}
+
+@keyframes smoke-drift {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-200px) scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
