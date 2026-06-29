@@ -70,7 +70,7 @@ const NAV_ITEMS = [
 
 function Landing() {
   return (
-    <div id="home" className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
+    <div id="home" className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />
       <Hero />
       <SpecialBlends />
