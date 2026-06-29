@@ -338,7 +338,7 @@ function MenuPage() {
 
           {/* Right col */}
           <div className="flex flex-col gap-8">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="lg:mt-0 mt-4">
               <SectionHeader title="HUMMUS PLATE" />
               {"base_includes" in hummus && (
                 <p className="text-white/40 text-xs leading-relaxed mb-3 px-4">
