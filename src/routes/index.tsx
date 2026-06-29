@@ -414,6 +414,22 @@ function SocialWall() {
             </motion.a>
           ))}
         </div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-8 flex justify-center"
+        >
+          <a
+            href="https://www.instagram.com/hells_shawarma/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-8 py-3 text-sm font-bold tracking-[0.1em] uppercase text-white hover:bg-[#ff3b14] transition-all"
+          >
+            <Instagram className="w-4 h-4" /> View More
+          </a>
+        </motion.div>
       </div>
     </section>
   );

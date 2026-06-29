@@ -1,0 +1,368 @@
+{
+  "restaurant": "Hell's Shawarma & Grill",
+  "currency": "LKR",
+  "categories": [
+    {
+      "id": "chicken_shawarma_wraps",
+      "name": "Chicken Shawarma Wraps",
+      "items": [
+        {
+          "id": 1,
+          "name": "Authentic Middle Eastern Chicken Shawarma",
+          "price": 1500,
+          "ingredients": [
+            "Marinated Chicken",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Pomegranate Molasses",
+            "Red Chilli Tomato Sauce",
+            "Homemade Pickles"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Chilli Chicken Shawarma",
+          "price": 1600,
+          "ingredients": [
+            "Marinated Chicken",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Pomegranate Molasses",
+            "Red Chilli Tomato Sauce",
+            "Homemade Pickles",
+            "Spicy Shatta Sauce",
+            "Paprika Peppers",
+            "Chilli Pickles"
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Cheesy Chicken Shawarma",
+          "price": 1600,
+          "ingredients": [
+            "Marinated Chicken",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Pomegranate Molasses",
+            "Homemade Pickles",
+            "Melted Cheese Slices"
+          ]
+        },
+        {
+          "id": 4,
+          "name": "Yemeni Chicken Shawarma",
+          "price": 1600,
+          "ingredients": [
+            "Marinated Chicken",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Homemade Pickles",
+            "Onion",
+            "Tomato",
+            "Chilli Pickles",
+            "Zhoug Sauce"
+          ]
+        },
+        {
+          "id": 5,
+          "name": "Turkish Chicken Shawarma",
+          "price": 1600,
+          "ingredients": [
+            "Marinated Chicken",
+            "Tahini",
+            "Toum",
+            "Olives",
+            "Onion",
+            "Tomato",
+            "Homemade Pickles",
+            "Iceberg Lettuce"
+          ]
+        },
+        {
+          "id": 6,
+          "name": "Palestinian Chicken Shawarma",
+          "price": 1700,
+          "ingredients": [
+            "Marinated Chicken",
+            "Hummus",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Pomegranate Molasses",
+            "Homemade Pickles",
+            "Spicy Shatta Sauce",
+            "Iceberg Lettuce",
+            "Paprika Peppers",
+            "Olives"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beef_shawarma_wraps",
+      "name": "Beef Shawarma Wraps",
+      "items": [
+        {
+          "id": 7,
+          "name": "Authentic Middle Eastern Beef Shawarma",
+          "price": 1700,
+          "ingredients": [
+            "Marinated Beef",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Red Chilli Tomato Sauce",
+            "Homemade Pickles"
+          ]
+        },
+        {
+          "id": 8,
+          "name": "Chilli Beef Shawarma",
+          "price": 1800,
+          "ingredients": [
+            "Marinated Beef",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Red Chilli Tomato Sauce",
+            "Homemade Pickles",
+            "Spicy Shatta Sauce",
+            "Paprika Peppers",
+            "Chilli Pickles"
+          ]
+        },
+        {
+          "id": 9,
+          "name": "Cheesy Beef Shawarma",
+          "price": 1800,
+          "ingredients": [
+            "Marinated Beef",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Homemade Pickles",
+            "Melted Cheese Slices"
+          ]
+        },
+        {
+          "id": 10,
+          "name": "Yemeni Beef Shawarma",
+          "price": 1800,
+          "ingredients": [
+            "Marinated Beef",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Homemade Pickles",
+            "Onion",
+            "Tomato",
+            "Chilli Pickles",
+            "Zhoug Sauce"
+          ]
+        },
+        {
+          "id": 11,
+          "name": "Turkish Beef Shawarma",
+          "price": 1850,
+          "ingredients": [
+            "Marinated Beef",
+            "Tahini",
+            "Toum",
+            "Olives",
+            "Onion",
+            "Tomato",
+            "Homemade Pickles",
+            "Iceberg Lettuce"
+          ]
+        },
+        {
+          "id": 12,
+          "name": "Palestinian Beef Shawarma",
+          "price": 1900,
+          "ingredients": [
+            "Marinated Beef",
+            "Hummus",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Homemade Pickles",
+            "Spicy Shatta Sauce",
+            "Iceberg Lettuce",
+            "Paprika Peppers",
+            "Olives",
+            "Zhoug Sauce"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hummus_plate",
+      "name": "Hummus Plate",
+      "base_includes": [
+        "Homemade Hummus",
+        "Pita Bread",
+        "Choice of Meat",
+        "Sumac Onions",
+        "Varieties of Homemade Pickles",
+        "Garlic Sauce/Toum",
+        "Cucumber",
+        "Cherry Tomato or Olives"
+      ],
+      "items": [
+        {
+          "id": 13,
+          "name": "Hummus Plate with Shawarma Chicken",
+          "price": 1700
+        },
+        {
+          "id": 14,
+          "name": "Hummus Plate with Shawarma Beef",
+          "price": 1900
+        },
+        {
+          "id": 15,
+          "name": "Hummus Plate with Fiery Falafels (Veg)",
+          "price": 1600
+        }
+      ]
+    },
+    {
+      "id": "shawarma_plate",
+      "name": "Shawarma Plate",
+      "items": [
+        {
+          "id": 16,
+          "name": "Chicken Shawarma Plate",
+          "price": 1750,
+          "ingredients": [
+            "Marinated Chicken",
+            "Pita Bread",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Iceberg Lettuce",
+            "Homemade Pickles",
+            "Pomegranate Molasses",
+            "Red Chilli Tomato Sauce"
+          ]
+        },
+        {
+          "id": 17,
+          "name": "Beef Shawarma Plate",
+          "price": 1950,
+          "ingredients": [
+            "Marinated Beef",
+            "Pita Bread",
+            "French Fries",
+            "Garlic Sauce/Toum",
+            "Iceberg Lettuce",
+            "Homemade Pickles",
+            "Red Chilli Tomato Sauce",
+            "Zhoug Sauce"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "falafel_wrap",
+      "name": "Falafel Wrap (Veg)",
+      "items": [
+        {
+          "id": 18,
+          "name": "Middle Eastern Falafel Sandwich (Veg)",
+          "price": 1500,
+          "ingredients": [
+            "Falafels",
+            "Tahini",
+            "Hummus",
+            "Homemade Pickles",
+            "Iceberg Lettuce",
+            "Onion",
+            "Tomato",
+            "Cucumber",
+            "Paprika Pepper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "snack_pack",
+      "name": "Hell's Snack Pack",
+      "items": [
+        {
+          "id": 19,
+          "name": "Hell's Chicken Snack Pack",
+          "price": 2100,
+          "ingredients": [
+            "Layers of French Fries",
+            "Signature In-house Sauces",
+            "Marinated Shawarma Chicken",
+            "Melty Cheese"
+          ]
+        },
+        {
+          "id": 20,
+          "name": "Hell's Beef Snack Pack",
+          "price": 2300,
+          "ingredients": [
+            "Layers of French Fries",
+            "Signature In-house Sauces",
+            "Marinated Shawarma Beef",
+            "Melty Cheese"
+          ]
+        },
+        {
+          "id": 21,
+          "name": "Hell's Combo Snack Pack (Chicken + Beef)",
+          "price": 2500,
+          "ingredients": [
+            "Layers of French Fries",
+            "Signature In-house Sauces",
+            "Marinated Shawarma Chicken",
+            "Marinated Shawarma Beef",
+            "Melty Cheese"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "addons",
+      "name": "Add-ons",
+      "items": [
+        {
+          "id": 22,
+          "name": "French Fries (200g)",
+          "price": 800
+        },
+        {
+          "id": 23,
+          "name": "Cheesy French Fries (200g)",
+          "price": 900
+        },
+        {
+          "id": 24,
+          "name": "Pita Bread (1 pcs)",
+          "price": 200
+        },
+        {
+          "id": 25,
+          "name": "Falafel (5 pcs)",
+          "price": 700
+        },
+        {
+          "id": 26,
+          "name": "Marinated Chicken (200g)",
+          "price": 1200
+        },
+        {
+          "id": 27,
+          "name": "Hummus Dip (150g)",
+          "price": 1000
+        },
+        {
+          "id": 28,
+          "name": "Lebaan (Sweet / Salty)",
+          "price": 500
+        },
+        {
+          "id": 29,
+          "name": "Vimto Drink",
+          "price": 300
+        }
+      ]
+    }
+  ]
+}

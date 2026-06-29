@@ -1,26 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import {
-  Flame,
-  Menu as MenuIcon,
-  X,
-  MapPin,
-  Instagram,
-  Facebook,
-  Star,
-  ShoppingBag,
-  UtensilsCrossed,
-  GlassWater,
-} from "lucide-react";
+import { Flame, Menu as MenuIcon, X, MapPin, Star } from "lucide-react";
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
 import logoImage from "@/assets/logo.png";
-import shawarmaChicken from "@/assets/shawarma-chicken.jpg";
-import shawarmaBeef from "@/assets/shawarma-beef.jpg";
-import shawarmaPlate from "@/assets/shawarma-plate.jpg";
-import hummusPlate from "@/assets/hummus-plate.jpg";
-import falafelImg from "@/assets/falafel.jpg";
-import loadedFries from "@/assets/loaded-fries.jpg";
-import drinkImg from "@/assets/drink.jpg";
+import menuBg from "@/assets/menu.png";
+import snackPackImg from "@/assets/snack-pack.png";
+import menuData from "@/assets/menu.json";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
@@ -29,7 +32,7 @@ export const Route = createFileRoute("/menu")({
       {
         name: "description",
         content:
-          "Authentic Middle Eastern & Mediterranean Cuisine. Chicken Shawarmas, Beef Shawarmas, Plates & More.",
+          "Authentic Middle Eastern & Asian Cuisine. Chicken Shawarmas, Beef Shawarmas, Plates & More.",
       },
     ],
   }),
@@ -93,10 +96,10 @@ function Navbar() {
         </nav>
         <div className="flex items-center gap-3">
           <a
-            href="#menu-grid"
+            href="tel:0723205285"
             className="hidden sm:inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-6 py-2.5 text-sm font-bold tracking-[0.05em] uppercase text-white hover:bg-[#ff3b14] transition-all"
           >
-            Order Now <Flame className="w-4 h-4 text-[#ff3b14]" />
+            Call Now <Flame className="w-4 h-4 text-[#ff3b14]" />
           </a>
           <button
             onClick={() => setOpen((v) => !v)}
@@ -140,526 +143,301 @@ function Navbar() {
   );
 }
 
-/* ─── MENU DATA ─── */
-type Category =
-  | "all"
-  | "chicken-wraps"
-  | "beef-wraps"
-  | "hummus-plates"
-  | "shawarma-plates"
-  | "falafel"
-  | "snack-packs"
-  | "add-ons";
+/* ─── SPICY INDICATOR ─── */
+const SPICY_IDS = new Set([1, 5, 7, 11]);
+const VERY_SPICY_IDS = new Set([4, 6, 10, 12]);
+const TRIPLE_SPICY_IDS = new Set([2, 8]);
 
-const CATEGORIES: { id: Category; label: string; icon: React.ReactNode }[] = [
-  { id: "all", label: "All Items", icon: <ShoppingBag className="w-4 h-4" /> },
-  { id: "chicken-wraps", label: "Chicken Wraps", icon: <Flame className="w-4 h-4" /> },
-  { id: "beef-wraps", label: "Beef Wraps", icon: <Flame className="w-4 h-4" /> },
-  { id: "hummus-plates", label: "Hummus Plates", icon: <UtensilsCrossed className="w-4 h-4" /> },
-  { id: "shawarma-plates", label: "Shawarma Plates", icon: <UtensilsCrossed className="w-4 h-4" /> },
-  { id: "falafel", label: "Falafel (Veg)", icon: <UtensilsCrossed className="w-4 h-4" /> },
-  { id: "snack-packs", label: "Snack Packs", icon: <GlassWater className="w-4 h-4" /> },
-  { id: "add-ons", label: "Add-ons", icon: <GlassWater className="w-4 h-4" /> },
-];
+function SpicyFlames({ id }: { id: number }) {
+  if (TRIPLE_SPICY_IDS.has(id)) return <span className="text-[#ff3b14] ml-1">🔥🔥🔥</span>;
+  if (VERY_SPICY_IDS.has(id)) return <span className="text-[#ff3b14] ml-1">🔥🔥</span>;
+  if (SPICY_IDS.has(id)) return <span className="text-[#ff3b14] ml-1">🔥</span>;
+  return null;
+}
 
-const MENU_ITEMS = [
-  /* ── CHICKEN SHAWARMA WRAPS ── */
-  {
-    num: "01",
-    name: "Authentic Middle Eastern Chicken Shawarma",
-    desc: "Marinated Chicken, French Fries, Garlic Sauce/Toum, Pomegranate Molasses, Red Chilli Tomato Sauce, Homemade Pickles",
-    price: "LKR 1,500",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 1,
-    categories: ["all", "chicken-wraps"] as Category[],
-  },
-  {
-    num: "02",
-    name: "Chilli Chicken Shawarma",
-    desc: "Marinated Chicken, French Fries, Garlic Sauce/Toum, Pomegranate Molasses, Red Chilli Tomato Sauce, Homemade Pickles, Spicy Shatta Sauce, Paprika Peppers, Chilli Pickles",
-    price: "LKR 1,600",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 3,
-    categories: ["all", "chicken-wraps"] as Category[],
-  },
-  {
-    num: "03",
-    name: "Cheesy Chicken Shawarma",
-    desc: "Marinated Chicken, French Fries, Garlic Sauce/Toum, Pomegranate Molasses, Homemade Pickles, Melted Cheese Slices",
-    price: "LKR 1,600",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "chicken-wraps"] as Category[],
-  },
-  {
-    num: "04",
-    name: "Yemeni Chicken Shawarma",
-    desc: "Marinated Chicken, French Fries, Garlic Sauce/Toum, Homemade Pickles, Onion + Tomato, Chilli Pickles, Zhoug Sauce",
-    price: "LKR 1,600",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 2,
-    categories: ["all", "chicken-wraps"] as Category[],
-  },
-  {
-    num: "05",
-    name: "Turkish Chicken Shawarma",
-    desc: "Marinated Chicken, Tahini, Toum, Olives, Onion + Tomato, Homemade Pickles, Iceberg Lettuce",
-    price: "LKR 1,600",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 1,
-    categories: ["all", "chicken-wraps"] as Category[],
-  },
-  {
-    num: "06",
-    name: "Palestinian Chicken Shawarma",
-    desc: "Marinated Chicken, Hummus, French Fries, Garlic Sauce/Toum, Pomegranate Molasses, Homemade Pickles, Spicy Shatta Sauce, Iceberg Lettuce, Paprika Peppers, Olives",
-    price: "LKR 1,700",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 2,
-    categories: ["all", "chicken-wraps"] as Category[],
-  },
-  /* ── BEEF SHAWARMA WRAPS ── */
-  {
-    num: "07",
-    name: "Authentic Middle Eastern Beef Shawarma",
-    desc: "Marinated Beef, French Fries, Garlic Sauce/Toum, Red Chilli Tomato Sauce, Homemade Pickles",
-    price: "LKR 1,700",
-    img: shawarmaBeef,
-    tag: null,
-    spicy: 1,
-    categories: ["all", "beef-wraps"] as Category[],
-  },
-  {
-    num: "08",
-    name: "Chilli Beef Shawarma",
-    desc: "Marinated Beef, French Fries, Garlic Sauce/Toum, Red Chilli Tomato Sauce, Homemade Pickles, Spicy Shatta Sauce, Paprika Peppers, Chilli Pickles",
-    price: "LKR 1,800",
-    img: shawarmaBeef,
-    tag: null,
-    spicy: 3,
-    categories: ["all", "beef-wraps"] as Category[],
-  },
-  {
-    num: "09",
-    name: "Cheesy Beef Shawarma",
-    desc: "Marinated Beef, French Fries, Garlic Sauce/Toum, Homemade Pickles, Melted Cheese Slices",
-    price: "LKR 1,800",
-    img: shawarmaBeef,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "beef-wraps"] as Category[],
-  },
-  {
-    num: "10",
-    name: "Yemeni Beef Shawarma",
-    desc: "Marinated Beef, French Fries, Garlic Sauce/Toum, Homemade Pickles, Onion + Tomato, Chilli Pickles, Zhoug Sauce",
-    price: "LKR 1,800",
-    img: shawarmaBeef,
-    tag: null,
-    spicy: 2,
-    categories: ["all", "beef-wraps"] as Category[],
-  },
-  {
-    num: "11",
-    name: "Turkish Beef Shawarma",
-    desc: "Marinated Beef, Tahini, Toum, Olives, Onion + Tomato, Homemade Pickles, Iceberg Lettuce",
-    price: "LKR 1,850",
-    img: shawarmaBeef,
-    tag: null,
-    spicy: 1,
-    categories: ["all", "beef-wraps"] as Category[],
-  },
-  {
-    num: "12",
-    name: "Palestinian Beef Shawarma",
-    desc: "Marinated Beef, Hummus, French Fries, Garlic Sauce/Toum, Spicy Shatta Sauce, Iceberg Lettuce, Paprika Peppers, Olives, Zhoug Sauce",
-    price: "LKR 1,900",
-    img: shawarmaBeef,
-    tag: null,
-    spicy: 2,
-    categories: ["all", "beef-wraps"] as Category[],
-  },
-  /* ── HUMMUS PLATES ── */
-  {
-    num: "13",
-    name: "Hummus Plate with Shawarma Chicken",
-    desc: "Homemade Hummus, Pita Bread, Shawarma Chicken, Sumac Onions, Varieties of Homemade Pickles, Garlic Sauce/Toum, Cucumber, Cherry Tomato or Olives",
-    price: "LKR 1,700",
-    img: hummusPlate,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "hummus-plates"] as Category[],
-  },
-  {
-    num: "14",
-    name: "Hummus Plate with Shawarma Beef",
-    desc: "Homemade Hummus, Pita Bread, Shawarma Beef, Sumac Onions, Varieties of Homemade Pickles, Garlic Sauce/Toum, Cucumber, Cherry Tomato or Olives",
-    price: "LKR 1,900",
-    img: hummusPlate,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "hummus-plates"] as Category[],
-  },
-  {
-    num: "15",
-    name: "Hummus Plate with Fiery Falafels (Veg)",
-    desc: "Homemade Hummus, Pita Bread, Fiery Falafels, Sumac Onions, Varieties of Homemade Pickles, Garlic Sauce/Toum, Cucumber, Cherry Tomato or Olives",
-    price: "LKR 1,600",
-    img: hummusPlate,
-    tag: null,
-    spicy: 1,
-    categories: ["all", "hummus-plates"] as Category[],
-  },
-  /* ── SHAWARMA PLATES ── */
-  {
-    num: "16",
-    name: "Chicken Shawarma Plate",
-    desc: "Marinated Chicken, Pita Bread, French Fries, Garlic Sauce/Toum, Iceberg Lettuce, Homemade Pickles, Pomegranate Molasses, Red Chilli Tomato Sauce",
-    price: "LKR 1,750",
-    img: shawarmaPlate,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "shawarma-plates"] as Category[],
-  },
-  {
-    num: "17",
-    name: "Beef Shawarma Plate",
-    desc: "Marinated Beef, Pita Bread, French Fries, Garlic Sauce/Toum, Iceberg Lettuce, Homemade Pickles, Red Chilli Tomato Sauce, Zhoug Sauce",
-    price: "LKR 1,950",
-    img: shawarmaPlate,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "shawarma-plates"] as Category[],
-  },
-  /* ── FALAFEL WRAP ── */
-  {
-    num: "18",
-    name: "Middle Eastern Falafel Sandwich (Veg)",
-    desc: "Falafels, Tahini + Hummus, Homemade Pickles, Iceberg Lettuce, Onion, Tomato, Cucumber, Paprika Pepper",
-    price: "LKR 1,500",
-    img: falafelImg,
-    tag: "Veg",
-    spicy: 0,
-    categories: ["all", "falafel"] as Category[],
-  },
-  /* ── HELL'S SNACK PACK ── */
-  {
-    num: "19",
-    name: "Hell's Chicken Snack Pack",
-    desc: "Layers of French Fries with signature in-house Sauces, Marinated Shawarma Chicken & Melty Cheese",
-    price: "LKR 2,100",
-    img: loadedFries,
-    tag: "Fan Fave",
-    spicy: 0,
-    categories: ["all", "snack-packs"] as Category[],
-  },
-  {
-    num: "20",
-    name: "Hell's Beef Snack Pack",
-    desc: "Layers of French Fries with signature in-house Sauces, Marinated Shawarma Beef & Melty Cheese",
-    price: "LKR 2,300",
-    img: loadedFries,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "snack-packs"] as Category[],
-  },
-  {
-    num: "21",
-    name: "Hell's Combo Snack Pack (Chicken + Beef)",
-    desc: "Layers of French Fries with signature in-house Sauces, Marinated Shawarma Chicken + Beef & Melty Cheese",
-    price: "LKR 2,500",
-    img: loadedFries,
-    tag: "Best Value",
-    spicy: 0,
-    categories: ["all", "snack-packs"] as Category[],
-  },
-  /* ── ADD-ONS ── */
-  {
-    num: "22",
-    name: "French Fries (200g)",
-    desc: "Crispy golden French Fries.",
-    price: "LKR 800",
-    img: loadedFries,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "23",
-    name: "Cheesy French Fries (200g)",
-    desc: "Crispy golden French Fries topped with melted cheese.",
-    price: "LKR 900",
-    img: loadedFries,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "24",
-    name: "Pita Bread (1 pc)",
-    desc: "Freshly baked warm pita bread.",
-    price: "LKR 200",
-    img: falafelImg,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "25",
-    name: "Falafel (5 pcs)",
-    desc: "Five crispy house-made falafels.",
-    price: "LKR 700",
-    img: falafelImg,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "26",
-    name: "Marinated Chicken (200g)",
-    desc: "Extra portion of our signature marinated shawarma chicken.",
-    price: "LKR 1,200",
-    img: shawarmaChicken,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "27",
-    name: "Hummus Dip (150g)",
-    desc: "Creamy house-made hummus dip.",
-    price: "LKR 1,000",
-    img: hummusPlate,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "28",
-    name: "Lebaan (Sweet / Salty)",
-    desc: "Traditional Middle Eastern yoghurt drink, available sweet or salty.",
-    price: "LKR 500",
-    img: drinkImg,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-  {
-    num: "29",
-    name: "Vimto Drink",
-    desc: "Classic Vimto fruit cordial drink.",
-    price: "LKR 300",
-    img: drinkImg,
-    tag: null,
-    spicy: 0,
-    categories: ["all", "add-ons"] as Category[],
-  },
-];
+/* ─── SECTION HEADER ─── */
+function SectionHeader({ title, subtitle }: { title: string; subtitle?: string }) {
+  const parts = title.split(" ");
+  const first = parts[0];
+  const rest = parts.slice(1).join(" ");
+  return (
+    <div className="flex items-center gap-3 mb-3 mt-0">
+      <span className="text-[#ff3b14]">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.5 5 7 8 8 12c-2-1-3-3-2.5-5.5C3 8.5 2 11 3 14c1 4 5 7 9 7s8-3 9-7c1-4-1-7-3-9-1 3-2 4-3 4 1-3 0-6-3-7z"/>
+        </svg>
+      </span>
+      <h2 className="font-display text-white uppercase tracking-wider text-2xl md:text-3xl">
+        <span className="text-white">{first}</span>{" "}
+        <span className="text-[#ff3b14]">{rest}</span>
+      </h2>
+      {subtitle && (
+        <span className="text-white/40 text-xs font-semibold tracking-[0.2em] uppercase hidden sm:block">
+          {subtitle}
+        </span>
+      )}
+    </div>
+  );
+}
 
-const SPICY_FLAMES = (count: number) =>
-  count > 0
-    ? Array.from({ length: count })
-        .map(() => "🔥")
-        .join("")
-    : null;
+/* ─── MENU ITEM ROW ─── */
+interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  ingredients?: string[];
+}
+
+function MenuItemRow({ item, showDivider }: { item: MenuItem; showDivider: boolean }) {
+  const ingredientsStr = item.ingredients?.join(", ");
+  const paddedId = String(item.id).padStart(2, "0");
+
+  return (
+    <div>
+      <div className="flex items-start gap-3 px-4 py-4">
+        <span className="shrink-0 text-[#ff3b14]/60 font-display text-base w-8 leading-tight pt-0.5">
+          {paddedId}
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex-1">
+              <p className="font-bold text-white text-[17px] leading-snug">
+                {item.name}
+                <SpicyFlames id={item.id} />
+              </p>
+              {ingredientsStr && (
+                <p className="text-white/40 text-[14px] leading-relaxed mt-1.5">{ingredientsStr}</p>
+              )}
+            </div>
+            <span className="shrink-0 text-white font-bold text-[17px] tabular-nums pt-0.5">
+              {item.price.toLocaleString()}
+            </span>
+          </div>
+        </div>
+      </div>
+      {showDivider && <div className="h-px border-t border-dashed border-white/10 mx-4" />}
+    </div>
+  );
+}
+
+/* ─── ADD-ONS GRID ─── */
+interface AddOnItem {
+  id: number;
+  name: string;
+  price: number;
+}
+
+function AddOnsGrid({ items }: { items: AddOnItem[] }) {
+  const half = Math.ceil(items.length / 2);
+  const left = items.slice(0, half);
+  const right = items.slice(half);
+
+  return (
+    <div className="grid grid-cols-2 gap-x-8">
+      <div>
+        {left.map((item) => (
+          <div key={item.id} className="flex items-center justify-between gap-3 px-3 py-2 border-b border-white/8">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="shrink-0 text-[#ff3b14]/50 font-display text-xs w-5">{String(item.id).padStart(2, "0")}</span>
+              <span className="text-white/80 text-[14px] truncate">{item.name}</span>
+            </div>
+            <span className="shrink-0 text-white font-bold text-[14px] tabular-nums">{item.price.toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+      <div>
+        {right.map((item) => (
+          <div key={item.id} className="flex items-center justify-between gap-3 px-3 py-2 border-b border-white/8">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="shrink-0 text-[#ff3b14]/50 font-display text-xs w-5">{String(item.id).padStart(2, "0")}</span>
+              <span className="text-white/80 text-[14px] truncate">{item.name}</span>
+            </div>
+            <span className="shrink-0 text-white font-bold text-[14px] tabular-nums">{item.price.toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ─── PAGE ─── */
 function MenuPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>("all");
+  const categories = menuData.categories;
+  const currency = menuData.currency;
 
-  const filtered = MENU_ITEMS.filter((item) => item.categories.includes(activeCategory));
+  const chicken = categories.find((c) => c.id === "chicken_shawarma_wraps")!;
+  const beef = categories.find((c) => c.id === "beef_shawarma_wraps")!;
+  const hummus = categories.find((c) => c.id === "hummus_plate")!;
+  const shawarmaPlate = categories.find((c) => c.id === "shawarma_plate")!;
+  const falafel = categories.find((c) => c.id === "falafel_wrap")!;
+  const snackPack = categories.find((c) => c.id === "snack_pack")!;
+  const addons = categories.find((c) => c.id === "addons")!;
+
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
       <Navbar />
 
-      {/* Page Header */}
-      <section className="relative pt-32 pb-16 px-5 lg:px-10 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,59,20,0.18),transparent_60%)]" />
-        {[...Array(6)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-[#ff6a00] opacity-60"
-            style={{
-              left: `${10 + i * 15}%`,
-              top: `${20 + (i % 3) * 20}%`,
-              animation: `ember-rise ${2 + i * 0.4}s ease-out infinite`,
-              animationDelay: `${i * 0.3}s`,
-            }}
-          />
-        ))}
-        <div className="relative mx-auto max-w-3xl">
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        {/* Background image — full width, no crop on mobile via object-position */}
+        <img
+          src={menuBg}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 w-full h-full object-cover object-[70%_30%] sm:object-[center_30%]"
+        />
+        {/* Dark overlay so text stays readable */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-black/30" />
+
+        <div className="relative mx-auto max-w-7xl px-5 lg:px-10 pt-36 pb-20 sm:pt-44 sm:pb-28 flex flex-col items-start">
           <p className="text-[#ff6a00] text-xs font-bold tracking-[0.35em] uppercase mb-4">
-            — Authentic Middle Eastern & Mediterranean Cuisine —
+            — Authentic Middle Eastern & Asian Cuisine —
           </p>
-          <h1 className="font-display text-white leading-[0.9] uppercase text-[clamp(3rem,12vw,7rem)]">
+          <h1 className="font-display text-white leading-[0.88] uppercase text-[clamp(3.2rem,10vw,7rem)]">
             <span className="text-[#ff3b14]">HELL'S</span> MENU
           </h1>
-          <p className="mt-4 text-white/60 tracking-[0.2em] uppercase text-sm font-semibold">
-            Bold Flavours. Real Recipes. 100% Hell's.
+          <p className="mt-4 text-white/60 tracking-[0.25em] uppercase text-sm font-semibold">
+            Bold. Spicy. Authentic.
           </p>
         </div>
       </section>
 
-      {/* Category Filter */}
-      <div className="sticky top-[60px] z-40 bg-[#0a0a0a]/95 backdrop-blur-sm border-b border-white/5 px-5 lg:px-10 py-4">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                data-category={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold tracking-wider uppercase transition-colors ${
-                  activeCategory === cat.id
-                    ? "bg-[#ff3b14] text-white shadow-[0_0_16px_rgba(255,59,20,0.4)]"
-                    : "glass-dark text-white/70"
-                }`}
-              >
-                {cat.icon}
-                {cat.label}
-              </button>
-            ))}
-          </div>
+      {/* ── MENU BODY ── */}
+      <section className="px-5 lg:px-10 pb-16 max-w-7xl mx-auto">
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ff3b14]/40 to-[#ff3b14]/40" />
+          <Flame className="w-5 h-5 text-[#ff3b14]" />
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ff3b14]/40 to-[#ff3b14]/40" />
         </div>
-      </div>
 
-      {/* Menu Grid */}
-      <section id="menu-grid" className="px-5 lg:px-10 py-12 md:py-16">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {filtered.map((item, i) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: i * 0.06 }}
-                className="relative rounded-lg overflow-hidden border border-[#ff3b14] transition-all duration-300 hover:shadow-[0_0_0_1px_rgba(255,59,20,0.4),0_8px_32px_rgba(255,59,20,0.35)]"
-              >
-                {/* image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="grid lg:grid-cols-2 gap-x-12">
+          {/* Left col */}
+          <div className="flex flex-col gap-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+              <SectionHeader title="CHICKEN SHAWARMA WRAPS" />
+              <div className="rounded-xl border border-white/8 bg-white/2 overflow-hidden">
+                {chicken.items.map((item, i) => (
+                  <MenuItemRow key={item.id} item={item} showDivider={i < chicken.items.length - 1} />
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.05 }}>
+              <SectionHeader title="BEEF SHAWARMA WRAPS" />
+              <div className="rounded-xl border border-white/8 bg-white/2 overflow-hidden">
+                {beef.items.map((item, i) => (
+                  <MenuItemRow key={item.id} item={item} showDivider={i < beef.items.length - 1} />
+                ))}
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Right col */}
+          <div className="flex flex-col gap-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+              <SectionHeader title="HUMMUS PLATE" />
+              {"base_includes" in hummus && (
+                <p className="text-white/40 text-xs leading-relaxed mb-3 px-4">
+                  {(hummus as typeof hummus & { base_includes: string[] }).base_includes.join(", ")}
+                </p>
+              )}
+              <div className="rounded-xl border border-white/8 bg-white/2 overflow-hidden">
+                {hummus.items.map((item, i) => (
+                  <MenuItemRow key={item.id} item={item} showDivider={i < hummus.items.length - 1} />
+                ))}
+              </div>
+              <p className="mt-3 text-right text-[#ff3b14]/70 font-display italic text-2xl tracking-wider pr-2">
+                Bold. Spicy. Authentic.
+              </p>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.05 }}>
+              <SectionHeader title="SHAWARMA PLATE" />
+              <div className="rounded-xl border border-white/8 bg-white/2 overflow-hidden">
+                {shawarmaPlate.items.map((item, i) => (
+                  <MenuItemRow key={item.id} item={item} showDivider={i < shawarmaPlate.items.length - 1} />
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
+              <SectionHeader title="FALAFEL WRAP (VEG)" />
+              <div className="rounded-xl border border-white/8 bg-white/2 overflow-hidden">
+                {falafel.items.map((item, i) => (
+                  <MenuItemRow key={item.id} item={item} showDivider={i < falafel.items.length - 1} />
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 }}>
+              <SectionHeader title="HELL'S SNACK PACK" subtitle="★" />
+              <div className="rounded-xl border border-[#ff3b14]/30 bg-[#ff3b14]/5 overflow-hidden">
+                {snackPack.items.map((item, i) => (
+                  <MenuItemRow key={item.id} item={item} showDivider={i < snackPack.items.length - 1} />
+                ))}
+                <div className="relative h-48 sm:h-56 overflow-hidden">
                   <img
-                    src={item.img}
-                    alt={item.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
+                    src={snackPackImg}
+                    alt="Hell's Snack Pack"
+                    className="w-full h-full object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  {item.tag && (
-                    <span className="absolute top-4 left-4 bg-[#ff3b14] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-sm leading-none">
-                      {item.tag}
-                    </span>
-                  )}
-                  {item.likes && (
-                    <span className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1.5 rounded-full">
-                      👍 {item.likes}
-                    </span>
-                  )}
-                </div>
-
-                {/* content */}
-                <div className="p-6">
-                  <div className="flex items-start gap-3 mb-2">
-                    <span className="shrink-0 text-[#ff3b14]/50 font-display text-xl leading-tight mt-0.5">
-                      {item.num}
-                    </span>
-                    <h3 className="font-display text-2xl md:text-3xl tracking-wide text-white uppercase leading-tight">
-                      {item.name}
-                      {SPICY_FLAMES(item.spicy) && (
-                        <span className="ml-2 text-base align-middle">
-                          {SPICY_FLAMES(item.spicy)}
-                        </span>
-                      )}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-white/60 leading-relaxed mb-5">{item.desc}</p>
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="inline-block border border-[#ff3b14] text-[#ff3b14] text-lg font-bold px-5 py-2 rounded-lg tracking-wider shadow-[0_0_10px_rgba(255,59,20,0.5),inset_0_0_10px_rgba(255,59,20,0.08)]">
-                      {item.price}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Bottom row: Hell's Meal Deal + Add-ons */}
-          <div className="mt-6 grid lg:grid-cols-2 gap-5 md:gap-6">
-            {/* Meal Deal */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative rounded-2xl overflow-hidden glass-dark border border-white/8 min-h-[220px] flex items-center"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_60%,rgba(255,59,20,0.25),transparent_60%)]" />
-              <div className="relative z-10 flex-1 p-8 md:p-10">
-                <p className="text-white font-display text-4xl md:text-5xl uppercase leading-tight tracking-wide mb-3">
-                  Make It A
-                </p>
-                <p className="font-display text-[clamp(3rem,8vw,5rem)] uppercase leading-[0.85] text-[#ff3b14] tracking-wide">
-                  HELL'S
-                </p>
-                <p className="font-display text-4xl md:text-5xl uppercase leading-tight tracking-wide text-white mb-4">
-                  MEAL DEAL!
-                </p>
-                <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
-                  Add garlic fries and a drink to make your order absolutely legendary.
-                </p>
-                <div className="inline-block border border-white/30 rounded-sm px-5 py-3">
-                  <div className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/50 mb-1">
-                    Starting From
-                  </div>
-                  <div className="text-white font-display text-2xl tracking-wide">LKR 590</div>
+                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
                 </div>
               </div>
-              <div className="hidden md:block relative z-10 w-48 shrink-0 pr-6">
-                <img
-                  src={loadedFries}
-                  alt="Hell's Meal Deal"
-                  className="w-full rounded-xl object-cover aspect-square opacity-90"
-                />
-              </div>
-            </motion.div>
-
-            {/* Customise tip */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="rounded-2xl glass-dark border border-white/8 p-8 flex flex-col justify-center"
-            >
-              <h3 className="font-display text-3xl md:text-4xl uppercase tracking-wide text-white mb-1">
-                Make it <span className="text-[#ff3b14]">YOURS!</span>
-              </h3>
-              <p className="text-white/50 text-xs tracking-[0.2em] uppercase mb-5">
-                Customise Your Order
-              </p>
-              <div className="h-px bg-white/10 mb-6" />
-              <p className="text-white/60 text-sm leading-relaxed mb-6">
-                Add extra sides, dips, and more from our <strong className="text-white">Add-ons</strong> category — fries, hummus, pita, falafels, extra meat, and drinks are all available to build your perfect plate.
-              </p>
-              <button
-                onClick={() => {
-                  const el = document.querySelector('[data-category="add-ons"]') as HTMLButtonElement | null;
-                  el?.click();
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                className="self-start inline-flex items-center gap-2 bg-[#ff3b14] hover:bg-[#ff5a2a] text-white px-6 py-3 rounded-md font-bold text-xs uppercase tracking-[0.15em] transition"
-              >
-                <Flame className="w-4 h-4" /> Browse Add-ons
-              </button>
             </motion.div>
           </div>
         </div>
+
+        {/* ── ADD-ONS — full width ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-4"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ff3b14]/30 to-[#ff3b14]/30" />
+            <SectionHeader title="ADD-ONS" />
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ff3b14]/30 to-[#ff3b14]/30" />
+          </div>
+          <div className="rounded-xl border border-white/8 bg-white/2 p-4">
+            <AddOnsGrid items={addons.items} />
+          </div>
+          <p className="text-white/30 text-xs text-center mt-3 tracking-[0.15em] uppercase">
+            All prices in {currency}
+          </p>
+        </motion.div>
+
+        {/* ── CONTACT BAR ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-10 rounded-xl border border-white/8 bg-white/2 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4"
+        >
+          <div className="flex items-center gap-3 text-white/70">
+            <MapPin className="w-4 h-4 text-[#ff3b14] shrink-0" />
+            <span className="text-sm">Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <a
+              href="tel:0723205285"
+              className="text-white font-bold tracking-widest text-sm hover:text-[#ff3b14] transition"
+            >
+              072 320 5285
+            </a>
+            <span className="text-white/20">|</span>
+            <p className="font-display text-[#ff3b14] uppercase tracking-wider text-sm">
+              We Grill, You Chill
+            </p>
+          </div>
+        </motion.div>
       </section>
 
       <MenuFooter />
@@ -681,19 +459,13 @@ function MenuFooter() {
               decoding="async"
             />
             <p className="text-white/60 max-w-md leading-relaxed">
-              Authentic Middle Eastern and Mediterranean cuisine — crafted with real spices, proper
-              technique, and a burning passion for bold flavour.
+              Authentic Middle Eastern and Asian cuisine — crafted with real spices, proper technique,
+              and a burning passion for bold flavour.
             </p>
             <div className="flex items-center gap-3 mt-6">
               {[
-                {
-                  Icon: Instagram,
-                  href: "https://www.instagram.com/hells_shawarma/",
-                },
-                {
-                  Icon: Facebook,
-                  href: "https://www.facebook.com/p/Hells-Shawarma-Grill-61569893127389/",
-                },
+                { Icon: InstagramIcon, href: "https://www.instagram.com/hells_shawarma/" },
+                { Icon: FacebookIcon, href: "https://www.facebook.com/p/Hells-Shawarma-Grill-61569893127389/" },
               ].map(({ Icon, href }, i) => (
                 <a
                   key={i}
@@ -722,10 +494,7 @@ function MenuFooter() {
                       {n.label}
                     </Link>
                   ) : (
-                    <a
-                      href={n.href}
-                      className="text-sm text-white/75 hover:text-[#ff6a00] transition"
-                    >
+                    <a href={n.href} className="text-sm text-white/75 hover:text-[#ff6a00] transition">
                       {n.label}
                     </a>
                   )}
