@@ -413,10 +413,7 @@ function CollageImage({
 
 function SocialWall() {
   return (
-    <section
-      id="gallery"
-      className="relative pt-8 pb-0 px-5 lg:px-10 bg-linear-to-b from-black via-[#0a0606] to-black"
-    >
+    <section id="gallery" className="relative pt-8 pb-0 px-5 lg:px-10 bg-black">
       <div className="relative mx-auto max-w-7xl">
         <SectionTitle kicker="Our Food" title="FROM THE KITCHEN" />
 
