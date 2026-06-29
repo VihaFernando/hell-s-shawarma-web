@@ -28,7 +28,7 @@ import menuData from "@/assets/menu.json";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu — Hell's Shawarma & Grill" },
+      { title: "Menu  Hell's Shawarma & Grill" },
       {
         name: "description",
         content:
@@ -44,7 +44,7 @@ const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Menu", href: "/menu" },
   { label: "Special Offers", href: "/#blends" },
-  { label: "Gallery", href: "/#gallery" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Locations", href: "/#contact" },
 ];
 
@@ -280,7 +280,7 @@ function MenuPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        {/* Background image — full width, no crop on mobile via object-position */}
+        {/* Background image  full width, no crop on mobile via object-position */}
         <img
           src={menuBg}
           alt=""
@@ -293,7 +293,7 @@ function MenuPage() {
 
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10 pt-36 pb-20 sm:pt-44 sm:pb-28 flex flex-col items-start">
           <p className="text-[#ff6a00] text-xs font-bold tracking-[0.35em] uppercase mb-4">
-            — Authentic Middle Eastern & Asian Cuisine —
+             Authentic Middle Eastern & Asian Cuisine 
           </p>
           <h1 className="font-display text-white leading-[0.88] uppercase text-[clamp(3.2rem,10vw,7rem)]">
             <span className="text-[#ff3b14]">HELL'S</span> MENU
@@ -392,7 +392,7 @@ function MenuPage() {
           </div>
         </div>
 
-        {/* ── ADD-ONS — full width ── */}
+        {/* ── ADD-ONS  full width ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -459,7 +459,7 @@ function MenuFooter() {
               decoding="async"
             />
             <p className="text-white/60 max-w-md leading-relaxed">
-              Authentic Middle Eastern and Asian cuisine — crafted with real spices, proper technique,
+              Authentic Middle Eastern and Asian cuisine  crafted with real spices, proper technique,
               and a burning passion for bold flavour.
             </p>
             <div className="flex items-center gap-3 mt-6">

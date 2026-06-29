@@ -6,11 +6,10 @@ import {
   MapPin,
   Menu as MenuIcon,
   X,
-  Instagram,
   Facebook,
+  Instagram,
   Phone,
   Clock,
-  Navigation,
   Star,
 } from "lucide-react";
 import heroImage from "@/assets/hero.png";
@@ -21,14 +20,18 @@ import menuBeef from "@/assets/menu-beef.jpg";
 import special1 from "@/assets/special1.png";
 import special2 from "@/assets/special2.png";
 import special3 from "@/assets/special3.png";
-import g1 from "@/assets/photos/g1.png";
-import g2 from "@/assets/photos/g2.png";
-import g3 from "@/assets/photos/g3.png";
-import g4 from "@/assets/photos/g4.png";
-import g5 from "@/assets/photos/g5.png";
-import g6 from "@/assets/photos/g6.png";
-import g7 from "@/assets/photos/g7.png";
-import g8 from "@/assets/photos/g8.png";
+const photoModules = import.meta.glob("../assets/photos/*.JPG", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+
+const PHOTOS = Object.keys(photoModules)
+  .sort((a, b) => {
+    const numA = parseInt(a.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
+    const numB = parseInt(b.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
+    return numA - numB;
+  })
+  .map((k) => photoModules[k]);
 import fireIcon from "@/assets/fire.png";
 import burgerIcon from "@/assets/burger.png";
 import starIcon from "@/assets/star.png";
@@ -36,20 +39,19 @@ import starIcon from "@/assets/star.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hell's Shawarma & Grill — Authentic Middle Eastern Cuisine" },
+      { title: "Hell's Shawarma & Grill  Authentic Middle Eastern Cuisine" },
       {
         name: "description",
         content:
-          "Hell's Shawarma & Grill — Authentic Middle Eastern and Mediterranean Cuisine. Bold shawarmas, loaded fries, legendary flavours.",
+          "Hell's Shawarma & Grill  Authentic Middle Eastern and Mediterranean Cuisine. Bold shawarmas, loaded fries, legendary flavours.",
       },
       {
         property: "og:title",
-        content: "Hell's Shawarma & Grill — Authentic Middle Eastern Cuisine",
+        content: "Hell's Shawarma & Grill  Authentic Middle Eastern Cuisine",
       },
       {
         property: "og:description",
-        content:
-          "Authentic Middle Eastern and Mediterranean cuisine. One bite and you know.",
+        content: "Authentic Middle Eastern and Mediterranean cuisine. One bite and you know.",
       },
       { property: "og:image", content: heroImage },
       { name: "twitter:card", content: "summary_large_image" },
@@ -62,7 +64,7 @@ const NAV_ITEMS = [
   { label: "Home", href: "#home", to: undefined },
   { label: "Menu", href: undefined, to: "/menu" as const },
   { label: "Special Offers", href: "#blends", to: undefined },
-  { label: "Gallery", href: "#gallery", to: undefined },
+  { label: "Gallery", href: undefined, to: "/gallery" as const },
   { label: "Locations", href: "#contact", to: undefined },
 ];
 
@@ -229,7 +231,7 @@ function Hero() {
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="flex flex-col items-center lg:items-start"
           >
-            {/* brand name — HELL'S big, the rest smaller */}
+            {/* brand name  HELL'S big, the rest smaller */}
             <h1 className="font-display text-white leading-[0.88] tracking-normal uppercase text-center lg:text-left">
               <span className="block text-[#ff3b14] text-[clamp(5rem,20vw,13rem)] leading-[0.82]">
                 HELL'S
@@ -376,59 +378,128 @@ function SpecialBlends() {
   );
 }
 
-/* ---------------- SOCIAL WALL ---------------- */
-const GALLERY = [g1, g2, g3, g4, g5, g6, g7, g8];
+/* ---------------- GALLERY PREVIEW ---------------- */
+const GALLERY_PREVIEW = PHOTOS.slice(0, 6);
+
+function CollageImage({
+  src,
+  alt,
+  delay,
+  className,
+}: {
+  src: string;
+  alt: string;
+  delay: number;
+  className: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay }}
+      className={`group relative overflow-hidden rounded-2xl ${className}`}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+    </motion.div>
+  );
+}
 
 function SocialWall() {
   return (
     <section
       id="gallery"
-      className="relative pt-8 pb-24 md:pb-32 px-5 lg:px-10 bg-linear-to-b from-black via-[#0a0606] to-black"
+      className="relative pt-8 pb-0 px-5 lg:px-10 bg-linear-to-b from-black via-[#0a0606] to-black"
     >
       <div className="relative mx-auto max-w-7xl">
-        <SectionTitle kicker="@hells_shawarma" title="FROM THE FEED" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          {GALLERY.map((img, i) => (
-            <motion.a
+        <SectionTitle kicker="Our Food" title="FROM THE KITCHEN" />
+
+        {/* Mobile: 2×2 square grid */}
+        <div className="grid grid-cols-2 gap-3 md:hidden">
+          {GALLERY_PREVIEW.slice(0, 4).map((src, i) => (
+            <CollageImage
               key={i}
-              href="https://www.instagram.com/hells_shawarma/"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group relative aspect-square rounded-xl overflow-hidden glass-dark"
-            >
-              <img
-                src={img}
-                alt={`Hell's Shawarma feed ${i + 1}`}
-                loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4">
-                <div className="flex items-center gap-2 text-[#ff6a00] text-xs font-bold">
-                  <Instagram className="w-4 h-4" /> @hells_shawarma
-                </div>
-              </div>
-            </motion.a>
+              src={src}
+              alt={`Hell's Shawarma dish ${i + 1}`}
+              delay={i * 0.08}
+              className="aspect-square"
+            />
           ))}
         </div>
+
+        {/* Tablet portrait (md)  two equal cols, left full height, right stacked */}
+        <div className="hidden md:flex lg:hidden gap-4 h-125">
+          <CollageImage
+            src={GALLERY_PREVIEW[0]}
+            alt="Hell's Shawarma signature dish"
+            delay={0}
+            className="flex-1"
+          />
+          <div className="flex flex-col gap-4 flex-1">
+            <CollageImage
+              src={GALLERY_PREVIEW[1]}
+              alt="Hell's Shawarma dish"
+              delay={0.1}
+              className="flex-1"
+            />
+            <CollageImage
+              src={GALLERY_PREVIEW[2]}
+              alt="Hell's Shawarma dish"
+              delay={0.18}
+              className="flex-1"
+            />
+          </div>
+        </div>
+
+        {/* Desktop  reference layout: large left, tall center, two stacked right */}
+        <div className="hidden lg:flex gap-4 h-145">
+          <CollageImage
+            src={GALLERY_PREVIEW[0]}
+            alt="Hell's Shawarma signature dish"
+            delay={0}
+            className="w-[44%] shrink-0"
+          />
+          <CollageImage
+            src={GALLERY_PREVIEW[1]}
+            alt="Hell's Shawarma dish"
+            delay={0.1}
+            className="flex-1"
+          />
+          <div className="flex flex-col gap-4 w-[22%] shrink-0">
+            <CollageImage
+              src={GALLERY_PREVIEW[2]}
+              alt="Hell's Shawarma dish"
+              delay={0.18}
+              className="flex-1"
+            />
+            <CollageImage
+              src={GALLERY_PREVIEW[3]}
+              alt="Hell's Shawarma dish"
+              delay={0.26}
+              className="flex-1"
+            />
+          </div>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-8 flex justify-center"
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-8 mb-16 md:mb-20 flex justify-center"
         >
-          <a
-            href="https://www.instagram.com/hells_shawarma/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/gallery"
             className="inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-8 py-3 text-sm font-bold tracking-[0.1em] uppercase text-white hover:bg-[#ff3b14] transition-all"
           >
-            <Instagram className="w-4 h-4" /> View More
-          </a>
+            View Full Gallery
+          </Link>
         </motion.div>
       </div>
     </section>
@@ -455,11 +526,15 @@ function LocationSection() {
           </div>
           <div className="glass-dark rounded-2xl p-8 md:p-10 border-white/10">
             <div className="space-y-6">
-              <InfoRow icon={MapPin} label="Address" value="Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350" />
+              <InfoRow
+                icon={MapPin}
+                label="Address"
+                value="Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350"
+              />
               <InfoRow
                 icon={Clock}
                 label="Opening Hours"
-                value={"Mon–Thu  11:00 — 23:00\nFri–Sun  11:00 — 01:00"}
+                value={"Mon–Thu  11:00  23:00\nFri–Sun  11:00  01:00"}
               />
               <InfoRow icon={Phone} label="Contact" value="072 320 5285" />
             </div>
@@ -530,7 +605,7 @@ function Footer() {
               decoding="async"
             />
             <p className="text-white/60 max-w-md leading-relaxed">
-              Authentic Middle Eastern and Mediterranean cuisine — crafted with real spices, proper
+              Authentic Middle Eastern and Mediterranean cuisine crafted with real spices, proper
               technique, and a burning passion for bold flavour.
             </p>
             <div className="flex items-center gap-3 mt-6">
@@ -587,7 +662,11 @@ function Footer() {
               Get In Touch
             </div>
             <ul className="space-y-2.5 text-sm text-white/75">
-              <li>Fusion Food Court, 9 Galle Rd,<br />Dehiwala-Mount Lavinia 10350</li>
+              <li>
+                Fusion Food Court, 9 Galle Rd,
+                <br />
+                Dehiwala-Mount Lavinia 10350
+              </li>
               <li>
                 <a href="tel:0723205285" className="hover:text-[#ff6a00] transition">
                   072 320 5285
