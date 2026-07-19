@@ -85,7 +85,7 @@ function ReviewCard({ review }: { review: GoogleReview }) {
   const displayText = expanded || !isLong ? review.text : `${review.text.slice(0, 200)}…`;
 
   return (
-    <div className="glass-dark rounded-2xl border-white/10 p-6 flex flex-col h-full w-75 sm:w-85 shrink-0">
+    <div className="glass-dark rounded-2xl border-white/10 p-6 flex flex-col w-80 sm:w-96 min-h-72 shrink-0">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3 min-w-0">
           <Avatar review={review} />
@@ -100,7 +100,7 @@ function ReviewCard({ review }: { review: GoogleReview }) {
       </div>
       {review.rating != null && <Stars rating={review.rating} />}
       {review.text && (
-        <p className="mt-3 text-sm text-white/75 leading-relaxed">
+        <p className="mt-3 text-[15px] text-white leading-relaxed">
           {displayText}
           {isLong && (
             <button
@@ -130,7 +130,7 @@ function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
 
     let raf: number;
     let x = 0;
-    const speed = 0.4; // px per frame, roughly 24px/s at 60fps
+    const speed = 0.25; // px per frame, roughly 15px/s at 60fps — slow enough to read comfortably
 
     const step = () => {
       if (!paused) {
@@ -260,6 +260,19 @@ export function GoogleReviews() {
         </div>
       ) : (
         <ReviewsCarousel reviews={reviews} />
+      )}
+
+      {reviewsUrl && (
+        <div className="mt-10 flex justify-center">
+          <a
+            href={reviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-8 py-3 text-sm font-bold tracking-[0.1em] uppercase text-white hover:bg-[#ff3b14] transition-all"
+          >
+            <GoogleLogo className="w-4 h-4" /> View All Reviews on Google
+          </a>
+        </div>
       )}
     </div>
   );
