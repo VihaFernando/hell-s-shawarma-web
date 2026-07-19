@@ -530,7 +530,7 @@ function MenuFooter() {
                 <Star key={i} className="w-3.5 h-3.5 fill-current" />
               ))}
               <span className="ml-2 text-white/60 font-medium tracking-normal normal-case">
-                4.9 on Google
+                4.6 on Google
               </span>
             </div>
           </div>
