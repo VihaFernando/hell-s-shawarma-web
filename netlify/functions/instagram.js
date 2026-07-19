@@ -44,10 +44,10 @@ export const handler = async () => {
 
   const now = Date.now();
   if (cache.data && now - cache.fetchedAt < CACHE_TTL_MS) {
-    return jsonResponse(200, { posts: cache.data, cached: true });
+    return jsonResponse(200, { ...cache.data, cached: true });
   }
 
-  const fields = `business_discovery.username(${CLIENT_IG_USERNAME}){username,media_count,media{caption,media_url,permalink,timestamp,media_type}}`;
+  const fields = `business_discovery.username(${CLIENT_IG_USERNAME}){username,profile_picture_url,media_count,media{caption,media_url,thumbnail_url,permalink,timestamp,media_type}}`;
   const url =
     `https://graph.facebook.com/${GRAPH_VERSION}/${IG_BUSINESS_ACCOUNT_ID}` +
     `?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(accessToken)}`;
@@ -56,7 +56,7 @@ export const handler = async () => {
   try {
     res = await fetch(url);
   } catch {
-    if (cache.data) return jsonResponse(200, { posts: cache.data, cached: true, stale: true });
+    if (cache.data) return jsonResponse(200, { ...cache.data, cached: true, stale: true });
     return jsonResponse(502, { error: "network_error", message: "Could not reach Instagram." });
   }
 
@@ -82,27 +82,32 @@ export const handler = async () => {
 
     // Serve stale cache rather than a hard error if we have something.
     if (cache.data) {
-      return jsonResponse(200, { posts: cache.data, cached: true, stale: true });
+      return jsonResponse(200, { ...cache.data, cached: true, stale: true });
     }
 
     return jsonResponse(errorType === "rate_limited" ? 429 : 502, { error: errorType, message });
   }
 
-  const media = body?.business_discovery?.media?.data ?? [];
+  const discovery = body?.business_discovery;
+  const media = discovery?.media?.data ?? [];
 
   const posts = media
     .map((m) => ({
       caption: m.caption ?? "",
-      media_url: m.media_url,
+      // Videos/Reels often have no usable media_url for direct <img> display;
+      // thumbnail_url is the static preview image Instagram generates for them.
+      media_url: m.media_type === "VIDEO" ? (m.thumbnail_url ?? m.media_url) : m.media_url,
       permalink: m.permalink,
       timestamp: m.timestamp,
       media_type: m.media_type,
     }))
     .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-  cache = { data: posts, fetchedAt: now };
+  const result = { posts, profilePictureUrl: discovery?.profile_picture_url ?? null };
 
-  return jsonResponse(200, { posts, cached: false });
+  cache = { data: result, fetchedAt: now };
+
+  return jsonResponse(200, { ...result, cached: false });
 };
 
 function jsonResponse(statusCode, payload) {
