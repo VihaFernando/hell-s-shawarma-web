@@ -147,35 +147,57 @@ function ReviewCard({ review }: { review: GoogleReview }) {
   );
 }
 
+const STEP_INTERVAL_MS = 2800;
+const CARD_GAP_PX = 20; // matches gap-5
+
 function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [paused, setPaused] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const [cardWidth, setCardWidth] = useState(0);
+  const pausedRef = useRef(false);
 
-  // Duplicate the list so the marquee can loop seamlessly; pause on
-  // hover/touch so users can actually read a card if they want to.
+  // Duplicate the list so it can loop seamlessly without a visible jump.
   const loopReviews = reviews.length > 1 ? [...reviews, ...reviews] : reviews;
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track || reviews.length <= 1) return;
+    const card = cardRef.current;
+    if (!card) return;
 
-    let raf: number;
-    let x = 0;
-    const speed = 0.25; // px per frame, roughly 15px/s at 60fps — slow enough to read comfortably
+    const measure = () => setCardWidth(card.offsetWidth);
+    measure();
 
-    const step = () => {
-      if (!paused) {
-        x -= speed;
-        const resetPoint = -(track.scrollWidth / 2);
-        if (x <= resetPoint) x = 0;
-        track.style.transform = `translateX(${x}px)`;
-      }
-      raf = requestAnimationFrame(step);
-    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
 
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [paused, reviews.length]);
+  useEffect(() => {
+    if (reviews.length <= 1) return;
+
+    const id = setInterval(() => {
+      if (pausedRef.current) return;
+      setIndex((i) => i + 1);
+    }, STEP_INTERVAL_MS);
+
+    return () => clearInterval(id);
+  }, [reviews.length]);
+
+  // Once we've scrolled through the first full set, snap back to the start
+  // without a transition so the loop is invisible.
+  useEffect(() => {
+    if (index !== reviews.length) return;
+    const id = setTimeout(() => {
+      const track = trackRef.current;
+      if (!track) return;
+      track.style.transition = "none";
+      setIndex(0);
+      requestAnimationFrame(() => {
+        track.style.transition = "";
+      });
+    }, 700); // wait out the slide transition before snapping
+    return () => clearTimeout(id);
+  }, [index, reviews.length]);
 
   if (reviews.length <= 1) {
     return (
@@ -187,17 +209,33 @@ function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
     );
   }
 
+  const offset = index * (cardWidth + CARD_GAP_PX);
+
   return (
     <div
       className="overflow-hidden mask-[linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      onMouseEnter={() => {
+        pausedRef.current = true;
+      }}
+      onMouseLeave={() => {
+        pausedRef.current = false;
+      }}
+      onTouchStart={() => {
+        pausedRef.current = true;
+      }}
+      onTouchEnd={() => {
+        pausedRef.current = false;
+      }}
     >
-      <div ref={trackRef} className="flex gap-5 w-max will-change-transform">
+      <div
+        ref={trackRef}
+        className="flex gap-5 w-max transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${offset}px)` }}
+      >
         {loopReviews.map((review, i) => (
-          <ReviewCard key={`${review.authorName}-${i}`} review={review} />
+          <div key={`${review.authorName}-${i}`} ref={i === 0 ? cardRef : undefined}>
+            <ReviewCard review={review} />
+          </div>
         ))}
       </div>
     </div>
