@@ -387,7 +387,7 @@ function InfluencerReelsSection() {
   return (
     <section
       id="blends"
-      className="relative py-24 md:py-32 px-5 lg:px-10 bg-linear-to-b from-black via-[#0a0506] to-black overflow-hidden"
+      className="relative py-16 md:py-24 lg:py-32 px-5 lg:px-10 bg-linear-to-b from-black via-[#0a0506] to-black overflow-hidden"
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,106,0,0.18),transparent_60%)]" />
       <div className="relative mx-auto max-w-7xl">

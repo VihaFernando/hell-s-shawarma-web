@@ -1,127 +1,61 @@
-import { useEffect, useState } from "react";
-import { Instagram } from "lucide-react";
+import { useEffect, useRef } from "react";
 
-declare global {
-  interface Window {
-    instgrm?: {
-      Embeds: { process: () => void };
-    };
-  }
+const CLOUD_NAME = "di3xtilio";
+
+// f_auto lets Cloudinary pick the smallest codec the requesting browser
+// supports (e.g. AV1/VP9 over H.264); q_auto tunes quality/size automatically.
+function cloudinaryVideoUrl(publicId: string) {
+  return `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/f_auto,q_auto/${publicId}`;
 }
 
-interface ReelEmbed {
-  url: string;
-  html: string | null;
-  error: string | null;
-}
+const REELS = [
+  cloudinaryVideoUrl("v1784470011/reel1_bk1glv"),
+  cloudinaryVideoUrl("v1784470011/reel2_jzkyen"),
+  cloudinaryVideoUrl("v1784470007/reel3_brjh7c"),
+];
 
-type ReelsState =
-  | { status: "loading" }
-  | { status: "error"; message: string }
-  | { status: "ready"; reels: ReelEmbed[] };
+function ReelTile({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-const EMBED_SCRIPT_SRC = "https://www.instagram.com/embed.js";
-let embedScriptPromise: Promise<void> | null = null;
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
-function loadEmbedScript(): Promise<void> {
-  if (window.instgrm) return Promise.resolve();
-  if (embedScriptPromise) return embedScriptPromise;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.5 },
+    );
 
-  embedScriptPromise = new Promise((resolve) => {
-    const existing = document.querySelector<HTMLScriptElement>(`script[src="${EMBED_SCRIPT_SRC}"]`);
-    if (existing) {
-      existing.addEventListener("load", () => resolve());
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = EMBED_SCRIPT_SRC;
-    script.async = true;
-    script.onload = () => resolve();
-    document.body.appendChild(script);
-  });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
 
-  return embedScriptPromise;
+  return (
+    <div className="relative aspect-9/16 w-full max-w-70 sm:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10">
+      <video
+        ref={videoRef}
+        src={src}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className="w-full h-full object-cover"
+      />
+    </div>
+  );
 }
 
 export function InfluencerReels() {
-  const [state, setState] = useState<ReelsState>({ status: "loading" });
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch("/api/instagram-oembed")
-      .then(async (res) => {
-        const body = await res.json().catch(() => null);
-        if (!res.ok || !body?.reels) {
-          throw new Error(body?.message ?? "Couldn't load reels right now.");
-        }
-        return body.reels as ReelEmbed[];
-      })
-      .then((reels) => {
-        if (!cancelled) setState({ status: "ready", reels });
-      })
-      .catch((err: Error) => {
-        if (!cancelled) setState({ status: "error", message: err.message });
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (state.status !== "ready") return;
-    let cancelled = false;
-    loadEmbedScript().then(() => {
-      if (!cancelled) window.instgrm?.Embeds.process();
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [state]);
-
-  if (state.status === "loading") {
-    return (
-      <div className="flex gap-6 overflow-x-auto lg:grid lg:grid-cols-3 lg:overflow-visible">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-150 w-80 shrink-0 lg:w-full rounded-2xl bg-white/5 animate-pulse"
-          />
-        ))}
-      </div>
-    );
-  }
-
-  if (state.status === "error") {
-    return (
-      <div className="rounded-2xl glass-dark border-white/10 py-12 px-6 text-center">
-        <Instagram className="w-8 h-8 mx-auto mb-3 text-white/40" />
-        <p className="text-white/60 text-sm">{state.message}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex gap-6 overflow-x-auto pb-4 lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0">
-      {state.reels.map((reel) => (
-        <div
-          key={reel.url}
-          className="w-80 shrink-0 lg:w-full rounded-2xl overflow-hidden border border-white/10 bg-white"
-        >
-          {reel.html ? (
-            <div dangerouslySetInnerHTML={{ __html: reel.html }} />
-          ) : (
-            <a
-              href={reel.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center h-64 text-sm text-black/50 hover:text-black"
-            >
-              View on Instagram
-            </a>
-          )}
-        </div>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
+      {REELS.map((src, i) => (
+        <ReelTile key={i} src={src} />
       ))}
     </div>
   );
