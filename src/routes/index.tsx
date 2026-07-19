@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { InstagramFeed } from "@/components/InstagramFeed";
 import { GoogleReviews } from "@/components/GoogleReviews";
+import { InfluencerReels } from "@/components/InfluencerReels";
 import heroImage from "@/assets/hero.png";
 import logoImage from "@/assets/logo.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
@@ -75,7 +76,8 @@ function Landing() {
     <div id="home" className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />
       <Hero />
-      <SpecialBlends />
+      {/* <SpecialBlends /> */}
+      <InfluencerReelsSection />
       <SocialWall />
       <LocationSection />
       <Footer />
@@ -340,14 +342,48 @@ function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
   );
 }
 
-/* ---------------- SPECIAL OFFERS ---------------- */
-const OFFERS = [
-  { img: special1, alt: "Special Offer 1" },
-  { img: special2, alt: "Special Offer 2" },
-  { img: special3, alt: "Special Offer 3" },
-];
+/* ---------------- SPECIAL OFFERS (currently unused, see InfluencerReelsSection below) ---------------- */
+// const OFFERS = [
+//   { img: special1, alt: "Special Offer 1" },
+//   { img: special2, alt: "Special Offer 2" },
+//   { img: special3, alt: "Special Offer 3" },
+// ];
+//
+// function SpecialBlends() {
+//   return (
+//     <section
+//       id="blends"
+//       className="relative py-24 md:py-32 px-5 lg:px-10 bg-linear-to-b from-black via-[#0a0506] to-black overflow-hidden"
+//     >
+//       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,106,0,0.18),transparent_60%)]" />
+//       <div className="relative mx-auto max-w-7xl">
+//         <SectionTitle kicker="Limited Time" title="SPECIAL OFFERS" />
+//         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {OFFERS.map((offer, i) => (
+//             <motion.div
+//               key={i}
+//               initial={{ opacity: 0, y: 40 }}
+//               whileInView={{ opacity: 1, y: 0 }}
+//               viewport={{ once: true, margin: "-80px" }}
+//               transition={{ duration: 0.6, delay: i * 0.1 }}
+//               className="relative rounded-2xl overflow-hidden border border-[#ff3b14]/40 hover:border-[#ff3b14] transition-all duration-300 hover:shadow-[0_0_0_1px_rgba(255,59,20,0.3),0_8px_32px_rgba(255,59,20,0.3)]"
+//             >
+//               <img
+//                 src={offer.img}
+//                 alt={offer.alt}
+//                 loading="lazy"
+//                 className="w-full h-full object-cover"
+//               />
+//             </motion.div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
 
-function SpecialBlends() {
+/* ---------------- INFLUENCER REELS ---------------- */
+function InfluencerReelsSection() {
   return (
     <section
       id="blends"
@@ -355,26 +391,8 @@ function SpecialBlends() {
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,106,0,0.18),transparent_60%)]" />
       <div className="relative mx-auto max-w-7xl">
-        <SectionTitle kicker="Limited Time" title="SPECIAL OFFERS" />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {OFFERS.map((offer, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="relative rounded-2xl overflow-hidden border border-[#ff3b14]/40 hover:border-[#ff3b14] transition-all duration-300 hover:shadow-[0_0_0_1px_rgba(255,59,20,0.3),0_8px_32px_rgba(255,59,20,0.3)]"
-            >
-              <img
-                src={offer.img}
-                alt={offer.alt}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-          ))}
-        </div>
+        <SectionTitle kicker="As Featured By" title="INFLUENCER REELS" />
+        <InfluencerReels />
       </div>
     </section>
   );
