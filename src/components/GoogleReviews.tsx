@@ -153,12 +153,16 @@ const CARD_GAP_PX = 20; // matches gap-5
 function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const [index, setIndex] = useState(0);
+  const count = reviews.length;
+  // Start in the middle copy so the carousel can step either direction
+  // (only forward, here) several times before ever needing to re-center.
+  const [index, setIndex] = useState(count);
   const [cardWidth, setCardWidth] = useState(0);
   const pausedRef = useRef(false);
 
-  // Duplicate the list so it can loop seamlessly without a visible jump.
-  const loopReviews = reviews.length > 1 ? [...reviews, ...reviews] : reviews;
+  // Render 3 copies back-to-back so stepping past the end of the middle
+  // copy still shows real cards (the start of the last copy), never a gap.
+  const loopReviews = count > 1 ? [...reviews, ...reviews, ...reviews] : reviews;
 
   useEffect(() => {
     const card = cardRef.current;
@@ -173,7 +177,7 @@ function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
   }, []);
 
   useEffect(() => {
-    if (reviews.length <= 1) return;
+    if (count <= 1) return;
 
     const id = setInterval(() => {
       if (pausedRef.current) return;
@@ -181,25 +185,26 @@ function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
     }, STEP_INTERVAL_MS);
 
     return () => clearInterval(id);
-  }, [reviews.length]);
+  }, [count]);
 
-  // Once we've scrolled through the first full set, snap back to the start
-  // without a transition so the loop is invisible.
+  // Once we've stepped a full set past the middle copy, silently re-center
+  // by exactly one set length (no transition) — visually identical since
+  // every copy of the list is the same.
   useEffect(() => {
-    if (index !== reviews.length) return;
+    if (index < count * 2) return;
     const id = setTimeout(() => {
       const track = trackRef.current;
       if (!track) return;
       track.style.transition = "none";
-      setIndex(0);
+      setIndex((i) => i - count);
       requestAnimationFrame(() => {
         track.style.transition = "";
       });
     }, 700); // wait out the slide transition before snapping
     return () => clearTimeout(id);
-  }, [index, reviews.length]);
+  }, [index, count]);
 
-  if (reviews.length <= 1) {
+  if (count <= 1) {
     return (
       <div className="flex justify-center px-4">
         {reviews.map((review, i) => (
