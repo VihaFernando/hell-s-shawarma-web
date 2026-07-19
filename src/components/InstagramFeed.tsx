@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { Instagram, Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Instagram } from "lucide-react";
 
 interface InstagramPost {
   caption: string;
   media_url: string;
+  thumbnail_url: string | null;
   permalink: string;
   timestamp: string;
   media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
@@ -13,6 +14,42 @@ type FeedState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ready"; posts: InstagramPost[]; profilePictureUrl: string | null };
+
+function VideoTile({ post }: { post: InstagramPost }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={post.media_url}
+      poster={post.thumbnail_url ?? undefined}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+    />
+  );
+}
 
 export function InstagramFeed({ limit = 6 }: { limit?: number }) {
   const [state, setState] = useState<FeedState>({ status: "loading" });
@@ -90,18 +127,15 @@ export function InstagramFeed({ limit = 6 }: { limit?: number }) {
             rel="noopener noreferrer"
             className="group relative aspect-square overflow-hidden rounded-2xl border border-white/10 hover:border-[#ff3b14] transition-all duration-300"
           >
-            <img
-              src={post.media_url}
-              alt={post.caption ? post.caption.slice(0, 100) : "Instagram post"}
-              loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            {post.media_type === "VIDEO" && (
-              <div className="absolute inset-0 grid place-items-center pointer-events-none">
-                <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm grid place-items-center">
-                  <Play className="w-5 h-5 text-white fill-white ml-0.5" />
-                </div>
-              </div>
+            {post.media_type === "VIDEO" ? (
+              <VideoTile post={post} />
+            ) : (
+              <img
+                src={post.media_url}
+                alt={post.caption ? post.caption.slice(0, 100) : "Instagram post"}
+                loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
               {post.caption && (

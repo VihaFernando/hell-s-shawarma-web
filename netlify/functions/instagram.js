@@ -94,9 +94,9 @@ export const handler = async () => {
   const posts = media
     .map((m) => ({
       caption: m.caption ?? "",
-      // Videos/Reels often have no usable media_url for direct <img> display;
-      // thumbnail_url is the static preview image Instagram generates for them.
-      media_url: m.media_type === "VIDEO" ? (m.thumbnail_url ?? m.media_url) : m.media_url,
+      media_url: m.media_url,
+      // Static preview image for videos/Reels (used as poster + grid fallback).
+      thumbnail_url: m.media_type === "VIDEO" ? (m.thumbnail_url ?? null) : null,
       permalink: m.permalink,
       timestamp: m.timestamp,
       media_type: m.media_type,
