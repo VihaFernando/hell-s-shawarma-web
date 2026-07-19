@@ -52,9 +52,16 @@ export const handler = async (event) => {
     });
   }
 
-  const store = getStore(BLOB_STORE);
+  // If Blobs isn't available in this environment (e.g. missing site context),
+  // degrade to "no cache" rather than failing the whole request.
+  let store = null;
+  try {
+    store = getStore(BLOB_STORE);
+  } catch (err) {
+    console.error("Netlify Blobs unavailable, skipping cache:", err);
+  }
 
-  const cached = await store.get(BLOB_KEY, { type: "json" }).catch(() => null);
+  const cached = store ? await store.get(BLOB_KEY, { type: "json" }).catch(() => null) : null;
   const now = Date.now();
   if (cached && now - cached.fetchedAt < CACHE_TTL_MS) {
     return jsonResponse(200, { ...cached.data, cached: true });
@@ -115,7 +122,11 @@ export const handler = async (event) => {
     reviewsUrl: `https://search.google.com/local/reviews?placeid=${encodeURIComponent(GOOGLE_PLACE_ID)}`,
   };
 
-  await store.setJSON(BLOB_KEY, { data: result, fetchedAt: now });
+  if (store) {
+    await store.setJSON(BLOB_KEY, { data: result, fetchedAt: now }).catch((err) => {
+      console.error("Failed to write reviews cache:", err);
+    });
+  }
 
   return jsonResponse(200, { ...result, cached: false });
 };
