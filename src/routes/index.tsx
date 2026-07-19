@@ -12,6 +12,7 @@ import {
   Clock,
   Star,
 } from "lucide-react";
+import { InstagramFeed } from "@/components/InstagramFeed";
 import heroImage from "@/assets/hero.png";
 import logoImage from "@/assets/logo.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
@@ -498,6 +499,21 @@ function SocialWall() {
             View Full Gallery
           </Link>
         </motion.div>
+
+        <SectionTitle kicker="Follow Along" title="LATEST ON INSTAGRAM" />
+        <div className="mb-16 md:mb-20">
+          <InstagramFeed limit={6} />
+          <div className="mt-8 flex justify-center">
+            <a
+              href="https://www.instagram.com/hells_shawarma/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-8 py-3 text-sm font-bold tracking-[0.1em] uppercase text-white hover:bg-[#ff3b14] transition-all"
+            >
+              <Instagram className="w-4 h-4" /> @hells_shawarma
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
