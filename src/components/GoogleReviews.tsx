@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Star } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface GoogleReview {
   authorName: string;
@@ -80,39 +86,64 @@ function Avatar({ review }: { review: GoogleReview }) {
 }
 
 function ReviewCard({ review }: { review: GoogleReview }) {
-  const [expanded, setExpanded] = useState(false);
+  const [open, setOpen] = useState(false);
   const isLong = review.text.length > 200;
-  const displayText = expanded || !isLong ? review.text : `${review.text.slice(0, 200)}…`;
+  const displayText = isLong ? `${review.text.slice(0, 200)}…` : review.text;
 
   return (
-    <div className="glass-dark rounded-2xl border-white/10 p-6 flex flex-col w-80 sm:w-96 min-h-72 shrink-0">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3 min-w-0">
-          <Avatar review={review} />
-          <div className="min-w-0">
-            <div className="text-sm font-semibold text-white truncate">{review.authorName}</div>
-            {review.relativeTime && (
-              <div className="text-xs text-white/40">{review.relativeTime}</div>
-            )}
+    <>
+      <div className="glass-dark rounded-2xl border-white/10 p-7 flex flex-col w-84 sm:w-100 min-h-80 shrink-0">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <Avatar review={review} />
+            <div className="min-w-0">
+              <div className="text-base font-semibold text-white truncate">
+                {review.authorName}
+              </div>
+              {review.relativeTime && (
+                <div className="text-sm text-white/45">{review.relativeTime}</div>
+              )}
+            </div>
           </div>
+          <GoogleLogo className="w-6 h-6 shrink-0" />
         </div>
-        <GoogleLogo className="w-5 h-5 shrink-0" />
+        {review.rating != null && <Stars rating={review.rating} className="w-5 h-5" />}
+        {review.text && (
+          <p className="mt-4 text-lg text-white leading-relaxed">
+            {displayText}
+            {isLong && (
+              <button
+                onClick={() => setOpen(true)}
+                className="ml-1.5 text-[#ff6a00] font-bold hover:underline"
+              >
+                Read more
+              </button>
+            )}
+          </p>
+        )}
       </div>
-      {review.rating != null && <Stars rating={review.rating} />}
-      {review.text && (
-        <p className="mt-3 text-[15px] text-white leading-relaxed">
-          {displayText}
-          {isLong && (
-            <button
-              onClick={() => setExpanded((v) => !v)}
-              className="ml-1 text-[#ff6a00] font-semibold hover:underline"
-            >
-              {expanded ? "Show less" : "Read more"}
-            </button>
-          )}
-        </p>
-      )}
-    </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="glass-dark border-white/10 bg-[#0a0506] text-white max-w-lg">
+          <DialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <Avatar review={review} />
+              <div>
+                <DialogTitle className="text-white text-lg">{review.authorName}</DialogTitle>
+                {review.relativeTime && (
+                  <div className="text-sm text-white/45">{review.relativeTime}</div>
+                )}
+              </div>
+              <GoogleLogo className="w-6 h-6 ml-auto shrink-0" />
+            </div>
+            {review.rating != null && <Stars rating={review.rating} className="w-5 h-5" />}
+          </DialogHeader>
+          <p className="text-lg text-white/90 leading-relaxed whitespace-pre-line">
+            {review.text}
+          </p>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -214,7 +245,7 @@ export function GoogleReviews() {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="h-48 w-75 sm:w-85 shrink-0 rounded-2xl bg-white/5 animate-pulse"
+              className="h-80 w-84 sm:w-100 shrink-0 rounded-2xl bg-white/5 animate-pulse"
             />
           ))}
         </div>
@@ -242,12 +273,12 @@ export function GoogleReviews() {
           rel="noopener noreferrer"
           className="group mx-auto mb-12 flex w-fit flex-col items-center gap-2 rounded-2xl glass-dark border-white/10 px-8 py-6 sm:px-10 hover:border-[#ff3b14] transition-all duration-300"
         >
-          <GoogleLogo className="w-8 h-8 mb-1" />
+          <GoogleLogo className="w-9 h-9 mb-1" />
           <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-display text-white">{rating.toFixed(1)}</span>
-            <Stars rating={rating} className="w-5 h-5" />
+            <span className="text-5xl font-display text-white">{rating.toFixed(1)}</span>
+            <Stars rating={rating} className="w-6 h-6" />
           </div>
-          <span className="text-xs uppercase tracking-[0.2em] text-white/50 group-hover:text-[#ff6a00] transition text-center">
+          <span className="text-sm uppercase tracking-[0.2em] text-white/60 group-hover:text-[#ff6a00] transition text-center">
             {totalReviews.toLocaleString()} Google Reviews
           </span>
         </a>
