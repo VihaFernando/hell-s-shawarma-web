@@ -149,20 +149,37 @@ function ReviewCard({ review }: { review: GoogleReview }) {
 
 const STEP_INTERVAL_MS = 2800;
 const CARD_GAP_PX = 20; // matches gap-5
+// How many laps' worth of (shuffled) cards to keep queued ahead of the
+// current position — trimming the trailing already-passed laps keeps the
+// DOM/track from growing forever during a long session.
+const LAPS_AHEAD = 3;
+
+function shuffled<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
 function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const count = reviews.length;
-  // Start in the middle copy so the carousel can step either direction
-  // (only forward, here) several times before ever needing to re-center.
-  const [index, setIndex] = useState(count);
+  const [index, setIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
   const pausedRef = useRef(false);
 
-  // Render 3 copies back-to-back so stepping past the end of the middle
-  // copy still shows real cards (the start of the last copy), never a gap.
-  const loopReviews = count > 1 ? [...reviews, ...reviews, ...reviews] : reviews;
+  // Each entry is one lap: the same reviews, reshuffled, so consecutive laps
+  // never show the exact same viewing order — it reads as "always more
+  // reviews" rather than "the list restarted."
+  const [laps, setLaps] = useState<GoogleReview[][]>(() => [
+    reviews,
+    ...Array.from({ length: LAPS_AHEAD }, () => shuffled(reviews)),
+  ]);
+
+  const loopReviews = count > 1 ? laps.flat() : reviews;
 
   useEffect(() => {
     const card = cardRef.current;
@@ -187,22 +204,21 @@ function ReviewsCarousel({ reviews }: { reviews: GoogleReview[] }) {
     return () => clearInterval(id);
   }, [count]);
 
-  // Once we've stepped a full set past the middle copy, silently re-center
-  // by exactly one set length (no transition) — visually identical since
-  // every copy of the list is the same.
+  // Once the current position has fully passed the first lap, drop it and
+  // queue a freshly shuffled lap on the end — an endless, ever-reshuffled
+  // stream instead of a fixed loop with a visible restart point.
   useEffect(() => {
-    if (index < count * 2) return;
-    const id = setTimeout(() => {
-      const track = trackRef.current;
-      if (!track) return;
+    if (index < count) return;
+    setLaps((prev) => [...prev.slice(1), shuffled(reviews)]);
+    setIndex((i) => i - count);
+    const track = trackRef.current;
+    if (track) {
       track.style.transition = "none";
-      setIndex((i) => i - count);
       requestAnimationFrame(() => {
         track.style.transition = "";
       });
-    }, 700); // wait out the slide transition before snapping
-    return () => clearTimeout(id);
-  }, [index, count]);
+    }
+  }, [index, count, reviews]);
 
   if (count <= 1) {
     return (
