@@ -8,7 +8,7 @@
 
 const GRAPH_VERSION = "v25.0";
 
-exports.handler = async () => {
+export const handler = async () => {
   const { IG_APP_ID, IG_APP_SECRET, IG_LONG_LIVED_TOKEN } = process.env;
 
   if (!IG_APP_ID || !IG_APP_SECRET || !IG_LONG_LIVED_TOKEN) {

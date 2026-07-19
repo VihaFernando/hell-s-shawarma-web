@@ -6,13 +6,13 @@
 // Netlify Blobs requires the `@netlify/blobs` package (already available in
 // the Netlify Functions runtime, no extra setup needed beyond `npm install`).
 
-const { getStore } = require("@netlify/blobs");
+import { getStore } from "@netlify/blobs";
 
 const GRAPH_VERSION = "v25.0";
 const BLOB_STORE = "instagram";
 const BLOB_KEY = "long-lived-token";
 
-exports.handler = async () => {
+export const handler = async () => {
   const { IG_APP_ID, IG_APP_SECRET } = process.env;
   const store = getStore(BLOB_STORE);
 
@@ -43,6 +43,6 @@ exports.handler = async () => {
   console.log("instagram-refresh-token-scheduled: token refreshed and stored successfully");
 };
 
-module.exports.config = {
+export const config = {
   schedule: "@monthly", // Netlify only supports fixed presets/cron, not arbitrary day counts; see netlify.toml note.
 };

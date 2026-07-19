@@ -4,12 +4,7 @@
 // linked to a Facebook app — no auth from the client account required) and
 // caches the result in-memory for 1 hour so we don't hit the API on every load.
 
-let getStore;
-try {
-  ({ getStore } = require("@netlify/blobs"));
-} catch (err) {
-  console.error("Failed to load @netlify/blobs:", err);
-}
+import { getStore } from "@netlify/blobs";
 
 const GRAPH_VERSION = "v25.0";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
@@ -20,7 +15,7 @@ const BLOB_KEY = "long-lived-token";
 // across instances/regions, but that's fine for a "don't hammer the API" cache.
 let cache = { data: null, fetchedAt: 0 };
 
-exports.handler = async () => {
+export const handler = async () => {
   const { IG_BUSINESS_ACCOUNT_ID, CLIENT_IG_USERNAME } = process.env;
 
   if (!IG_BUSINESS_ACCOUNT_ID || !CLIENT_IG_USERNAME) {
@@ -34,7 +29,6 @@ exports.handler = async () => {
   // the env var set at initial setup time.
   let accessToken;
   try {
-    if (!getStore) throw new Error("@netlify/blobs unavailable");
     const store = getStore(BLOB_STORE);
     accessToken = (await store.get(BLOB_KEY)) ?? process.env.IG_LONG_LIVED_TOKEN;
   } catch {
