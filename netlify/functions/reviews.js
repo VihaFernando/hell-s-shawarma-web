@@ -74,7 +74,8 @@ export const handler = async (event) => {
     res = await fetch(url, {
       headers: {
         "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY,
-        "X-Goog-FieldMask": "rating,userRatingCount,reviews",
+        "X-Goog-FieldMask":
+          "rating,userRatingCount,reviews.authorAttribution,reviews.rating,reviews.text,reviews.originalText,reviews.relativePublishTimeDescription",
       },
     });
   } catch {
@@ -110,6 +111,7 @@ export const handler = async (event) => {
 
   const reviews = (body.reviews ?? []).map((r) => ({
     authorName: r.authorAttribution?.displayName ?? "Anonymous",
+    authorPhotoUrl: r.authorAttribution?.photoUri ?? null,
     rating: r.rating ?? null,
     text: r.text?.text ?? r.originalText?.text ?? "",
     relativeTime: r.relativePublishTimeDescription ?? "",
