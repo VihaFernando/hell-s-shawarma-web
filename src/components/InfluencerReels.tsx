@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { FEATURED_REELS, type FeaturedReel } from "@/config/featuredReels";
 
 const CLOUD_NAME = "di3xtilio";
 
@@ -8,13 +9,7 @@ function cloudinaryVideoUrl(publicId: string) {
   return `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/f_auto,q_auto/${publicId}`;
 }
 
-const REELS = [
-  cloudinaryVideoUrl("v1784470011/reel1_bk1glv"),
-  cloudinaryVideoUrl("v1784470011/reel2_jzkyen"),
-  cloudinaryVideoUrl("v1784470007/reel3_brjh7c"),
-];
-
-function ReelTile({ src }: { src: string }) {
+function ReelTile({ reel }: { reel: FeaturedReel }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -37,25 +32,30 @@ function ReelTile({ src }: { src: string }) {
   }, []);
 
   return (
-    <div className="relative aspect-9/16 w-full max-w-70 sm:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10">
+    <a
+      href={reel.instagramUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative aspect-9/16 w-full max-w-70 sm:max-w-none mx-auto block rounded-2xl overflow-hidden border border-white/10 hover:border-[#ff3b14] transition-all duration-300"
+    >
       <video
         ref={videoRef}
-        src={src}
+        src={cloudinaryVideoUrl(reel.cloudinaryPublicId)}
         muted
         loop
         playsInline
         preload="metadata"
         className="w-full h-full object-cover"
       />
-    </div>
+    </a>
   );
 }
 
 export function InfluencerReels() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
-      {REELS.map((src, i) => (
-        <ReelTile key={i} src={src} />
+      {FEATURED_REELS.map((reel) => (
+        <ReelTile key={reel.cloudinaryPublicId} reel={reel} />
       ))}
     </div>
   );
