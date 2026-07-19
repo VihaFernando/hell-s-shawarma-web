@@ -8,11 +8,6 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # Netlify only supports fixed cron/preset schedules for scheduled functions,
 # not an arbitrary "every 50 days" interval. @monthly (1st of each month)
 # comfortably refreshes well inside the 60-day token expiry window.
