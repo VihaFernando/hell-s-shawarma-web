@@ -13,6 +13,7 @@ import {
   Star,
 } from "lucide-react";
 import { InstagramFeed } from "@/components/InstagramFeed";
+import { GoogleReviews } from "@/components/GoogleReviews";
 import heroImage from "@/assets/hero.png";
 import logoImage from "@/assets/logo.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
@@ -513,6 +514,11 @@ function SocialWall() {
               <Instagram className="w-4 h-4" /> @hells_shawarma
             </a>
           </div>
+        </div>
+
+        <SectionTitle kicker="Word On The Street" title="WHAT PEOPLE SAY" />
+        <div className="mb-16 md:mb-20">
+          <GoogleReviews />
         </div>
       </div>
     </section>
