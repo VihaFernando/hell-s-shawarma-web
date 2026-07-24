@@ -196,7 +196,7 @@ function CategoryImage({
   src,
   alt,
   position = "object-center",
-  height = "h-44 sm:h-56",
+  height = "h-52 sm:h-64 lg:h-72",
 }: {
   src: string;
   alt: string;
@@ -371,6 +371,7 @@ function MenuPage() {
                   src={beefShawarmaImg}
                   alt="Beef Shawarma Wrap"
                   position="object-[50%_55%]"
+                  height="h-52 sm:h-64 lg:h-88"
                 />
               </div>
             </motion.div>
@@ -393,7 +394,7 @@ function MenuPage() {
                 <CategoryImage
                   src={hummusPlateImg}
                   alt="Hummus Plate"
-                  position="object-[50%_62%]"
+                  position="object-[50%_58%] sm:object-[50%_62%]"
                 />
               </div>
               <p className="mt-3 text-right text-[#ff3b14]/70 font-display italic text-2xl tracking-wider pr-2">
@@ -411,7 +412,6 @@ function MenuPage() {
                   src={shawarmaPlateImg}
                   alt="Shawarma Plate"
                   position="object-[50%_48%]"
-                  height="h-48 sm:h-60"
                 />
               </div>
             </motion.div>
