@@ -16,7 +16,7 @@ import { InstagramFeed } from "@/components/InstagramFeed";
 import { GoogleReviews } from "@/components/GoogleReviews";
 import { InfluencerReels } from "@/components/InfluencerReels";
 import heroImage from "@/assets/hero.png";
-import logoImage from "@/assets/logo.png";
+import logoImage from "@/assets/new-logo.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
 import menuBeef from "@/assets/menu-beef.jpg";
 
@@ -74,7 +74,7 @@ export const Route = createFileRoute("/")({
 const NAV_ITEMS = [
   { label: "Home", href: "#home", to: undefined },
   { label: "Menu", href: undefined, to: "/menu" as const },
-  { label: "Special Offers", href: "#blends", to: undefined },
+  { label: "Featured", href: "#blends", to: undefined },
   { label: "Gallery", href: undefined, to: "/gallery" as const },
   { label: "Locations", href: "#contact", to: undefined },
 ];

@@ -28,7 +28,7 @@ function TikTokIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-import logoImage from "@/assets/logo.png";
+import logoImage from "@/assets/new-logo.png";
 import menuBg from "@/assets/menu.png";
 import snackPackImg from "@/assets/snack-pack.png";
 import chickenShawarmaImg from "@/assets/photos/g2.jpg";
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/menu")({
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Menu", href: "/menu" },
-  { label: "Special Offers", href: "/#blends" },
+  { label: "Featured", href: "/#blends" },
   { label: "Gallery", href: "/gallery" },
   { label: "Locations", href: "/#contact" },
 ];

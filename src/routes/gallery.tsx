@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Flame, Menu as MenuIcon, X, ChevronLeft, ChevronRight } from "lucide-react";
-import logoImage from "@/assets/logo.png";
+import logoImage from "@/assets/new-logo.png";
 
 const photoModules = import.meta.glob("../assets/photos/*.JPG", {
   eager: true,
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/gallery")({
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Menu", href: "/menu" },
-  { label: "Special Offers", href: "/#blends" },
+  { label: "Featured", href: "/#blends" },
   { label: "Gallery", href: "/gallery" },
   { label: "Locations", href: "/#contact" },
 ];
