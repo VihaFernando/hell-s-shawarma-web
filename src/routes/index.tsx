@@ -28,6 +28,14 @@ const photoModules = import.meta.glob("../assets/photos/*.JPG", {
   import: "default",
 }) as Record<string, string>;
 
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M16.6 5.82c-.9-.79-1.47-1.94-1.47-3.22h-3.13v13.44a2.6 2.6 0 1 1-2.6-2.6c.24 0 .47.03.69.09V10.4a5.73 5.73 0 0 0-.69-.04A5.73 5.73 0 1 0 15.13 16V9.4a8.15 8.15 0 0 0 4.71 1.5V7.77a4.85 4.85 0 0 1-3.24-1.95z" />
+    </svg>
+  );
+}
+
 const PHOTOS = Object.keys(photoModules)
   .sort((a, b) => {
     const numA = parseInt(a.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
@@ -391,7 +399,7 @@ function InfluencerReelsSection() {
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,106,0,0.18),transparent_60%)]" />
       <div className="relative mx-auto max-w-7xl">
-        <SectionTitle kicker="As Featured By" title="INFLUENCER REELS" />
+        <SectionTitle kicker="As Seen On" title="FEATURED" />
         <InfluencerReels />
       </div>
     </section>
@@ -544,66 +552,86 @@ function SocialWall() {
 }
 
 /* ---------------- LOCATION ---------------- */
+const LOCATIONS = [
+  {
+    name: "Dehiwala",
+    address: "Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350",
+    hours: "Daily  2:30 PM-1 AM",
+    mapTitle: "Hell's Shawarma & Grill Dehiwala location",
+    mapSrc:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.235983750658!2d79.86148147598695!3d6.862297519131488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25be80c90d25d%3A0x37c04fe78f2dde8b!2sHell's%20Shawarma%20%26%20Grill!5e0!3m2!1sen!2slk!4v1782395176950!5m2!1sen!2slk",
+  },
+  {
+    name: "Marine Drive",
+    address: "No.18, Marine Drive, Kollupitiya",
+    hours: "Fri-Sun  4:30 PM-1 AM\nTue-Thu  4:30 PM-12:30 AM\nMonday  Closed",
+    mapTitle: "Hell's Shawarma Marine Drive location",
+    mapSrc:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sHell's%20Shawarma%20Marine%20Drive!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
+  },
+];
+
 function LocationSection() {
   return (
     <section id="contact" className="relative py-24 md:py-32 px-5 lg:px-10 bg-black">
       <div className="mx-auto max-w-7xl">
         <SectionTitle kicker="Come Visit Us" title="FIND HELL'S" />
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
-          <div className="relative aspect-4/3 lg:aspect-auto rounded-2xl overflow-hidden glass-dark border-white/10">
-            <iframe
-              title="Hell's Shawarma & Grill location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.235983750658!2d79.86148147598695!3d6.862297519131488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25be80c90d25d%3A0x37c04fe78f2dde8b!2sHell&#39;s%20Shawarma%20%26%20Grill!5e0!3m2!1sen!2slk!4v1782395176950!5m2!1sen!2slk"
-              className="w-full h-full grayscale contrast-125 opacity-85"
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(255,59,20,0.15))]" />
-          </div>
-          <div className="glass-dark rounded-2xl p-8 md:p-10 border-white/10">
-            <div className="space-y-6">
-              <InfoRow
-                icon={MapPin}
-                label="Address"
-                value="Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350"
-              />
-              <InfoRow
-                icon={Clock}
-                label="Opening Hours"
-                value={"Mon–Thu  11:00  23:00\nFri–Sun  11:00  01:00"}
-              />
-              <InfoRow icon={Phone} label="Contact" value="072 320 5285" />
+          {LOCATIONS.map((location) => (
+            <div
+              key={location.name}
+              className="glass-dark rounded-2xl overflow-hidden border-white/10"
+            >
+              <div className="relative aspect-4/3">
+                <iframe
+                  title={location.mapTitle}
+                  src={location.mapSrc}
+                  className="w-full h-full grayscale contrast-125 opacity-85"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(255,59,20,0.15))]" />
+              </div>
+              <div className="p-6 md:p-8">
+                <h3 className="font-display text-3xl text-white uppercase tracking-wider mb-6">
+                  {location.name}
+                </h3>
+                <div className="space-y-5">
+                  <InfoRow icon={MapPin} label="Address" value={location.address} />
+                  <InfoRow icon={Clock} label="Opening Hours" value={location.hours} />
+                  <InfoRow icon={Phone} label="Contact" value="072 320 5285" />
+                </div>
+              </div>
             </div>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <a
-                href="tel:0723205285"
-                className="inline-flex items-center gap-2 bg-[#ff3b14] hover:bg-[#ff5a2a] text-white px-6 py-3.5 rounded-md font-bold text-xs uppercase tracking-[0.18em] transition hover:glow-flame"
-              >
-                <Phone className="w-4 h-4" /> Call to Order
-              </a>
-              <Link
-                to="/menu"
-                className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white px-6 py-3.5 rounded-md font-bold text-xs uppercase tracking-[0.18em] transition"
-              >
-                <Flame className="w-4 h-4" /> View Menu
-              </Link>
-              <a
-                href="https://www.ubereats.com/lk/store/hells-shawarma-%26-grill/ZM3tJn6fRe-RtiSWcW0rdA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-white/20 hover:border-[#ff3b14] hover:text-[#ff3b14] text-white px-6 py-3.5 rounded-md font-bold text-xs uppercase tracking-[0.18em] transition"
-              >
-                🛵 Uber Eats
-              </a>
-            </div>
-          </div>
+          ))}
+        </div>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <a
+            href="tel:0723205285"
+            className="inline-flex items-center gap-2 bg-[#ff3b14] hover:bg-[#ff5a2a] text-white px-6 py-3.5 rounded-md font-bold text-xs uppercase tracking-[0.18em] transition hover:glow-flame"
+          >
+            <Phone className="w-4 h-4" /> Call to Order
+          </a>
+          <Link
+            to="/menu"
+            className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white px-6 py-3.5 rounded-md font-bold text-xs uppercase tracking-[0.18em] transition"
+          >
+            <Flame className="w-4 h-4" /> View Menu
+          </Link>
+          <a
+            href="https://www.ubereats.com/lk/store/hells-shawarma-%26-grill/ZM3tJn6fRe-RtiSWcW0rdA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border border-white/20 hover:border-[#ff3b14] hover:text-[#ff3b14] text-white px-6 py-3.5 rounded-md font-bold text-xs uppercase tracking-[0.18em] transition"
+          >
+            Uber Eats
+          </a>
         </div>
       </div>
     </section>
   );
 }
-
 function InfoRow({
   icon: Icon,
   label,
@@ -633,7 +661,7 @@ function Footer() {
   return (
     <footer className="relative pt-20 pb-10 px-5 lg:px-10 bg-linear-to-b from-black to-[#1a0606] border-t border-white/5">
       <div className="mx-auto max-w-7xl">
-        <div className="grid md:grid-cols-4 gap-10 mb-14">
+        <div className="grid md:grid-cols-5 gap-10 mb-14">
           <div className="md:col-span-2">
             <img
               src={logoImage}
@@ -654,6 +682,10 @@ function Footer() {
                 {
                   Icon: Facebook,
                   href: "https://www.facebook.com/p/Hells-Shawarma-Grill-61569893127389/",
+                },
+                {
+                  Icon: TikTokIcon,
+                  href: "https://www.tiktok.com/discover/hells-shawarma?is_from_webapp=1&sender_device=pc",
                 },
               ].map(({ Icon, href }, i) => (
                 <a
@@ -696,17 +728,45 @@ function Footer() {
           </div>
           <div>
             <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
+              Locations
+            </div>
+            <ul className="space-y-3.5 text-sm text-white/75">
+              <li>
+                <span className="font-semibold text-white/85">Dehiwala</span>
+                <br />
+                Fusion Food Court, 9 Galle Rd,
+                <br />
+                Dehiwala-Mount Lavinia 10350
+                <br />
+                Daily 2:30 PM-1 AM
+              </li>
+              <li>
+                <span className="font-semibold text-white/85">Marine Drive</span>
+                <br />
+                No.18, Marine Drive, Kollupitiya
+                <br />
+                Fri-Sun 4:30 PM-1 AM, Tue-Thu 4:30 PM-12:30 AM
+                <br />
+                Monday Closed
+              </li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
               Get In Touch
             </div>
             <ul className="space-y-2.5 text-sm text-white/75">
               <li>
-                Fusion Food Court, 9 Galle Rd,
-                <br />
-                Dehiwala-Mount Lavinia 10350
-              </li>
-              <li>
                 <a href="tel:0723205285" className="hover:text-[#ff6a00] transition">
                   072 320 5285
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:hells.shawarma@gmail.com"
+                  className="hover:text-[#ff6a00] transition"
+                >
+                  hells.shawarma@gmail.com
                 </a>
               </li>
               <li>
@@ -748,3 +808,4 @@ function Footer() {
     </footer>
   );
 }
+
