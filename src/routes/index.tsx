@@ -564,7 +564,7 @@ const LOCATIONS = [
   {
     name: "Marine Drive",
     address: "No.18, Marine Drive, Kollupitiya",
-    hours: "Fri-Sun  4:30 PM-1 AM\nTue-Thu  4:30 PM-12:30 AM\nMonday  Closed",
+    hours: "Fri-Sun  5 PM-1 AM\nTue-Thu  5 PM-12:30 AM\nMonday  Closed",
     mapTitle: "Hell's Shawarma Marine Drive location",
     mapSrc:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sHell's%20Shawarma%20Marine%20Drive!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
@@ -745,7 +745,7 @@ function Footer() {
                 <br />
                 No.18, Marine Drive, Kollupitiya
                 <br />
-                Fri-Sun 4:30 PM-1 AM, Tue-Thu 4:30 PM-12:30 AM
+                Fri-Sun 5 PM-1 AM, Tue-Thu 5 PM-12:30 AM
                 <br />
                 Monday Closed
               </li>

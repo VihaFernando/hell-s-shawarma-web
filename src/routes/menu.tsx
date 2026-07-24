@@ -577,7 +577,7 @@ function MenuFooter() {
                 <br />
                 No.18, Marine Drive, Kollupitiya
                 <br />
-                Fri-Sun 4:30 PM-1 AM, Tue-Thu 4:30 PM-12:30 AM
+                Fri-Sun 5:00 PM-1 AM, Tue-Thu 5:00 PM-12:30 AM
                 <br />
                 Monday Closed
               </li>
