@@ -31,10 +31,10 @@ function TikTokIcon({ className }: { className?: string }) {
 import logoImage from "@/assets/new-logo.png";
 import menuBg from "@/assets/menu.png";
 import snackPackImg from "@/assets/snack-pack.png";
-import chickenShawarmaImg from "@/assets/photos/g2.jpg";
-import hummusPlateImg from "@/assets/photos/g6.jpg";
-import shawarmaPlateImg from "@/assets/photos/g7.jpg";
-import beefShawarmaImg from "@/assets/photos/g8.jpg";
+import chickenShawarmaImg from "@/assets/photos/g2.JPG";
+import hummusPlateImg from "@/assets/photos/g6.JPG";
+import shawarmaPlateImg from "@/assets/photos/g7.JPG";
+import beefShawarmaImg from "@/assets/photos/g8.JPG";
 import menuData from "@/assets/menu.json";
 
 export const Route = createFileRoute("/menu")({
