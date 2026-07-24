@@ -23,6 +23,10 @@ function FacebookIcon({ className }: { className?: string }) {
 import logoImage from "@/assets/logo.png";
 import menuBg from "@/assets/menu.png";
 import snackPackImg from "@/assets/snack-pack.png";
+import chickenShawarmaImg from "@/assets/photos/g2.JPG";
+import hummusPlateImg from "@/assets/photos/g6.JPG";
+import shawarmaPlateImg from "@/assets/photos/g7.JPG";
+import beefShawarmaImg from "@/assets/photos/g8.JPG";
 import menuData from "@/assets/menu.json";
 
 export const Route = createFileRoute("/menu")({
@@ -149,9 +153,9 @@ const VERY_SPICY_IDS = new Set([4, 6, 10, 12]);
 const TRIPLE_SPICY_IDS = new Set([2, 8]);
 
 function SpicyFlames({ id }: { id: number }) {
-  if (TRIPLE_SPICY_IDS.has(id)) return <span className="text-[#ff3b14] ml-1">🔥🔥🔥</span>;
-  if (VERY_SPICY_IDS.has(id)) return <span className="text-[#ff3b14] ml-1">🔥🔥</span>;
-  if (SPICY_IDS.has(id)) return <span className="text-[#ff3b14] ml-1">🔥</span>;
+  if (TRIPLE_SPICY_IDS.has(id)) return <span className="inline-block whitespace-nowrap text-[#ff3b14] ml-1">🔥🔥🔥</span>;
+  if (VERY_SPICY_IDS.has(id)) return <span className="inline-block whitespace-nowrap text-[#ff3b14] ml-1">🔥🔥</span>;
+  if (SPICY_IDS.has(id)) return <span className="inline-block whitespace-nowrap text-[#ff3b14] ml-1">🔥</span>;
   return null;
 }
 
@@ -188,6 +192,31 @@ interface MenuItem {
   ingredients?: string[];
 }
 
+function CategoryImage({
+  src,
+  alt,
+  position = "object-center",
+  height = "h-44 sm:h-56",
+}: {
+  src: string;
+  alt: string;
+  position?: string;
+  height?: string;
+}) {
+  return (
+    <div className={`relative ${height} overflow-hidden`}>
+      <img
+        src={src}
+        alt={alt}
+        className={`w-full h-full object-cover ${position}`}
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
+    </div>
+  );
+}
+
 function MenuItemRow({ item, showDivider }: { item: MenuItem; showDivider: boolean }) {
   const ingredientsStr = item.ingredients?.join(", ");
   const paddedId = String(item.id).padStart(2, "0");
@@ -199,17 +228,19 @@ function MenuItemRow({ item, showDivider }: { item: MenuItem; showDivider: boole
           {paddedId}
         </span>
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-6">
-            <div className="flex-1">
-              <p className="font-bold text-white text-[17px] leading-snug">
+          <div className="flex items-start justify-between gap-3 sm:gap-6 min-w-0">
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-white text-[16px] sm:text-[17px] leading-snug break-words">
                 {item.name}
                 <SpicyFlames id={item.id} />
               </p>
               {ingredientsStr && (
-                <p className="text-white/40 text-[14px] leading-relaxed mt-1.5">{ingredientsStr}</p>
+                <p className="text-white/40 text-[13px] sm:text-[14px] leading-relaxed mt-1.5 break-words">
+                  {ingredientsStr}
+                </p>
               )}
             </div>
-            <span className="shrink-0 text-white font-bold text-[17px] tabular-nums pt-0.5">
+            <span className="shrink-0 text-white font-bold text-[16px] sm:text-[17px] tabular-nums pt-0.5">
               {item.price.toLocaleString()}
             </span>
           </div>
@@ -233,13 +264,13 @@ function AddOnsGrid({ items }: { items: AddOnItem[] }) {
   const right = items.slice(half);
 
   return (
-    <div className="grid grid-cols-2 gap-x-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
       <div>
         {left.map((item) => (
           <div key={item.id} className="flex items-center justify-between gap-3 px-3 py-2 border-b border-white/8">
             <div className="flex items-center gap-2 min-w-0">
               <span className="shrink-0 text-[#ff3b14]/50 font-display text-xs w-5">{String(item.id).padStart(2, "0")}</span>
-              <span className="text-white/80 text-[14px] truncate">{item.name}</span>
+              <span className="text-white/80 text-[14px] break-words">{item.name}</span>
             </div>
             <span className="shrink-0 text-white font-bold text-[14px] tabular-nums">{item.price.toLocaleString()}</span>
           </div>
@@ -250,7 +281,7 @@ function AddOnsGrid({ items }: { items: AddOnItem[] }) {
           <div key={item.id} className="flex items-center justify-between gap-3 px-3 py-2 border-b border-white/8">
             <div className="flex items-center gap-2 min-w-0">
               <span className="shrink-0 text-[#ff3b14]/50 font-display text-xs w-5">{String(item.id).padStart(2, "0")}</span>
-              <span className="text-white/80 text-[14px] truncate">{item.name}</span>
+              <span className="text-white/80 text-[14px] break-words">{item.name}</span>
             </div>
             <span className="shrink-0 text-white font-bold text-[14px] tabular-nums">{item.price.toLocaleString()}</span>
           </div>
@@ -322,6 +353,11 @@ function MenuPage() {
                 {chicken.items.map((item, i) => (
                   <MenuItemRow key={item.id} item={item} showDivider={i < chicken.items.length - 1} />
                 ))}
+                <CategoryImage
+                  src={chickenShawarmaImg}
+                  alt="Chicken Shawarma Wrap"
+                  position="object-[50%_58%]"
+                />
               </div>
             </motion.div>
 
@@ -331,6 +367,11 @@ function MenuPage() {
                 {beef.items.map((item, i) => (
                   <MenuItemRow key={item.id} item={item} showDivider={i < beef.items.length - 1} />
                 ))}
+                <CategoryImage
+                  src={beefShawarmaImg}
+                  alt="Beef Shawarma Wrap"
+                  position="object-[50%_55%]"
+                />
               </div>
             </motion.div>
 
@@ -349,6 +390,11 @@ function MenuPage() {
                 {hummus.items.map((item, i) => (
                   <MenuItemRow key={item.id} item={item} showDivider={i < hummus.items.length - 1} />
                 ))}
+                <CategoryImage
+                  src={hummusPlateImg}
+                  alt="Hummus Plate"
+                  position="object-[50%_62%]"
+                />
               </div>
               <p className="mt-3 text-right text-[#ff3b14]/70 font-display italic text-2xl tracking-wider pr-2">
                 Bold. Spicy. Authentic.
@@ -361,6 +407,12 @@ function MenuPage() {
                 {shawarmaPlate.items.map((item, i) => (
                   <MenuItemRow key={item.id} item={item} showDivider={i < shawarmaPlate.items.length - 1} />
                 ))}
+                <CategoryImage
+                  src={shawarmaPlateImg}
+                  alt="Shawarma Plate"
+                  position="object-[50%_48%]"
+                  height="h-48 sm:h-60"
+                />
               </div>
             </motion.div>
 
@@ -379,14 +431,7 @@ function MenuPage() {
                 {snackPack.items.map((item, i) => (
                   <MenuItemRow key={item.id} item={item} showDivider={i < snackPack.items.length - 1} />
                 ))}
-                <div className="relative h-48 sm:h-56 overflow-hidden">
-                  <img
-                    src={snackPackImg}
-                    alt="Hell's Snack Pack"
-                    className="w-full h-full object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
-                </div>
+                <CategoryImage src={snackPackImg} alt="Hell's Snack Pack" />
               </div>
             </motion.div>
           </div>
