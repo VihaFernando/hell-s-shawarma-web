@@ -50,15 +50,15 @@ import starIcon from "@/assets/star.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hell's Shawarma & Grill  Authentic Middle Eastern Cuisine" },
+      { title: "Hell's Shawarma  Authentic Middle Eastern Cuisine" },
       {
         name: "description",
         content:
-          "Hell's Shawarma & Grill  Authentic Middle Eastern and Mediterranean Cuisine. Bold shawarmas, loaded fries, legendary flavours.",
+          "Hell's Shawarma  Authentic Middle Eastern and Mediterranean Cuisine. Bold shawarmas, loaded fries, legendary flavours.",
       },
       {
         property: "og:title",
-        content: "Hell's Shawarma & Grill  Authentic Middle Eastern Cuisine",
+        content: "Hell's Shawarma  Authentic Middle Eastern Cuisine",
       },
       {
         property: "og:description",
@@ -113,7 +113,7 @@ function Navbar() {
         <a href="#home" className="shrink-0">
           <img
             src={logoImage}
-            alt="Hell's Shawarma & Grill"
+            alt="Hell's Shawarma"
             className="h-10 md:h-12 w-auto object-contain"
             decoding="async"
           />
@@ -249,9 +249,6 @@ function Hero() {
                 HELL'S
               </span>
               <span className="block text-[clamp(2.2rem,8vw,5.5rem)] leading-[1]">SHAWARMA</span>
-              <span className="block text-[clamp(1.4rem,5vw,3.2rem)] leading-[1.1] text-white/70 font-bold tracking-[0.12em]">
-                &amp; GRILL
-              </span>
             </h1>
 
             <p className="mt-5 text-white/60 text-sm sm:text-base tracking-[0.25em] uppercase font-semibold text-center lg:text-left">
@@ -557,12 +554,12 @@ const LOCATIONS = [
     name: "Dehiwala",
     address: "Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350",
     hours: "Daily  2:30 PM-1 AM",
-    mapTitle: "Hell's Shawarma & Grill Dehiwala location",
+    mapTitle: "Hell's Shawarma Dehiwala location",
     mapSrc:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.235983750658!2d79.86148147598695!3d6.862297519131488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25be80c90d25d%3A0x37c04fe78f2dde8b!2sHell's%20Shawarma%20%26%20Grill!5e0!3m2!1sen!2slk!4v1782395176950!5m2!1sen!2slk",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.235983750658!2d79.86148147598695!3d6.862297519131488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25be80c90d25d%3A0x37c04fe78f2dde8b!2sHell's%20Shawarma!5e0!3m2!1sen!2slk!4v1782395176950!5m2!1sen!2slk",
   },
   {
-    name: "Marine Drive",
+    name: "Kollupitiya",
     address: "No.18, Marine Drive, Kollupitiya",
     hours: "Fri-Sun  5 PM-1 AM\nTue-Thu  5 PM-12:30 AM\nMonday  Closed",
     mapTitle: "Hell's Shawarma Marine Drive location",
@@ -665,7 +662,7 @@ function Footer() {
           <div className="md:col-span-2">
             <img
               src={logoImage}
-              alt="Hell's Shawarma & Grill"
+              alt="Hell's Shawarma"
               className="h-16 w-auto object-contain mb-5"
               decoding="async"
             />
@@ -681,7 +678,7 @@ function Footer() {
                 },
                 {
                   Icon: Facebook,
-                  href: "https://www.facebook.com/p/Hells-Shawarma-Grill-61569893127389/",
+                  href: "https://www.facebook.com/p/Hells-Shawarma-61569893127389/",
                 },
                 {
                   Icon: TikTokIcon,
@@ -801,7 +798,7 @@ function Footer() {
           </div>
         </div>
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/45">
-          <div>© {new Date().getFullYear()} Hell's Shawarma & Grill. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Hell's Shawarma. All rights reserved.</div>
           <div className="tracking-[0.2em] uppercase">Authentic Middle Eastern Cuisine 🔥</div>
         </div>
       </div>

@@ -40,7 +40,7 @@ import menuData from "@/assets/menu.json";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu  Hell's Shawarma & Grill" },
+      { title: "Menu  Hell's Shawarma" },
       {
         name: "description",
         content:
@@ -80,7 +80,7 @@ function Navbar() {
         <Link to="/" className="shrink-0">
           <img
             src={logoImage}
-            alt="Hell's Shawarma & Grill"
+            alt="Hell's Shawarma"
             className="h-10 md:h-12 w-auto object-contain"
             decoding="async"
           />
@@ -511,7 +511,7 @@ function MenuFooter() {
           <div className="md:col-span-2">
             <img
               src={logoImage}
-              alt="Hell's Shawarma & Grill"
+              alt="Hell's Shawarma"
               className="h-16 w-auto object-contain mb-5"
               decoding="async"
             />
@@ -522,7 +522,7 @@ function MenuFooter() {
             <div className="flex items-center gap-3 mt-6">
               {[
                 { Icon: InstagramIcon, href: "https://www.instagram.com/hells_shawarma/" },
-                { Icon: FacebookIcon, href: "https://www.facebook.com/p/Hells-Shawarma-Grill-61569893127389/" },
+                { Icon: FacebookIcon, href: "https://www.facebook.com/p/Hells-Shawarma-61569893127389/" },
                 { Icon: TikTokIcon, href: "https://www.tiktok.com/discover/hells-shawarma?is_from_webapp=1&sender_device=pc" },
               ].map(({ Icon, href }, i) => (
                 <a
@@ -620,7 +620,7 @@ function MenuFooter() {
           </div>
         </div>
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/45">
-          <div>© {new Date().getFullYear()} Hell's Shawarma & Grill. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Hell's Shawarma. All rights reserved.</div>
           <div className="tracking-[0.2em] uppercase">Authentic Middle Eastern Cuisine 🔥</div>
         </div>
       </div>

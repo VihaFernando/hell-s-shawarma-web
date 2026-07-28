@@ -20,10 +20,10 @@ const PHOTOS = Object.keys(photoModules)
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Gallery  Hell's Shawarma & Grill" },
+      { title: "Gallery  Hell's Shawarma" },
       {
         name: "description",
-        content: "Browse photos from Hell's Shawarma & Grill  authentic Middle Eastern cuisine.",
+        content: "Browse photos from Hell's Shawarma  authentic Middle Eastern cuisine.",
       },
     ],
   }),
@@ -58,7 +58,7 @@ function Navbar() {
         <Link to="/" className="shrink-0">
           <img
             src={logoImage}
-            alt="Hell's Shawarma & Grill"
+            alt="Hell's Shawarma"
             className="h-10 md:h-12 w-auto object-contain"
             decoding="async"
           />
@@ -251,7 +251,7 @@ function GalleryPage() {
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 px-5 lg:px-10">
         <div className="mx-auto max-w-7xl flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/45">
-          <div>© {new Date().getFullYear()} Hell's Shawarma & Grill. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Hell's Shawarma. All rights reserved.</div>
           <div className="tracking-[0.2em] uppercase">Authentic Middle Eastern Cuisine 🔥</div>
         </div>
       </footer>
