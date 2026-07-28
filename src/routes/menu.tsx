@@ -573,7 +573,7 @@ function MenuFooter() {
                 Daily 2:30 PM-1 AM
               </li>
               <li>
-                <span className="font-semibold text-white/85">Marine Drive</span>
+                <span className="font-semibold text-white/85">Kollupitiya</span>
                 <br />
                 No.18, Marine Drive, Kollupitiya
                 <br />
