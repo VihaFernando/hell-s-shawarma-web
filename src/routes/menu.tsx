@@ -31,7 +31,7 @@ function TikTokIcon({ className }: { className?: string }) {
 import logoImage from "@/assets/new-logo.png";
 import menuBg from "@/assets/menu.png";
 import snackPackImg from "@/assets/snack-pack.png";
-import chickenShawarmaImg from "@/assets/photos/g2.JPG";
+import chickenShawarmaImg from "@/assets/photos/g9.JPG";
 import hummusPlateImg from "@/assets/photos/g6.JPG";
 import shawarmaPlateImg from "@/assets/photos/g7.JPG";
 import beefShawarmaImg from "@/assets/photos/g8.JPG";
@@ -364,7 +364,7 @@ function MenuPage() {
                 <CategoryImage
                   src={chickenShawarmaImg}
                   alt="Chicken Shawarma Wrap"
-                  position="object-[50%_58%]"
+                  position="object-[50%_40%]"
                 />
               </div>
             </motion.div>
