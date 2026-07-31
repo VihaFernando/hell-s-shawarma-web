@@ -10,6 +10,22 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Don Jose";
+  src: url("./assets/fonts/DonJose_Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("./assets/fonts/Lato-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -38,33 +54,33 @@
   --color-ring: var(--ring);
   --color-flame: var(--flame);
   --color-ember: var(--ember);
-  --font-display: "Capture it", sans-serif;
-  --font-body: "Oswald", sans-serif;
+  --font-display: "Don Jose", sans-serif;
+  --font-body: "Lato", sans-serif;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.08 0.01 30);
+  --background: oklch(0.225 0.002 197);
   --foreground: oklch(0.98 0 0);
-  --card: oklch(0.12 0.015 30);
+  --card: oklch(0.26 0.004 197);
   --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.12 0.015 30);
+  --popover: oklch(0.26 0.004 197);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.62 0.24 28);
+  --primary: oklch(0.602 0.231 26.9);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.15 0.01 30);
+  --secondary: oklch(0.28 0.003 197);
   --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.18 0.01 30);
+  --muted: oklch(0.32 0.003 197);
   --muted-foreground: oklch(0.72 0.02 30);
-  --accent: oklch(0.7 0.22 50);
+  --accent: oklch(0.684 0.173 47.6);
   --accent-foreground: oklch(0.08 0 0);
-  --destructive: oklch(0.62 0.24 28);
+  --destructive: oklch(0.602 0.231 26.9);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.22 0.02 30);
-  --input: oklch(0.22 0.02 30);
-  --ring: oklch(0.62 0.24 28);
-  --flame: oklch(0.62 0.24 28);
-  --ember: oklch(0.7 0.22 50);
+  --border: oklch(0.35 0.005 197);
+  --input: oklch(0.35 0.005 197);
+  --ring: oklch(0.602 0.231 26.9);
+  --flame: oklch(0.602 0.231 26.9);
+  --ember: oklch(0.684 0.173 47.6);
 }
 
 @layer base {

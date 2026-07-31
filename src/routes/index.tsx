@@ -17,6 +17,7 @@ import { GoogleReviews } from "@/components/GoogleReviews";
 import { InfluencerReels } from "@/components/InfluencerReels";
 import heroImage from "@/assets/hero.png";
 import logoImage from "@/assets/new-logo.png";
+import logo2Image from "@/assets/logo2.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
 import menuBeef from "@/assets/menu-beef.jpg";
 
@@ -244,14 +245,13 @@ function Hero() {
             className="flex flex-col items-center lg:items-start"
           >
             {/* brand name  HELL'S big, the rest smaller */}
-            <h1 className="font-display text-white leading-[0.88] tracking-normal uppercase text-center lg:text-left">
-              <span className="block text-[#ff3b14] text-[clamp(5rem,20vw,13rem)] leading-[0.82]">
-                HELL'S
-              </span>
-              <span className="block text-[clamp(2.2rem,8vw,5.5rem)] leading-[1]">SHAWARMA</span>
-            </h1>
+            <img
+              src={logo2Image}
+              alt="Hell's Shawarma"
+              className="w-full max-w-[min(90vw,700px)]"
+            />
 
-            <p className="mt-5 text-white/60 text-sm sm:text-base tracking-[0.25em] uppercase font-semibold text-center lg:text-left">
+            <p className="mt-5 text-white/60 text-sm sm:text-base tracking-[0.1em] uppercase font-semibold text-center lg:text-left">
               Authentic Middle Eastern &amp; Mediterranean Cuisine
             </p>
 
@@ -805,4 +805,3 @@ function Footer() {
     </footer>
   );
 }
-
