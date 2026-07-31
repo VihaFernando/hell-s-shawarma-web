@@ -32,8 +32,8 @@ import logoImage from "@/assets/new-logo.png";
 import menuBg from "@/assets/menu.png";
 import snackPackImg from "@/assets/snack-pack.png";
 import chickenShawarmaImg from "@/assets/photos/g9.JPG";
-import hummusPlateImg from "@/assets/photos/g6.JPG";
-import shawarmaPlateImg from "@/assets/photos/g7.JPG";
+import hummusPlateImg from "@/assets/photos/g1.JPG";
+import shawarmaPlateImg from "@/assets/photos/g3.JPG";
 import beefShawarmaImg from "@/assets/photos/g8.JPG";
 import menuData from "@/assets/menu.json";
 
@@ -402,7 +402,7 @@ function MenuPage() {
                 <CategoryImage
                   src={hummusPlateImg}
                   alt="Hummus Plate"
-                  position="object-[50%_58%] sm:object-[50%_62%]"
+                  position="object-[50%_58%] sm:object-[50%_55%]"
                 />
               </div>
               <p className="mt-3 text-right text-[#ff3b14]/70 font-display italic text-2xl tracking-wider pr-2">
