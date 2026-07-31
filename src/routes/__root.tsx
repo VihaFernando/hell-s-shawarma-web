@@ -13,7 +13,6 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import donJoseFont from "../assets/fonts/DonJose_Black.otf?url";
 import latoFont from "../assets/fonts/Lato-Black.ttf?url";
-import kamaliFont from "../assets/fonts/Kamali.ttf?url";
 
 function NotFoundComponent() {
   return (
@@ -94,7 +93,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "preload", href: donJoseFont, as: "font", type: "font/otf", crossOrigin: "anonymous" },
       { rel: "preload", href: latoFont, as: "font", type: "font/ttf", crossOrigin: "anonymous" },
-      { rel: "preload", href: kamaliFont, as: "font", type: "font/ttf", crossOrigin: "anonymous" },
     ],
   }),
   shellComponent: RootShell,
