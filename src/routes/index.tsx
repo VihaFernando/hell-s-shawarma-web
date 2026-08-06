@@ -243,7 +243,7 @@ function Hero() {
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
-            className="flex flex-col items-center lg:items-start"
+            className="flex flex-col items-center lg:items-start xl:items-center"
           >
             {/* brand name  HELL'S big, the rest smaller */}
             <img
@@ -252,7 +252,7 @@ function Hero() {
               className="w-full max-w-[min(90vw,700px)]"
             />
 
-            <p className="mt-5 text-white/60 text-sm sm:text-base tracking-[0.1em] uppercase font-semibold text-center lg:text-left">
+            <p className="mt-5 text-white/60 text-sm sm:text-base tracking-[0.1em] uppercase font-semibold text-center lg:text-left xl:text-center">
               Authentic Middle Eastern &amp; Mediterranean Cuisine
             </p>
 
@@ -266,7 +266,7 @@ function Hero() {
               <span>Grills</span>
             </div>
 
-            <div className="mt-8 sm:mt-10 flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4">
+            <div className="mt-8 sm:mt-10 flex flex-wrap justify-center lg:justify-start xl:justify-center gap-3 sm:gap-4">
               <Link
                 to="/menu"
                 className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#ff3b14] hover:bg-[#ff5a2a] text-white px-5 py-2 sm:px-8 sm:py-3.5 rounded-md font-semibold tracking-wider text-xs sm:text-sm uppercase transition-all shadow-[0_0_20px_rgba(255,59,20,0.3)]"
