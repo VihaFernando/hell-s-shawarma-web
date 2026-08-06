@@ -16,7 +16,7 @@ import { InstagramFeed } from "@/components/InstagramFeed";
 import { GoogleReviews } from "@/components/GoogleReviews";
 import { InfluencerReels } from "@/components/InfluencerReels";
 import heroImage from "@/assets/hero.png";
-import logoImage from "@/assets/new-logo.png";
+import logoImage from "@/assets/logo2.png";
 import logo2Image from "@/assets/logo2.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
 import menuBeef from "@/assets/menu-beef.jpg";

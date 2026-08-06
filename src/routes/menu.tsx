@@ -28,7 +28,7 @@ function TikTokIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-import logoImage from "@/assets/new-logo.png";
+import logoImage from "@/assets/logo2.png";
 import menuBg from "@/assets/menu.png";
 import snackPackImg from "@/assets/snack-pack.png";
 import chickenShawarmaImg from "@/assets/photos/g9.JPG";
