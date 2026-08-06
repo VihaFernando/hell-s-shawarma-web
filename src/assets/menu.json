@@ -325,12 +325,12 @@
         {
           "id": 22,
           "name": "French Fries (200g)",
-          "price": 800
+          "price": 1000
         },
         {
           "id": 23,
           "name": "Cheesy French Fries (200g)",
-          "price": 900
+          "price": 1490
         },
         {
           "id": 24,
@@ -361,6 +361,11 @@
           "id": 29,
           "name": "Vimto Drink",
           "price": 300
+        },
+        {
+          "id": 30,
+          "name": "Signature Potato Wedges (250g)",
+          "price": 1250
         }
       ]
     }

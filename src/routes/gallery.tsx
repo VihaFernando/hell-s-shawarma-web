@@ -11,8 +11,8 @@ const photoModules = import.meta.glob("../assets/photos/*.JPG", {
 
 const PHOTOS = Object.keys(photoModules)
   .sort((a, b) => {
-    const numA = parseInt(a.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
-    const numB = parseInt(b.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
+    const numA = parseFloat(a.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
+    const numB = parseFloat(b.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
     return numA - numB;
   })
   .map((key) => photoModules[key]);

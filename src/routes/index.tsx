@@ -39,14 +39,15 @@ function TikTokIcon({ className }: { className?: string }) {
 
 const PHOTOS = Object.keys(photoModules)
   .sort((a, b) => {
-    const numA = parseInt(a.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
-    const numB = parseInt(b.match(/g(\d+)\.JPG$/)?.[1] ?? "0");
+    const numA = parseFloat(a.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
+    const numB = parseFloat(b.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
     return numA - numB;
   })
   .map((k) => photoModules[k]);
 import fireIcon from "@/assets/fire.png";
 import burgerIcon from "@/assets/burger.png";
 import starIcon from "@/assets/star.png";
+import halalIcon from "@/assets/halal-certified-icon.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -258,9 +259,9 @@ function Hero() {
             <div className="mt-4 flex items-center gap-3 sm:gap-5 text-sm sm:text-base font-semibold tracking-normal uppercase text-white/80">
               <span>Shawarmas</span>
               <span className="w-[5px] h-[5px] rounded-full bg-[#ff3b14] shrink-0" />
-              <span>Plates</span>
+              <span>Hummus</span>
               <span className="w-[5px] h-[5px] rounded-full bg-[#ff3b14] shrink-0" />
-              <span>Loaded Fries</span>
+              <span>Snack Pack</span>
               <span className="w-[5px] h-[5px] rounded-full bg-[#ff3b14] shrink-0" />
               <span>Grills</span>
             </div>
@@ -299,10 +300,10 @@ function Hero() {
 }
 
 const FEATURES = [
-  { icon: fireIcon, title: "Real Charcoal Grill", desc: "Slow-roasted on open flame" },
+  { icon: fireIcon, title: "Flamed Grilled", desc: "Slow-roasted on open flame" },
   { icon: burgerIcon, title: "Loaded Shawarmas", desc: "Stuffed to the max" },
   { icon: starIcon, title: "Signature Sauces", desc: "House-made toum & zhoug" },
-  { icon: fireIcon, title: "Halal Certified", desc: "100% Halal meat" },
+  { icon: halalIcon, title: "Halal Certified", desc: "100% Halal meat" },
 ];
 
 function FeatureBar() {
@@ -333,13 +334,15 @@ function FeatureBar() {
 }
 
 /* ---------------- SECTION TITLE ---------------- */
-function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
+function SectionTitle({ kicker, title }: { kicker?: string; title: string }) {
   return (
     <div className="text-center mb-14 md:mb-20">
-      <div className="inline-flex items-center gap-2 text-[#ff6a00] tracking-[0.3em] text-xs font-bold uppercase mb-4">
-        <span className="h-px w-8 bg-[#ff6a00]" /> {kicker}{" "}
-        <span className="h-px w-8 bg-[#ff6a00]" />
-      </div>
+      {kicker && (
+        <div className="inline-flex items-center gap-2 text-[#ff6a00] tracking-[0.3em] text-xs font-bold uppercase mb-4">
+          <span className="h-px w-8 bg-[#ff6a00]" /> {kicker}{" "}
+          <span className="h-px w-8 bg-[#ff6a00]" />
+        </div>
+      )}
       <h2 className="font-display text-white leading-[0.9] text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
         {title}
       </h2>
@@ -396,7 +399,7 @@ function InfluencerReelsSection() {
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,106,0,0.18),transparent_60%)]" />
       <div className="relative mx-auto max-w-7xl">
-        <SectionTitle kicker="As Seen On" title="FEATURED" />
+        <SectionTitle title="FEATURED" />
         <InfluencerReels />
       </div>
     </section>

@@ -44,7 +44,7 @@ export const Route = createFileRoute("/menu")({
       {
         name: "description",
         content:
-          "Authentic Middle Eastern & Asian Cuisine. Chicken Shawarmas, Beef Shawarmas, Plates & More.",
+          "Authentic Middle Eastern & Mediterranean Cuisine. Chicken Shawarmas, Beef Shawarmas, Plates & More.",
       },
     ],
   }),
@@ -332,7 +332,7 @@ function MenuPage() {
 
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10 pt-36 pb-20 sm:pt-44 sm:pb-28 flex flex-col items-start">
           <p className="text-[#ff6a00] text-xs font-bold tracking-[0.35em] uppercase mb-4">
-             Authentic Middle Eastern & Asian Cuisine 
+             Authentic Middle Eastern & Mediterranean Cuisine 
           </p>
           <h1 className="font-display text-white leading-[0.88] uppercase text-[clamp(3.2rem,10vw,7rem)]">
             <span className="text-[#ff3b14]">HELL'S</span> MENU
@@ -516,7 +516,7 @@ function MenuFooter() {
               decoding="async"
             />
             <p className="text-white/60 max-w-md leading-relaxed">
-              Authentic Middle Eastern and Asian cuisine  crafted with real spices, proper technique,
+              Authentic Middle Eastern and Mediterranean Cuisine  crafted with real spices, proper technique,
               and a burning passion for bold flavour.
             </p>
             <div className="flex items-center gap-3 mt-6">
