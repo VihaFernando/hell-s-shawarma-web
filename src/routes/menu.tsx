@@ -477,9 +477,13 @@ function MenuPage() {
           <div className="flex items-start gap-3 text-white/70">
             <MapPin className="w-4 h-4 text-[#ff3b14] shrink-0" />
             <span className="text-sm">
-              Dehiwala: Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350
+              Dehiwala: Fusion Food Court, Dehiwala
               <br />
-              Marine Drive: No.18, Marine Drive, Kollupitiya
+              Kollupitiya: Hey Marine, Marine Drive, Colombo 3
+              <br />
+              Bamba Food Square, Colombo 4
+              <br />
+              Pink Beach, Marine Drive, Colombo 4
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -507,7 +511,7 @@ function MenuFooter() {
   return (
     <footer className="relative pt-20 pb-10 px-5 lg:px-10 bg-gradient-to-b from-black to-[#1a0606] border-t border-white/5">
       <div className="mx-auto max-w-7xl">
-        <div className="grid md:grid-cols-5 gap-10 mb-14">
+        <div className="grid md:grid-cols-6 gap-10 mb-14">
           <div className="md:col-span-2">
             <img
               src={logoImage}
@@ -560,26 +564,40 @@ function MenuFooter() {
               ))}
             </ul>
           </div>
-          <div>
+          <div className="md:col-span-2">
             <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
               Locations
             </div>
-            <ul className="space-y-3.5 text-sm text-white/75">
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3.5 text-sm text-white/75">
               <li>
                 <span className="font-semibold text-white/85">Dehiwala</span>
                 <br />
-                Fusion Food Court, 9 Galle Rd,<br />Dehiwala-Mount Lavinia 10350
+                Fusion Food Court, Dehiwala
                 <br />
                 Daily 2:30 PM-1 AM
               </li>
               <li>
                 <span className="font-semibold text-white/85">Kollupitiya</span>
                 <br />
-                No.18, Marine Drive, Kollupitiya
+                Hey Marine, Marine Drive, Colombo 3
                 <br />
                 Fri-Sun 5:00 PM-1 AM, Tue-Thu 5:00 PM-12:30 AM
                 <br />
                 Monday Closed
+              </li>
+              <li>
+                <span className="font-semibold text-white/85">Bamba Food Square</span>
+                <br />
+                Bamba Food Square, Colombo 4
+                <br />
+                Daily 2:30 PM-1 AM
+              </li>
+              <li>
+                <span className="font-semibold text-white/85">Pink Beach</span>
+                <br />
+                Pink Beach, Marine Drive, Colombo 4
+                <br />
+                Daily 2:30 PM-1 AM
               </li>
             </ul>
           </div>

@@ -555,7 +555,7 @@ function SocialWall() {
 const LOCATIONS = [
   {
     name: "Dehiwala",
-    address: "Fusion Food Court, 9 Galle Rd, Dehiwala-Mount Lavinia 10350",
+    address: "Fusion Food Court, Dehiwala",
     hours: "Daily  2:30 PM-1 AM",
     mapTitle: "Hell's Shawarma Dehiwala location",
     mapSrc:
@@ -563,11 +563,29 @@ const LOCATIONS = [
   },
   {
     name: "Kollupitiya",
-    address: "No.18, Marine Drive, Kollupitiya",
+    address: "Hey Marine, Marine Drive, Colombo 3",
     hours: "Fri-Sun  5 PM-1 AM\nTue-Thu  5 PM-12:30 AM\nMonday  Closed",
     mapTitle: "Hell's Shawarma Marine Drive location",
     mapSrc:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sHell's%20Shawarma%20Marine%20Drive!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
+  },
+  {
+    name: "Bamba Food Square",
+    address: "Bamba Food Square, Colombo 4",
+    hours: "Daily  2:30 PM-1 AM",
+    mapTitle: "Hell's Shawarma Bamba Food Square location",
+    // TODO: replace with the real Google Maps embed link once available
+    mapSrc:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sColombo%204!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
+  },
+  {
+    name: "Pink Beach",
+    address: "Pink Beach, Marine Drive, Colombo 4",
+    hours: "Daily  2:30 PM-1 AM",
+    mapTitle: "Hell's Shawarma Pink Beach location",
+    // TODO: replace with the real Google Maps embed link once available
+    mapSrc:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sColombo%204!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
   },
 ];
 
@@ -661,7 +679,7 @@ function Footer() {
   return (
     <footer className="relative pt-20 pb-10 px-5 lg:px-10 bg-linear-to-b from-black to-[#1a0606] border-t border-white/5">
       <div className="mx-auto max-w-7xl">
-        <div className="grid md:grid-cols-5 gap-10 mb-14">
+        <div className="grid md:grid-cols-6 gap-10 mb-14">
           <div className="md:col-span-2">
             <img
               src={logoImage}
@@ -726,28 +744,40 @@ function Footer() {
               ))}
             </ul>
           </div>
-          <div>
+          <div className="md:col-span-2">
             <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
               Locations
             </div>
-            <ul className="space-y-3.5 text-sm text-white/75">
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3.5 text-sm text-white/75">
               <li>
                 <span className="font-semibold text-white/85">Dehiwala</span>
                 <br />
-                Fusion Food Court, 9 Galle Rd,
-                <br />
-                Dehiwala-Mount Lavinia 10350
+                Fusion Food Court, Dehiwala
                 <br />
                 Daily 2:30 PM-1 AM
               </li>
               <li>
                 <span className="font-semibold text-white/85">Kollupitiya</span>
                 <br />
-                No.18, Marine Drive, Kollupitiya
+                Hey Marine, Marine Drive, Colombo 3
                 <br />
                 Fri-Sun 5 PM-1 AM, Tue-Thu 5 PM-12:30 AM
                 <br />
                 Monday Closed
+              </li>
+              <li>
+                <span className="font-semibold text-white/85">Bamba Food Square</span>
+                <br />
+                Bamba Food Square, Colombo 4
+                <br />
+                Daily 2:30 PM-1 AM
+              </li>
+              <li>
+                <span className="font-semibold text-white/85">Pink Beach</span>
+                <br />
+                Pink Beach, Marine Drive, Colombo 4
+                <br />
+                Daily 2:30 PM-1 AM
               </li>
             </ul>
           </div>
