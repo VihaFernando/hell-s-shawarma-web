@@ -574,18 +574,16 @@ const LOCATIONS = [
     address: "Bamba Food Square, Colombo 4",
     hours: "Daily  2:30 PM-1 AM",
     mapTitle: "Hell's Shawarma Bamba Food Square location",
-    // TODO: replace with the real Google Maps embed link once available
     mapSrc:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sColombo%204!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.0509366881465!2d79.85596087598694!3d6.88450221886094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25b9733b38eb7%3A0x5ed9a963adf2d919!2sHell%E2%80%99s%20Shawarma%20-%20Bamba%20Food%20Square!5e0!3m2!1sen!2slk!4v1788980701242!5m2!1sen!2slk",
   },
   {
     name: "Pink Beach",
     address: "Pink Beach, Marine Drive, Colombo 4",
     hours: "Daily  2:30 PM-1 AM",
     mapTitle: "Hell's Shawarma Pink Beach location",
-    // TODO: replace with the real Google Maps embed link once available
     mapSrc:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.851081666466!2d79.84659397598706!3d6.908404018568768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259eb01de9a93%3A0x913975e6f320cd67!2sColombo%204!5e0!3m2!1sen!2slk!4v1784882836345!5m2!1sen!2slk",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.051546856858!2d79.85275187598697!3d6.884429118861803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25b532bbcee87%3A0xfd0347f517cbf8c!2sHell%E2%80%99s%20Shawarma-%20Pink%20Beach%2C%20Marine%20Drive!5e0!3m2!1sen!2slk!4v1788980812014!5m2!1sen!2slk",
   },
 ];
 
