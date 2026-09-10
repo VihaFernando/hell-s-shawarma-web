@@ -145,12 +145,17 @@ function Navbar() {
           })}
         </nav>
         <div className="flex items-center gap-3">
-          <Link
-            to="/menu"
-            className="hidden sm:inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-6 py-2.5 text-sm font-bold tracking-[0.05em] uppercase text-white hover:bg-[#ff3b14] transition-all"
-          >
-            Order Now <Flame className="w-4 h-4 text-[#ff3b14]" />
-          </Link>
+          <div className="relative hidden sm:block">
+            <Link
+              to="/menu"
+              className="inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-6 py-2.5 text-sm font-bold tracking-[0.05em] uppercase text-white hover:bg-[#ff3b14] transition-all"
+            >
+              Order Now <Flame className="w-4 h-4 text-[#ff3b14]" />
+            </Link>
+            <div className="hidden xl:block">
+              <OrderNowAnnouncement hide={scrolled} />
+            </div>
+          </div>
           <button
             onClick={() => setOpen((v) => !v)}
             className="lg:hidden grid place-items-center w-10 h-10 rounded-full glass-dark"
@@ -236,7 +241,7 @@ function Hero() {
       {/* content */}
       <motion.div
         style={{ opacity }}
-        className="relative z-10 flex-1 flex items-center pt-24 pb-12 px-5 lg:px-10"
+        className="relative z-10 flex-1 shrink-0 flex items-center pt-24 pb-4 sm:pb-12 px-5 lg:px-10"
       >
         <div className="mx-auto max-w-7xl w-full grid lg:grid-cols-2 place-items-center lg:place-items-start">
           <motion.div
@@ -291,11 +296,101 @@ function Hero() {
         </div>
       </motion.div>
 
+      {/* online ordering coming soon */}
+      <div className="relative z-10 w-full px-5 lg:px-10 pb-5 sm:pb-6 flex justify-center">
+        <OnlineOrderingNotice />
+      </div>
+
       {/* feature strip overlay */}
       <div className="relative z-10 w-full">
         <FeatureBar />
       </div>
     </section>
+  );
+}
+
+function OnlineOrderingNotice() {
+  const [visible, setVisible] = useState(true);
+  if (!visible) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
+      className="relative inline-flex w-fit max-w-full rounded-xl sm:rounded-2xl bg-[#161616] border border-white/10 pl-3.5 pr-8 py-2.5 sm:pl-7 sm:pr-12 sm:py-5 items-center gap-2.5 sm:gap-5 xl:hidden"
+    >
+      <img
+        src={logo2Image}
+        alt=""
+        aria-hidden="true"
+        className="w-8 h-8 sm:w-14 sm:h-14 rounded-full bg-black object-contain p-1 sm:p-1.5 shrink-0"
+      />
+      <span className="w-px self-stretch bg-white/10 shrink-0" />
+      <div className="min-w-0">
+        <h3 className="text-white font-bold text-xs sm:text-base leading-snug">
+          Online Ordering <span className="text-[#ff3b14]">Coming Soon</span>
+        </h3>
+        <p className="mt-0.5 text-white/50 text-[10px] sm:text-sm leading-snug">
+          Soon, you'll be able to order your favourites directly through our website.
+        </p>
+      </div>
+      <button
+        onClick={() => setVisible(false)}
+        aria-label="Dismiss"
+        className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 grid place-items-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+      >
+        <X className="w-3 h-3 sm:w-4 sm:h-4" />
+      </button>
+    </motion.div>
+  );
+}
+
+/* announcement popover anchored to the navbar's Order Now button (desktop only) */
+function OrderNowAnnouncement({ hide }: { hide: boolean }) {
+  const [ready, setReady] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setReady(true), 1200);
+    return () => clearTimeout(timer);
+  }, []);
+  if (!ready || dismissed || hide) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.96 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="absolute right-0 top-full mt-3 w-88 rounded-xl bg-[#161616] border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.5)] p-5 pr-10 z-50"
+    >
+      {/* pointer arrow */}
+      <span className="absolute -top-1.5 right-8 w-3 h-3 bg-[#161616] border-t border-l border-white/10 rotate-45" />
+      <div className="flex items-center gap-3">
+        <img
+          src={logo2Image}
+          alt=""
+          aria-hidden="true"
+          className="w-12 h-12 rounded-full bg-black object-contain p-1.5 shrink-0"
+        />
+        <span className="w-px self-stretch bg-white/10 shrink-0" />
+        <div className="min-w-0">
+          <h3 className="text-white font-bold text-sm leading-snug">
+            Online Ordering <span className="text-[#ff3b14]">Coming Soon</span>
+          </h3>
+          <p className="mt-0.5 text-white/50 text-xs leading-snug">
+            Soon, you'll be able to order your favourites directly through our website.
+          </p>
+        </div>
+      </div>
+      <button
+        onClick={() => setDismissed(true)}
+        aria-label="Dismiss"
+        className="absolute top-2.5 right-2.5 grid place-items-center w-6 h-6 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+      >
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </motion.div>
   );
 }
 

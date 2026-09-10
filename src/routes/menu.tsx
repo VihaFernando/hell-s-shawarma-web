@@ -345,6 +345,27 @@ function MenuPage() {
 
       {/* ── MENU BODY ── */}
       <section className="px-5 lg:px-10 pb-16 max-w-7xl mx-auto">
+        {/* Online ordering coming soon */}
+        <div className="mb-8 flex justify-center">
+          <div className="relative inline-flex w-fit max-w-full rounded-xl sm:rounded-2xl bg-[#161616] border border-white/10 pl-3.5 pr-4 py-2.5 sm:pl-7 sm:pr-8 sm:py-5 items-center gap-2.5 sm:gap-5">
+            <img
+              src={logoImage}
+              alt=""
+              aria-hidden="true"
+              className="w-8 h-8 sm:w-14 sm:h-14 rounded-full bg-black object-contain p-1 sm:p-1.5 shrink-0"
+            />
+            <span className="w-px self-stretch bg-white/10 shrink-0" />
+            <div className="min-w-0">
+              <h3 className="text-white font-bold text-xs sm:text-base leading-snug">
+                Online Ordering <span className="text-[#ff3b14]">Coming Soon</span>
+              </h3>
+              <p className="mt-0.5 text-white/50 text-[10px] sm:text-sm leading-snug">
+                Soon, you'll be able to order your favourites directly through our website.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Divider */}
         <div className="flex items-center gap-3 mb-8">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ff3b14]/40 to-[#ff3b14]/40" />
