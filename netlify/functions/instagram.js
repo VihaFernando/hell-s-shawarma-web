@@ -4,12 +4,10 @@
 // linked to a Facebook app — no auth from the client account required) and
 // caches the result in-memory for 1 hour so we don't hit the API on every load.
 
-import { getStore } from "@netlify/blobs";
+import { getInstagramStore, BLOB_KEY } from "./lib/instagram-store.js";
 
 const GRAPH_VERSION = "v25.0";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
-const BLOB_STORE = "instagram";
-const BLOB_KEY = "long-lived-token";
 
 // Persists across warm invocations of the same function instance. Not shared
 // across instances/regions, but that's fine for a "don't hammer the API" cache.
@@ -29,9 +27,10 @@ export const handler = async () => {
   // the env var set at initial setup time.
   let accessToken;
   try {
-    const store = getStore(BLOB_STORE);
+    const store = getInstagramStore();
     accessToken = (await store.get(BLOB_KEY)) ?? process.env.IG_LONG_LIVED_TOKEN;
-  } catch {
+  } catch (err) {
+    console.error("instagram: Blobs read failed, falling back to env var", err?.message ?? err);
     accessToken = process.env.IG_LONG_LIVED_TOKEN;
   }
 

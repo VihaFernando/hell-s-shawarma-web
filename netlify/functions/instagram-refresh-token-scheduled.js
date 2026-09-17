@@ -6,19 +6,30 @@
 // Netlify Blobs requires the `@netlify/blobs` package (already available in
 // the Netlify Functions runtime, no extra setup needed beyond `npm install`).
 
-import { getStore } from "@netlify/blobs";
+import { getInstagramStore, BLOB_KEY } from "./lib/instagram-store.js";
 
 const GRAPH_VERSION = "v25.0";
-const BLOB_STORE = "instagram";
-const BLOB_KEY = "long-lived-token";
 
 export const handler = async () => {
   const { IG_APP_ID, IG_APP_SECRET } = process.env;
-  const store = getStore(BLOB_STORE);
+
+  let store;
+  try {
+    store = getInstagramStore();
+  } catch (err) {
+    console.error("instagram-refresh-token-scheduled: getStore failed", err?.message ?? err);
+    return;
+  }
 
   // Prefer the last refreshed token if we have one, otherwise fall back to
   // the value baked into env vars (e.g. right after initial setup).
-  const currentToken = (await store.get(BLOB_KEY)) ?? process.env.IG_LONG_LIVED_TOKEN;
+  let currentToken;
+  try {
+    currentToken = (await store.get(BLOB_KEY)) ?? process.env.IG_LONG_LIVED_TOKEN;
+  } catch (err) {
+    console.error("instagram-refresh-token-scheduled: store.get failed", err?.message ?? err);
+    currentToken = process.env.IG_LONG_LIVED_TOKEN;
+  }
 
   if (!IG_APP_ID || !IG_APP_SECRET || !currentToken) {
     console.error("instagram-refresh-token-scheduled: missing IG_APP_ID/IG_APP_SECRET/token");
@@ -39,8 +50,12 @@ export const handler = async () => {
     return;
   }
 
-  await store.set(BLOB_KEY, body.access_token);
-  console.log("instagram-refresh-token-scheduled: token refreshed and stored successfully");
+  try {
+    await store.set(BLOB_KEY, body.access_token);
+    console.log("instagram-refresh-token-scheduled: token refreshed and stored successfully");
+  } catch (err) {
+    console.error("instagram-refresh-token-scheduled: store.set failed", err?.message ?? err);
+  }
 };
 
 export const config = {
