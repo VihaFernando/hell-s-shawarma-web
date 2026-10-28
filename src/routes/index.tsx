@@ -16,6 +16,7 @@ import { InstagramFeed } from "@/components/InstagramFeed";
 import { GoogleReviews } from "@/components/GoogleReviews";
 import { InfluencerReels } from "@/components/InfluencerReels";
 import heroImage from "@/assets/hero.png";
+import { pageSeo } from "@/lib/seo";
 import logoImage from "@/assets/logo2.png";
 import logo2Image from "@/assets/logo2.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
@@ -52,23 +53,23 @@ import halalIcon from "@/assets/halal-certified-icon.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hell's Shawarma  Authentic Middle Eastern Cuisine" },
+      { title: "Hell's Shawarma | Authentic Middle Eastern Cuisine" },
       {
         name: "description",
         content:
-          "Hell's Shawarma  Authentic Middle Eastern and Mediterranean Cuisine. Bold shawarmas, loaded fries, legendary flavours.",
+          "Hell's Shawarma: authentic Middle Eastern and Mediterranean cuisine. Bold shawarmas, loaded fries, legendary flavours.",
       },
       {
         property: "og:title",
-        content: "Hell's Shawarma  Authentic Middle Eastern Cuisine",
+        content: "Hell's Shawarma | Authentic Middle Eastern Cuisine",
       },
       {
         property: "og:description",
         content: "Authentic Middle Eastern and Mediterranean cuisine. One bite and you know.",
       },
-      { property: "og:image", content: heroImage },
-      { name: "twitter:card", content: "summary_large_image" },
+      ...pageSeo({ path: "/", image: heroImage }).meta,
     ],
+    links: pageSeo({ path: "/" }).links,
   }),
   component: Landing,
 });

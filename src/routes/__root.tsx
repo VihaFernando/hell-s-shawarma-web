@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import donJoseFont from "../assets/fonts/DonJose_Black.otf?url";
 import latoFont from "../assets/fonts/Lato-Black.ttf?url";
+import defaultShareImage from "../assets/hero.png";
+import { absoluteUrl } from "../lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -79,14 +81,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Hell's Shawarma | Authentic Middle Eastern Cuisine in Sri Lanka" },
+      {
+        name: "description",
+        content:
+          "Hell's Shawarma serves authentic Middle Eastern and Mediterranean food in Sri Lanka. Flame-grilled shawarmas, loaded fries and house-made sauces.",
+      },
+      { name: "theme-color", content: "#000000" },
+      { property: "og:site_name", content: "Hell's Shawarma" },
+      { property: "og:locale", content: "en_US" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:title", content: "Hell's Shawarma | Authentic Middle Eastern Cuisine" },
+      {
+        property: "og:description",
+        content: "Authentic Middle Eastern and Mediterranean cuisine. One bite and you know.",
+      },
+      { property: "og:image", content: absoluteUrl(defaultShareImage) },
+      { property: "og:image:alt", content: "Hell's Shawarma flame-grilled shawarma" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

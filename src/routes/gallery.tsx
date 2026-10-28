@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Flame, Menu as MenuIcon, X, ChevronLeft, ChevronRight } from "lucide-react";
 import logoImage from "@/assets/logo2.png";
+import { pageSeo } from "@/lib/seo";
 
 const photoModules = import.meta.glob("../assets/photos/*.JPG", {
   eager: true,
@@ -20,12 +21,19 @@ const PHOTOS = Object.keys(photoModules)
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Gallery  Hell's Shawarma" },
+      { title: "Gallery | Hell's Shawarma" },
       {
         name: "description",
-        content: "Browse photos from Hell's Shawarma  authentic Middle Eastern cuisine.",
+        content: "Browse photos from Hell's Shawarma: authentic Middle Eastern cuisine.",
       },
+      { property: "og:title", content: "Gallery | Hell's Shawarma" },
+      {
+        property: "og:description",
+        content: "Photos of our shawarmas, plates and branches.",
+      },
+      ...pageSeo({ path: "/gallery" }).meta,
     ],
+    links: pageSeo({ path: "/gallery" }).links,
   }),
   component: GalleryPage,
 });
