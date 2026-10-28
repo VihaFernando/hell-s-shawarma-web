@@ -36,17 +36,25 @@ import hummusPlateImg from "@/assets/photos/g1.JPG";
 import shawarmaPlateImg from "@/assets/photos/g3.JPG";
 import beefShawarmaImg from "@/assets/photos/g8.JPG";
 import menuData from "@/assets/menu.json";
+import { pageSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu  Hell's Shawarma" },
+      { title: "Menu | Hell's Shawarma" },
       {
         name: "description",
         content:
           "Authentic Middle Eastern & Mediterranean Cuisine. Chicken Shawarmas, Beef Shawarmas, Plates & More.",
       },
+      { property: "og:title", content: "Menu | Hell's Shawarma" },
+      {
+        property: "og:description",
+        content: "Chicken shawarmas, beef shawarmas, plates, loaded fries and more.",
+      },
+      ...pageSeo({ path: "/menu", image: chickenShawarmaImg }).meta,
     ],
+    links: pageSeo({ path: "/menu" }).links,
   }),
   component: MenuPage,
 });
@@ -541,7 +549,7 @@ function MenuFooter() {
               decoding="async"
             />
             <p className="text-white/60 max-w-md leading-relaxed">
-              Authentic Middle Eastern and Mediterranean Cuisine  crafted with real spices, proper technique,
+              Authentic Middle Eastern and Mediterranean Cuisine, crafted with real spices, proper technique,
               and a burning passion for bold flavour.
             </p>
             <div className="flex items-center gap-3 mt-6">
