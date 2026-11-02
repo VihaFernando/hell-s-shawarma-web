@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource-variable/outfit";
+@import "./styles/blog-prose.css";
 
 @font-face {
   font-family: "Capture it";
@@ -27,6 +29,8 @@
 }
 
 @custom-variant dark (&:is(.dark *));
+/* Light mode exists only for the blog + blog admin; the attribute is set on those routes only. */
+@custom-variant light (&:where(html[data-blog-theme="light"] *));
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -56,6 +60,14 @@
   --color-ember: var(--ember);
   --font-display: "Don Jose", sans-serif;
   --font-body: "Lato", sans-serif;
+  --font-blog: "Outfit Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-blog-bg: var(--blog-bg);
+  --color-blog-surface: var(--blog-surface);
+  --color-blog-elevated: var(--blog-elevated);
+  --color-blog-fg: var(--blog-fg);
+  --color-blog-accent: var(--blog-accent);
+  --color-blog-link: var(--blog-link);
+  --color-blog-header: var(--blog-header);
 }
 
 :root {
@@ -83,6 +95,72 @@
   --ember: oklch(0.684 0.173 47.6);
 }
 
+/* ---------------------------------------------------------------------------
+   Blog + blog admin theme tokens. Dark values are the defaults everywhere, so
+   pages that share components with the blog (e.g. the home page footer) look
+   exactly as before. html[data-blog-theme="light"] is only ever set on /blog
+   and /admin routes (see src/lib/blog/theme.ts).
+   --------------------------------------------------------------------------- */
+:root {
+  --blog-bg: #0a0a0a;
+  --blog-surface: #121212;
+  --blog-elevated: #181818;
+  --blog-fg: #ffffff;
+  --blog-accent: #ff3b14;
+  --blog-link: #ff6a00;
+  --blog-header: #000000;
+  --blog-footer-from: #000000;
+  --blog-footer-to: #1a0606;
+}
+
+html[data-blog-theme="light"] {
+  color-scheme: light;
+  --blog-bg: #faf8f5;
+  --blog-surface: #ffffff;
+  --blog-elevated: #f3efe9;
+  --blog-fg: #1a1410;
+  /* Darker brand reds keep text readable (WCAG AA) on light backgrounds. */
+  --blog-accent: #d12d0c;
+  --blog-link: #c2410c;
+  --blog-header: #ffffff;
+  --blog-footer-from: #f3efe9;
+  --blog-footer-to: #f7e4dc;
+
+  --blog-prose-text: rgba(26, 20, 16, 0.82);
+  --blog-prose-heading: #1a1410;
+  --blog-prose-muted: rgba(26, 20, 16, 0.55);
+  --blog-prose-accent: #d12d0c;
+  --blog-prose-link: #c2410c;
+  --blog-prose-border: rgba(26, 20, 16, 0.12);
+  --blog-prose-surface: #f3efe9;
+
+  /* shadcn tokens for the admin UI (dialogs/menus render in portals, hence html-level). */
+  --background: #faf8f5;
+  --foreground: #1a1410;
+  --card: #ffffff;
+  --card-foreground: #1a1410;
+  --popover: #ffffff;
+  --popover-foreground: #1a1410;
+  --primary: #e0330f;
+  --primary-foreground: #ffffff;
+  --secondary: #f1ece5;
+  --secondary-foreground: #1a1410;
+  --muted: #f1ece5;
+  --muted-foreground: #6b6058;
+  --accent: #f1ece5;
+  --accent-foreground: #1a1410;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e6dfd6;
+  --input: #ddd4ca;
+  --ring: #e0330f;
+}
+
+html[data-blog-theme="light"] body {
+  background-color: var(--blog-bg);
+  color: var(--blog-fg);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -102,6 +180,51 @@
   letter-spacing: 0.01em;
 }
 
+/* TinyMCE's oxide-dark skin is blue-slate; match the admin's near-black surfaces. */
+html[data-blog-theme="dark"] .tox.tox-tinymce {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+html[data-blog-theme="dark"] .tox .tox-editor-header,
+html[data-blog-theme="dark"] .tox .tox-menubar,
+html[data-blog-theme="dark"] .tox .tox-toolbar,
+html[data-blog-theme="dark"] .tox .tox-toolbar__primary,
+html[data-blog-theme="dark"] .tox .tox-toolbar__overflow,
+html[data-blog-theme="dark"] .tox .tox-toolbar-overlord,
+html[data-blog-theme="dark"] .tox .tox-statusbar,
+html[data-blog-theme="dark"] .tox .tox-menu,
+html[data-blog-theme="dark"] .tox .tox-dialog,
+html[data-blog-theme="dark"] .tox .tox-dialog__header,
+html[data-blog-theme="dark"] .tox .tox-dialog__footer,
+html[data-blog-theme="dark"] .tox .tox-pop__dialog {
+  background-color: #141414;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html[data-blog-theme="dark"] .tox .tox-tbtn,
+html[data-blog-theme="dark"] .tox .tox-mbtn,
+html[data-blog-theme="dark"] .tox .tox-split-button,
+html[data-blog-theme="dark"] .tox .tox-tbtn--select {
+  background-color: transparent;
+}
+html[data-blog-theme="dark"] .tox .tox-tbtn:hover,
+html[data-blog-theme="dark"] .tox .tox-mbtn:hover:not(:disabled),
+html[data-blog-theme="dark"] .tox .tox-collection__item--active {
+  background-color: #262626;
+}
+html[data-blog-theme="dark"] .tox .tox-tbtn--enabled,
+html[data-blog-theme="dark"] .tox .tox-tbtn--enabled:hover {
+  background-color: rgba(255, 59, 20, 0.25);
+}
+html[data-blog-theme="dark"] .tox .tox-textfield,
+html[data-blog-theme="dark"] .tox .tox-listboxfield .tox-listbox--select,
+html[data-blog-theme="dark"] .tox .tox-textarea {
+  background-color: #0d0d0d;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+html[data-blog-theme="light"] .glass-dark {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(26, 20, 16, 0.08);
+}
 
 @utility glass-dark {
   background: rgba(0, 0, 0, 0.85);
@@ -117,7 +240,10 @@
 }
 
 @utility glow-flame {
-  box-shadow: 0 0 0 1px rgba(255, 59, 20, 0.4), 0 10px 40px -10px rgba(255, 59, 20, 0.6), 0 0 60px -20px rgba(255, 106, 0, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(255, 59, 20, 0.4),
+    0 10px 40px -10px rgba(255, 59, 20, 0.6),
+    0 0 60px -20px rgba(255, 106, 0, 0.5);
 }
 
 @keyframes ember-rise {
@@ -149,7 +275,6 @@
 }
 
 @keyframes flicker {
-
   0%,
   100% {
     opacity: 1;

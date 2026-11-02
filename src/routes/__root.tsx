@@ -14,7 +14,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import donJoseFont from "../assets/fonts/DonJose_Black.otf?url";
 import latoFont from "../assets/fonts/Lato-Black.ttf?url";
 import defaultShareImage from "../assets/hero.png";
-import { absoluteUrl } from "../lib/seo";
+import { absoluteUrl, jsonLd, organizationJsonLd } from "../lib/seo";
+import { ROBOTS_INDEX } from "../lib/blog/seo";
+import { themeBootScript } from "../lib/blog/theme";
 
 function NotFoundComponent() {
   return (
@@ -87,6 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Hell's Shawarma serves authentic Middle Eastern and Mediterranean food in Sri Lanka. Flame-grilled shawarmas, loaded fries and house-made sauces.",
       },
+      { name: "robots", content: ROBOTS_INDEX },
       { name: "theme-color", content: "#000000" },
       { property: "og:site_name", content: "Hell's Shawarma" },
       { property: "og:locale", content: "en_US" },
@@ -99,8 +102,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: absoluteUrl(defaultShareImage) },
       { property: "og:image:alt", content: "Hell's Shawarma flame-grilled shawarma" },
       { name: "twitter:card", content: "summary_large_image" },
+      jsonLd(organizationJsonLd()),
     ],
     links: [
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Hell's Shawarma Blog",
+        href: "/blog/rss.xml",
+      },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
@@ -108,6 +118,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preload", href: latoFont, as: "font", type: "font/ttf", crossOrigin: "anonymous" },
     ],
     scripts: [
+      // Blog/admin light-dark theme, applied before first paint (no-op on other pages).
+      { children: themeBootScript },
       // Google tag (gtag.js) - Google Analytics 4
       { src: "https://www.googletagmanager.com/gtag/js?id=G-YJNW4W71Q6", async: true },
       {
@@ -126,7 +138,7 @@ gtag('config', 'G-YJNW4W71Q6');`,
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

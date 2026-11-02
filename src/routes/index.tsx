@@ -15,8 +15,9 @@ import {
 import { InstagramFeed } from "@/components/InstagramFeed";
 import { GoogleReviews } from "@/components/GoogleReviews";
 import { InfluencerReels } from "@/components/InfluencerReels";
+import { SiteFooter } from "@/components/site/SiteFooter";
 import heroImage from "@/assets/hero.png";
-import { pageSeo } from "@/lib/seo";
+import { jsonLd, pageSeo, restaurantsJsonLd } from "@/lib/seo";
 import logoImage from "@/assets/logo2.png";
 import logo2Image from "@/assets/logo2.png";
 import menuChicken from "@/assets/menu-chicken.jpg";
@@ -29,14 +30,6 @@ const photoModules = import.meta.glob("../assets/photos/*.JPG", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
-
-function TikTokIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16.6 5.82c-.9-.79-1.47-1.94-1.47-3.22h-3.13v13.44a2.6 2.6 0 1 1-2.6-2.6c.24 0 .47.03.69.09V10.4a5.73 5.73 0 0 0-.69-.04A5.73 5.73 0 1 0 15.13 16V9.4a8.15 8.15 0 0 0 4.71 1.5V7.77a4.85 4.85 0 0 1-3.24-1.95z" />
-    </svg>
-  );
-}
 
 const PHOTOS = Object.keys(photoModules)
   .sort((a, b) => {
@@ -68,6 +61,7 @@ export const Route = createFileRoute("/")({
         content: "Authentic Middle Eastern and Mediterranean cuisine. One bite and you know.",
       },
       ...pageSeo({ path: "/", image: heroImage }).meta,
+      jsonLd(restaurantsJsonLd(heroImage)),
     ],
     links: pageSeo({ path: "/" }).links,
   }),
@@ -80,6 +74,7 @@ const NAV_ITEMS = [
   { label: "Featured", href: "#blends", to: undefined },
   { label: "Gallery", href: undefined, to: "/gallery" as const },
   { label: "Locations", href: "#contact", to: undefined },
+  { label: "Blog", href: undefined, to: "/blog" as const },
 ];
 
 function Landing() {
@@ -91,7 +86,7 @@ function Landing() {
       <InfluencerReelsSection />
       <SocialWall />
       <LocationSection />
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
@@ -251,16 +246,18 @@ function Hero() {
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="flex flex-col items-center lg:items-start xl:items-center"
           >
-            {/* brand name  HELL'S big, the rest smaller */}
-            <img
-              src={logo2Image}
-              alt="Hell's Shawarma"
-              className="w-full max-w-[min(90vw,700px)]"
-            />
-
-            <p className="mt-5 text-white/60 text-sm sm:text-base tracking-[0.1em] uppercase font-semibold text-center lg:text-left xl:text-center">
-              Authentic Middle Eastern &amp; Mediterranean Cuisine
-            </p>
+            {/* brand name  HELL'S big, the rest smaller. The page's <h1> is the logo +
+                tagline; `contents` keeps the layout exactly as it was. */}
+            <h1 className="contents">
+              <img
+                src={logo2Image}
+                alt="Hell's Shawarma"
+                className="w-full max-w-[min(90vw,700px)]"
+              />{" "}
+              <span className="block mt-5 text-white/60 text-sm sm:text-base tracking-[0.1em] uppercase font-semibold text-center lg:text-left xl:text-center">
+                Authentic Middle Eastern &amp; Mediterranean Cuisine
+              </span>
+            </h1>
 
             <div className="mt-4 flex items-center gap-3 sm:gap-5 text-sm sm:text-base font-semibold tracking-normal uppercase text-white/80">
               <span>Shawarmas</span>
@@ -765,170 +762,5 @@ function InfoRow({
         <div className="text-white font-medium whitespace-pre-line">{value}</div>
       </div>
     </div>
-  );
-}
-
-/* ---------------- FOOTER ---------------- */
-function Footer() {
-  return (
-    <footer className="relative pt-20 pb-10 px-5 lg:px-10 bg-linear-to-b from-black to-[#1a0606] border-t border-white/5">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid md:grid-cols-6 gap-10 mb-14">
-          <div className="md:col-span-2">
-            <img
-              src={logoImage}
-              alt="Hell's Shawarma"
-              className="h-16 w-auto object-contain mb-5"
-              decoding="async"
-            />
-            <p className="text-white/60 max-w-md leading-relaxed">
-              Authentic Middle Eastern and Mediterranean cuisine crafted with real spices, proper
-              technique, and a burning passion for bold flavour.
-            </p>
-            <div className="flex items-center gap-3 mt-6">
-              {[
-                {
-                  Icon: Instagram,
-                  href: "https://www.instagram.com/hells_shawarma/",
-                },
-                {
-                  Icon: Facebook,
-                  href: "https://www.facebook.com/p/Hells-Shawarma-61569893127389/",
-                },
-                {
-                  Icon: TikTokIcon,
-                  href: "https://www.tiktok.com/discover/hells-shawarma?is_from_webapp=1&sender_device=pc",
-                },
-              ].map(({ Icon, href }, i) => (
-                <a
-                  key={i}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="grid place-items-center w-10 h-10 rounded-full border border-white/15 hover:border-[#ff3b14] hover:bg-[#ff3b14]/10 hover:text-[#ff6a00] text-white transition"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
-              Explore
-            </div>
-            <ul className="space-y-2.5">
-              {NAV_ITEMS.map((n) => (
-                <li key={n.label}>
-                  {n.to ? (
-                    <Link
-                      to={n.to}
-                      className="text-sm text-white/75 hover:text-[#ff6a00] transition"
-                    >
-                      {n.label}
-                    </Link>
-                  ) : (
-                    <a
-                      href={n.href!}
-                      className="text-sm text-white/75 hover:text-[#ff6a00] transition"
-                    >
-                      {n.label}
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="md:col-span-2">
-            <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
-              Locations
-            </div>
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-3.5 text-sm text-white/75">
-              <li>
-                <span className="font-semibold text-white/85">Dehiwala</span>
-                <br />
-                Fusion Food Court, Dehiwala
-                <br />
-                Daily 2:30 PM-1 AM
-              </li>
-              <li>
-                <span className="font-semibold text-white/85">Kollupitiya</span>
-                <br />
-                Hey Marine, Marine Drive, Colombo 3
-                <br />
-                Fri-Sun 5 PM-1 AM, Tue-Thu 5 PM-12:30 AM
-                <br />
-                Monday Closed
-              </li>
-              <li>
-                <span className="font-semibold text-white/85">Bamba Food Square</span>
-                <br />
-                Bamba Food Square, Colombo 4
-                <br />
-                Daily 2:30 PM-1 AM
-              </li>
-              <li>
-                <span className="font-semibold text-white/85">Pink Beach</span>
-                <br />
-                Pink Beach, Marine Drive, Colombo 4
-                <br />
-                Daily 2:30 PM-1 AM
-              </li>
-            </ul>
-          </div>
-          <div>
-            <div className="text-xs font-bold tracking-[0.22em] uppercase text-white/55 mb-4">
-              Get In Touch
-            </div>
-            <ul className="space-y-2.5 text-sm text-white/75">
-              <li>
-                <a href="tel:0723205285" className="hover:text-[#ff6a00] transition">
-                  072 320 5285
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:hells.shawarma@gmail.com"
-                  className="hover:text-[#ff6a00] transition"
-                >
-                  hells.shawarma@gmail.com
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.instagram.com/hells_shawarma/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#ff6a00] transition"
-                >
-                  @hells_shawarma
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.ubereats.com/lk/store/hells-shawarma-%26-grill/ZM3tJn6fRe-RtiSWcW0rdA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#ff6a00] transition"
-                >
-                  Order on Uber Eats
-                </a>
-              </li>
-            </ul>
-            <div className="mt-5 flex items-center gap-1 text-[#ff6a00] text-xs font-bold tracking-[0.2em] uppercase">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-current" />
-              ))}
-              <span className="ml-2 text-white/60 font-medium tracking-normal normal-case">
-                4.6 on Google
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/45">
-          <div>© {new Date().getFullYear()} Hell's Shawarma. All rights reserved.</div>
-          <div className="tracking-[0.2em] uppercase">Authentic Middle Eastern Cuisine 🔥</div>
-        </div>
-      </div>
-    </footer>
   );
 }
