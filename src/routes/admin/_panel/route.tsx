@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
-import { ExternalLink, FileText, FolderTree, LogOut, Users } from "lucide-react";
+import { ExternalLink, FileText, FolderTree, Images, LogOut, Users } from "lucide-react";
 
 import logoImage from "@/assets/logo2.png";
 import { DeployStatus } from "@/components/admin/DeployStatus";
@@ -51,6 +51,9 @@ function AdminPanel() {
           <Link to="/admin" activeOptions={{ exact: true }} className={navItem}>
             <FileText className="h-4 w-4" /> Posts
           </Link>
+          <Link to="/admin/assets" className={navItem}>
+            <Images className="h-4 w-4" /> Asset library
+          </Link>
           {can(member, "categories.manage") && (
             <Link to="/admin/categories" className={navItem}>
               <FolderTree className="h-4 w-4" /> Categories
@@ -80,6 +83,9 @@ function AdminPanel() {
           <nav className="flex gap-4 text-sm md:hidden">
             <Link to="/admin" activeOptions={{ exact: true }} className={mobileItem}>
               Posts
+            </Link>
+            <Link to="/admin/assets" className={mobileItem}>
+              Assets
             </Link>
             {can(member, "categories.manage") && (
               <Link to="/admin/categories" className={mobileItem}>

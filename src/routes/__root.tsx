@@ -123,7 +123,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // Google tag (gtag.js) - Google Analytics 4
       { src: "https://www.googletagmanager.com/gtag/js?id=G-YJNW4W71Q6", async: true },
       {
-        children: `window.dataLayer = window.dataLayer || [];
+        // The admin is a team tool; Google's disable flag keeps its visits out of site traffic.
+        children: `window['ga-disable-G-YJNW4W71Q6'] = /^\\/admin(\\/|$)/.test(location.pathname);
+window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-YJNW4W71Q6');`,

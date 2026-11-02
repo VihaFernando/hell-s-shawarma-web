@@ -166,6 +166,32 @@ export function getUploadSignature() {
   );
 }
 
+// ------------------------------------------------------------ Asset library
+
+export type BlogAsset = {
+  publicId: string;
+  url: string;
+  width: number;
+  height: number;
+  bytes: number;
+  format: string;
+  createdAt: string;
+  usedBy: { id: string; title: string }[];
+  isNew: boolean;
+};
+
+export function listAssets(cursor: string | null) {
+  const query = cursor ? `?cursor=${encodeURIComponent(cursor)}` : "";
+  return callFunction<{ assets: BlogAsset[]; nextCursor: string | null }>(`blog-assets${query}`);
+}
+
+export function deleteAsset(publicId: string) {
+  return callFunction<{ ok: true }>("blog-assets", {
+    method: "POST",
+    body: JSON.stringify({ public_id: publicId }),
+  });
+}
+
 // ------------------------------------------------------------ Team management
 
 export type InviteResult = {

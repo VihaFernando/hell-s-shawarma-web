@@ -28,7 +28,12 @@ export function cloudinaryBase(url: string) {
 
 export function transformImage(
   url: string,
-  opts: { width?: number; height?: number; crop?: "fill" | "limit"; format?: "auto" | "jpg" } = {},
+  opts: {
+    width?: number;
+    height?: number;
+    crop?: "fill" | "limit";
+    format?: "auto" | "jpg" | "webp";
+  } = {},
 ) {
   if (!isCloudinary(url)) return url;
   const { width, height, crop = "limit", format = "auto" } = opts;
