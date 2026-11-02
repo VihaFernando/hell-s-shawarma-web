@@ -5,6 +5,16 @@ const UPLOAD_SEGMENT = "/image/upload/";
 // A leading transformation component such as "f_auto,q_auto,w_800/".
 const TRANSFORM_RE = /^([a-z]{1,3}_[^/]+)\//;
 
+export const ARTICLE_COVER_ASPECT = 2;
+export const CARD_COVER_ASPECT = 16 / 10;
+
+// Google recommends 16:9, 4:3 and 1:1 variants (>= 1200px wide) for article rich results.
+export const GOOGLE_IMAGE_SIZES = [
+  { label: "16:9", width: 1200, height: 675 },
+  { label: "4:3", width: 1200, height: 900 },
+  { label: "1:1", width: 1200, height: 1200 },
+];
+
 export function isCloudinary(url: string | null | undefined): url is string {
   return !!url && url.includes("res.cloudinary.com") && url.includes(UPLOAD_SEGMENT);
 }
@@ -47,6 +57,10 @@ export function responsiveImage(
     src: make(widths[Math.floor(widths.length / 2)]),
     srcSet: widths.map((w) => `${make(w)} ${w}w`).join(", "),
   };
+}
+
+export function googleImage(url: string, size: { width: number; height: number }) {
+  return transformImage(url, { ...size, crop: "fill", format: "jpg" });
 }
 
 // Open Graph images: 1200x630 JPEG (Facebook/WhatsApp don't read AVIF/WebP reliably).

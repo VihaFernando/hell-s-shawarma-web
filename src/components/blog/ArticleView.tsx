@@ -4,7 +4,7 @@ import { ArrowRight, Clock, Flame, MapPin, ShoppingBag } from "lucide-react";
 import { absoluteUrl } from "@/lib/seo";
 import { BUSINESS } from "@/lib/site-info";
 import { formatDate } from "@/lib/blog/format";
-import { responsiveImage } from "@/lib/blog/images";
+import { ARTICLE_COVER_ASPECT, responsiveImage } from "@/lib/blog/images";
 import { categoryPath, postPath } from "@/lib/blog/seo";
 import type { CategoryRef, FaqItem, PostCard as PostCardData, TocItem } from "@/lib/blog/types";
 
@@ -42,7 +42,9 @@ export function ArticleView({
   crumbs: { name: string; path: string }[];
 }) {
   const cover = post.cover_image_url
-    ? responsiveImage(post.cover_image_url, [640, 960, 1280, 1600], { aspect: 2 })
+    ? responsiveImage(post.cover_image_url, [640, 960, 1280, 1600], {
+        aspect: ARTICLE_COVER_ASPECT,
+      })
     : null;
   const wasUpdated =
     post.published_at &&

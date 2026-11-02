@@ -10,7 +10,7 @@ import {
 import defaultArticleImage from "@/assets/hero.png";
 
 import { truncate } from "./format";
-import { isCloudinary, ogImage, transformImage } from "./images";
+import { GOOGLE_IMAGE_SIZES, googleImage, isCloudinary, ogImage } from "./images";
 import { BLOG_PAGE_SIZE, type BlogCategory, type PostCard, type PostWithCategory } from "./types";
 
 export const BLOG_TITLE = "Hell's Shawarma Blog";
@@ -71,16 +71,11 @@ function postShareImage(post: Pick<PostWithCategory, "og_image_url" | "cover_ima
   return src ? ogImage(src) : undefined;
 }
 
-// Google recommends 16:9, 4:3 and 1:1 variants (>= 1200px wide) for article rich results.
 // Article rich results require an image, so posts without a cover fall back to the brand hero.
 function articleImages(src: string | null) {
   if (!src) return [absoluteUrl(defaultArticleImage)];
   if (!isCloudinary(src)) return [src];
-  return [
-    transformImage(src, { width: 1200, height: 675, crop: "fill", format: "jpg" }),
-    transformImage(src, { width: 1200, height: 900, crop: "fill", format: "jpg" }),
-    transformImage(src, { width: 1200, height: 1200, crop: "fill", format: "jpg" }),
-  ];
+  return GOOGLE_IMAGE_SIZES.map((size) => googleImage(src, size));
 }
 
 // A named writer must not reuse ORG_ID, or the graph gives the Organization two names.

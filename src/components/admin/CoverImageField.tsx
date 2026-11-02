@@ -5,10 +5,34 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { transformImage } from "@/lib/blog/images";
+import {
+  ARTICLE_COVER_ASPECT,
+  CARD_COVER_ASPECT,
+  GOOGLE_IMAGE_SIZES,
+  googleImage,
+  ogImage,
+  responsiveImage,
+} from "@/lib/blog/images";
 import { uploadImage } from "@/lib/blog/media";
 
 import type { PostForm } from "./PostEditor";
+
+// Uses the URLs public pages request, so each preview is the crop visitors actually get.
+function cropPreviews(cover: string, shareImage: string) {
+  return [
+    {
+      label: "Blog card",
+      src: responsiveImage(cover, [640], { aspect: CARD_COVER_ASPECT }).src,
+      aspect: CARD_COVER_ASPECT,
+    },
+    { label: "Facebook & WhatsApp", src: ogImage(shareImage), aspect: 1200 / 630 },
+    ...GOOGLE_IMAGE_SIZES.map((size) => ({
+      label: `Google ${size.label}`,
+      src: googleImage(cover, size),
+      aspect: size.width / size.height,
+    })),
+  ];
+}
 
 export function CoverImageField({
   form,
@@ -47,7 +71,7 @@ export function CoverImageField({
       {form.cover_image_url ? (
         <div className="group relative overflow-hidden rounded-lg border border-blog-fg/10">
           <img
-            src={transformImage(form.cover_image_url, { width: 640, height: 320, crop: "fill" })}
+            src={responsiveImage(form.cover_image_url, [640], { aspect: ARTICLE_COVER_ASPECT }).src}
             alt={form.cover_image_alt ?? ""}
             className="aspect-2/1 w-full object-cover"
           />
@@ -106,6 +130,30 @@ export function CoverImageField({
             </span>
           )}
         </button>
+      )}
+      {form.cover_image_url && (
+        <div>
+          <p className="text-xs text-blog-fg/45">
+            Article page crop shown above. Covers are cropped automatically, so check nothing
+            important is cut off. Photos inside the article are never cropped.
+          </p>
+          <ul className="mt-3 grid grid-cols-2 gap-x-3 gap-y-3">
+            {cropPreviews(form.cover_image_url, form.og_image_url || form.cover_image_url).map(
+              (crop) => (
+                <li key={crop.label}>
+                  <img
+                    src={crop.src}
+                    alt=""
+                    loading="lazy"
+                    style={{ aspectRatio: crop.aspect }}
+                    className="w-full rounded-md bg-blog-fg/5 object-cover ring-1 ring-blog-fg/10"
+                  />
+                  <p className="mt-1 text-[11px] text-blog-fg/55">{crop.label}</p>
+                </li>
+              ),
+            )}
+          </ul>
+        </div>
       )}
       <input
         ref={inputRef}

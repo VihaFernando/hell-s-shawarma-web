@@ -3,12 +3,12 @@ import { ArrowRight } from "lucide-react";
 
 import fallbackCover from "@/assets/blog-hero-sm.webp";
 import { formatDate } from "@/lib/blog/format";
-import { responsiveImage } from "@/lib/blog/images";
+import { CARD_COVER_ASPECT, responsiveImage } from "@/lib/blog/images";
 import type { PostCard as PostCardData } from "@/lib/blog/types";
 
 export function PostCard({ post, eager = false }: { post: PostCardData; eager?: boolean }) {
   const img = post.cover_image_url
-    ? responsiveImage(post.cover_image_url, [400, 640, 960], { aspect: 16 / 10 })
+    ? responsiveImage(post.cover_image_url, [400, 640, 960], { aspect: CARD_COVER_ASPECT })
     : { src: fallbackCover };
 
   return (
