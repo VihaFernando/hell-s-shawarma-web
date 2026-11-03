@@ -39,7 +39,7 @@ function NavLink({ href, label, onClick }: { href: string; label: string; onClic
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ showThemeToggle = true }: { showThemeToggle?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -75,7 +75,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <ThemeToggle />
+          {showThemeToggle && <ThemeToggle />}
           <Link
             to="/menu"
             className="hidden sm:inline-flex items-center gap-2 rounded-md border border-[#ff3b14] px-6 py-2.5 text-sm font-bold tracking-[0.05em] uppercase text-blog-fg hover:bg-[#ff3b14] hover:text-white transition-all"

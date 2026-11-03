@@ -38,39 +38,7 @@ export function BlogListing({
 
   return (
     <>
-      <section className="relative overflow-hidden">
-        {/* Dark: full-bleed photo fading into the page. Light: the (dark) photo becomes a
-            framed card beside the headline, since fading it into cream looks muddy. */}
-        <div className="absolute inset-0 light:mx-auto light:max-w-7xl">
-          <picture>
-            <source media="(max-width: 767px)" srcSet={heroImageSm} />
-            <img
-              src={heroImage}
-              alt=""
-              aria-hidden="true"
-              width={1200}
-              height={800}
-              fetchPriority="high"
-              decoding="async"
-              className="absolute inset-y-0 right-0 h-full w-full md:w-[70%] object-cover object-right opacity-60 md:opacity-100 light:max-md:hidden light:top-12 light:right-5 light:h-[calc(100%-6rem)] light:w-[40%] light:rounded-[28px] light:object-[72%_center] light:opacity-100 light:shadow-[0_30px_70px_-25px_rgba(90,30,10,0.45)] light:ring-1 light:ring-black/5 light:lg:right-10"
-            />
-          </picture>
-        </div>
-        <div className="absolute inset-0 bg-linear-to-r from-blog-bg via-blog-bg/85 md:via-blog-bg/60 to-transparent light:hidden" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-blog-bg to-transparent light:hidden" />
-        <div className="relative mx-auto max-w-7xl px-5 lg:px-10 pt-14 pb-16 md:pt-20 md:pb-24 light:md:pr-[46%] light:lg:pr-[46%]">
-          {crumbs && (
-            <div className="mb-8">
-              <Breadcrumbs items={crumbs} />
-            </div>
-          )}
-          <p className="text-sm font-bold uppercase tracking-[0.18em] text-blog-accent">{kicker}</p>
-          <h1 className="mt-4 max-w-2xl text-5xl font-extrabold leading-[1.02] tracking-tight text-blog-fg md:text-7xl">
-            {heading}
-          </h1>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-blog-fg/75">{intro}</p>
-        </div>
-      </section>
+      <ListingHero kicker={kicker} heading={heading} intro={intro} crumbs={crumbs} />
 
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
         <nav aria-label="Blog categories" className="border-b border-blog-fg/10">
@@ -132,6 +100,91 @@ export function BlogListing({
         </section>
       </div>
     </>
+  );
+}
+
+// Shown only during client-side navigation while the loader fetches from Supabase.
+// Prerendered HTML (what crawlers get) always contains the real listing.
+export function BlogListingSkeleton(hero: Pick<Props, "kicker" | "heading" | "intro" | "crumbs">) {
+  return (
+    <>
+      <ListingHero {...hero} />
+
+      <div
+        className="mx-auto max-w-7xl px-5 lg:px-10"
+        aria-busy="true"
+        aria-label="Loading articles"
+      >
+        <div className="flex gap-8 border-b border-blog-fg/10 py-4">
+          {[10, 20, 16, 24].map((w) => (
+            <div
+              key={w}
+              className="h-5 animate-pulse rounded bg-blog-fg/10"
+              style={{ width: `${w * 4}px` }}
+            />
+          ))}
+        </div>
+
+        <div className="grid gap-x-8 gap-y-14 py-12 sm:grid-cols-2 md:py-16 lg:grid-cols-3">
+          {Array.from({ length: 6 }, (_, i) => (
+            <div key={i} className="flex flex-col">
+              <div className="aspect-16/10 animate-pulse rounded-xl bg-blog-fg/10" />
+              <div className="mt-4 flex justify-between">
+                <div className="h-3 w-20 animate-pulse rounded bg-blog-fg/10" />
+                <div className="h-3 w-16 animate-pulse rounded bg-blog-fg/10" />
+              </div>
+              <div className="mt-3 h-6 w-11/12 animate-pulse rounded bg-blog-fg/10" />
+              <div className="mt-2 h-6 w-2/3 animate-pulse rounded bg-blog-fg/10" />
+              <div className="mt-3 h-4 w-full animate-pulse rounded bg-blog-fg/10" />
+              <div className="mt-2 h-4 w-4/5 animate-pulse rounded bg-blog-fg/10" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ListingHero({
+  kicker,
+  heading,
+  intro,
+  crumbs,
+}: Pick<Props, "kicker" | "heading" | "intro" | "crumbs">) {
+  return (
+    <section className="relative overflow-hidden">
+      {/* Dark: full-bleed photo fading into the page. Light: the (dark) photo becomes a
+          framed card beside the headline, since fading it into cream looks muddy. */}
+      <div className="absolute inset-0 light:mx-auto light:max-w-7xl">
+        <picture>
+          <source media="(max-width: 767px)" srcSet={heroImageSm} />
+          <img
+            src={heroImage}
+            alt=""
+            aria-hidden="true"
+            width={1200}
+            height={800}
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-y-0 right-0 h-full w-full md:w-[70%] object-cover object-right opacity-60 md:opacity-100 light:max-md:hidden light:top-12 light:right-5 light:h-[calc(100%-6rem)] light:w-[40%] light:rounded-[28px] light:object-[72%_center] light:opacity-100 light:shadow-[0_30px_70px_-25px_rgba(90,30,10,0.45)] light:ring-1 light:ring-black/5 light:lg:right-10"
+          />
+        </picture>
+      </div>
+      <div className="absolute inset-0 bg-linear-to-r from-blog-bg via-blog-bg/85 md:via-blog-bg/60 to-transparent light:hidden" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-blog-bg to-transparent light:hidden" />
+      <div className="relative mx-auto max-w-7xl px-5 lg:px-10 pt-14 pb-16 md:pt-20 md:pb-24 light:md:pr-[46%] light:lg:pr-[46%]">
+        {crumbs && (
+          <div className="mb-8">
+            <Breadcrumbs items={crumbs} />
+          </div>
+        )}
+        <p className="text-sm font-bold uppercase tracking-[0.18em] text-blog-accent">{kicker}</p>
+        <h1 className="mt-4 max-w-2xl text-5xl font-extrabold leading-[1.02] tracking-tight text-blog-fg md:text-7xl">
+          {heading}
+        </h1>
+        <p className="mt-6 max-w-md text-lg leading-relaxed text-blog-fg/75">{intro}</p>
+      </div>
+    </section>
   );
 }
 

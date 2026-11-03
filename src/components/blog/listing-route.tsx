@@ -2,6 +2,7 @@
 // /blog, /blog/page/$page, /blog/category/$category, /blog/category/$category/page/$page
 
 import { notFound, redirect } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import outfitFont from "@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2?url";
 import { fetchCategories, fetchPostList } from "@/lib/blog/api";
@@ -15,7 +16,7 @@ import {
 } from "@/lib/blog/seo";
 
 import { BlogLayout } from "./BlogLayout";
-import { BlogListing } from "./BlogListing";
+import { BlogListing, BlogListingSkeleton } from "./BlogListing";
 
 export const blogFontPreload = {
   rel: "preload",
@@ -49,7 +50,8 @@ export function listingRouteHead(data: ListingData | undefined) {
   if (!data)
     return {
       meta: [
-        { title: "Page not found | Hell's Shawarma" },
+        // No loader data means loading OR not found; the 404 view sets its own title.
+        { title: BLOG_TITLE },
         { name: "robots", content: ROBOTS_NOINDEX },
       ],
     };
@@ -80,7 +82,7 @@ export function listingRouteHead(data: ListingData | undefined) {
 export function ListingPage({ data }: { data: ListingData }) {
   const { category, categories, posts, page, pageCount } = data;
   return (
-    <BlogLayout>
+    <BlogLayout themed={false}>
       {category ? (
         <BlogListing
           kicker="Hell's Blog"
@@ -99,15 +101,7 @@ export function ListingPage({ data }: { data: ListingData }) {
         />
       ) : (
         <BlogListing
-          kicker={BLOG_TITLE}
-          heading={
-            <>
-              Real Food.
-              <br />
-              <span className="text-blog-accent">Real Stories.</span>
-            </>
-          }
-          intro="Shawarma stories, Middle Eastern food culture and guides to our branches in Colombo and Dehiwala."
+          {...MAIN_HERO}
           categories={categories}
           posts={posts}
           page={page}
@@ -118,7 +112,31 @@ export function ListingPage({ data }: { data: ListingData }) {
   );
 }
 
+const MAIN_HERO = {
+  kicker: BLOG_TITLE,
+  heading: (
+    <>
+      Real Food.
+      <br />
+      <span className="text-blog-accent">Real Stories.</span>
+    </>
+  ),
+  intro:
+    "Shawarma stories, Middle Eastern food culture and guides to our branches in Colombo and Dehiwala.",
+};
+
+export function BlogIndexPending() {
+  return (
+    <BlogLayout themed={false}>
+      <BlogListingSkeleton {...MAIN_HERO} />
+    </BlogLayout>
+  );
+}
+
 export function BlogNotFound() {
+  useEffect(() => {
+    document.title = "Page not found | Hell's Shawarma";
+  }, []);
   return (
     <BlogLayout>
       <div className="mx-auto max-w-2xl px-5 py-28 text-center">

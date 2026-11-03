@@ -4,8 +4,15 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { useApplyBlogTheme } from "@/lib/blog/theme";
 
-export function BlogLayout({ children }: { children: ReactNode }) {
-  useApplyBlogTheme();
+export function BlogLayout({
+  children,
+  themed = true,
+}: {
+  children: ReactNode;
+  /** false = always dark, no light/dark toggle (the blog listing). */
+  themed?: boolean;
+}) {
+  useApplyBlogTheme(themed);
   return (
     <div className="min-h-screen bg-blog-bg text-blog-fg overflow-x-clip">
       <a
@@ -14,7 +21,7 @@ export function BlogLayout({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
-      <SiteHeader />
+      <SiteHeader showThemeToggle={themed} />
       {/* Header/footer keep the site's Lato; long-form content uses the more readable Outfit. */}
       <main id="main" className="font-blog">
         {children}

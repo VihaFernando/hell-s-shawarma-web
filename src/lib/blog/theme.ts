@@ -9,7 +9,9 @@ export type BlogTheme = "light" | "dark";
 const STORAGE_KEY = "hs-blog-theme";
 const ATTR = "data-blog-theme";
 const EVENT = "hs-blog-theme";
-const THEMED_PATH = /^\/(blog|admin)(\/|$)/;
+// Admin and article pages only; the blog listing (/blog, /blog/page/N,
+// /blog/category/...) is always dark.
+const THEMED_PATH = /^\/(admin(\/|$)|blog\/(?!(page|category)(\/|$))[^\/])/;
 
 // Runs in <head> before first paint so prerendered pages never flash the wrong theme.
 // No saved choice -> follow the device setting.
@@ -38,8 +40,12 @@ function setThemeAttr(t: BlogTheme) {
  * mounted (covers client-side navigation from the always-dark pages) and
  * removes it again when leaving.
  */
-export function useApplyBlogTheme() {
+export function useApplyBlogTheme(enabled = true) {
   useEffect(() => {
+    if (!enabled) {
+      document.documentElement.removeAttribute(ATTR);
+      return;
+    }
     setThemeAttr(savedTheme() ?? systemTheme());
     const media = window.matchMedia("(prefers-color-scheme: light)");
     const onSystemChange = () => {
@@ -50,7 +56,7 @@ export function useApplyBlogTheme() {
       media.removeEventListener("change", onSystemChange);
       document.documentElement.removeAttribute(ATTR);
     };
-  }, []);
+  }, [enabled]);
 }
 
 /** Current theme + toggle, for components that render differently per theme. */
