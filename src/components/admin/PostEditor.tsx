@@ -463,7 +463,7 @@ export function PostEditor({
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-5">
+        <aside className="space-y-5 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
           <Panel title="Publishing">
             <div className="space-y-1.5">
               <Label htmlFor="published-at">Publish date</Label>

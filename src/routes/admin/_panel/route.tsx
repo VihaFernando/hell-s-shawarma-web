@@ -40,7 +40,7 @@ function AdminPanel() {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-blog-fg/10 bg-blog-surface p-4 md:flex">
+      <aside className="hidden w-60 shrink-0 flex-col self-start overflow-y-auto border-r border-blog-fg/10 bg-blog-surface p-4 md:sticky md:top-0 md:flex md:h-screen">
         <Link to="/admin" className="px-2 py-3">
           <img src={logoImage} alt="Hell's Shawarma" className="h-9 w-auto" />
         </Link>
