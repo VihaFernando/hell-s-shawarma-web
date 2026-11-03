@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Flame, Menu as MenuIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import logoImage from "@/assets/logo2.png";
+import logoImage from "@/assets/logo2-sm.webp";
 import { ThemeToggle } from "@/components/blog/ThemeToggle";
 
 const NAV = [

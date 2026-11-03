@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Star } from "lucide-react";
 
-import logoImage from "@/assets/logo2.png";
+import logoImage from "@/assets/logo2-sm.webp";
 import { BRANCHES, BUSINESS } from "@/lib/site-info";
 
 export function TikTokIcon({ className }: { className?: string }) {

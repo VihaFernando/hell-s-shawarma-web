@@ -4,13 +4,16 @@ import { ExternalLink, FileText, FolderTree, Images, LogOut, Users } from "lucid
 import logoImage from "@/assets/logo2.png";
 import { DeployStatus } from "@/components/admin/DeployStatus";
 import { ThemeToggle } from "@/components/blog/ThemeToggle";
-import { getMyMembership } from "@/lib/blog/admin-api";
 import { can } from "@/lib/blog/permissions";
-import { getSupabase } from "@/lib/supabase";
 
 // Pathless layout guarding every admin page except login / set-password / reset-password.
 export const Route = createFileRoute("/admin/_panel")({
   beforeLoad: async ({ location }) => {
+    // Dynamic imports keep supabase-js out of the public (blog/site) bundle.
+    const [{ getSupabase }, { getMyMembership }] = await Promise.all([
+      import("@/lib/supabase"),
+      import("@/lib/blog/admin-api"),
+    ]);
     const sb = getSupabase();
     const { data } = await sb.auth.getSession();
     const member = data.session ? await getMyMembership().catch(() => null) : null;
@@ -34,6 +37,7 @@ function AdminPanel() {
   const navigate = useNavigate();
 
   async function signOut() {
+    const { getSupabase } = await import("@/lib/supabase");
     await getSupabase().auth.signOut();
     navigate({ to: "/admin/login", search: { redirect: undefined } });
   }

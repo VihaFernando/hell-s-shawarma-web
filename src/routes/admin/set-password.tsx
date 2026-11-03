@@ -15,6 +15,11 @@ import { getSupabase } from "@/lib/supabase";
 // replace the temporary password before they can use the admin.
 export const Route = createFileRoute("/admin/set-password")({
   beforeLoad: async () => {
+    // Dynamic imports keep supabase-js out of the public (blog/site) bundle.
+    const [{ getSupabase }, { getMyMembership }] = await Promise.all([
+      import("@/lib/supabase"),
+      import("@/lib/blog/admin-api"),
+    ]);
     const { data } = await getSupabase().auth.getSession();
     if (!data.session) throw redirect({ to: "/admin/login", search: { redirect: undefined } });
     const member = await getMyMembership().catch(() => null);

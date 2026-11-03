@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PostEditor } from "@/components/admin/PostEditor";
-import { getAdminPost, listAdminCategories, listAdminPosts } from "@/lib/blog/admin-api";
 
 export const Route = createFileRoute("/admin/_panel/posts/$id")({
   loader: async ({ params }) => {
+    // Dynamic import keeps supabase-js out of the public (blog/site) bundle.
+    const { getAdminPost, listAdminCategories, listAdminPosts } = await import(
+      "@/lib/blog/admin-api"
+    );
     const [post, categories, posts] = await Promise.all([
       params.id === "new" ? null : getAdminPost(params.id),
       listAdminCategories(),
