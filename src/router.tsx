@@ -9,7 +9,11 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+    // Start loading a page (and its Supabase data) on hover/touch, and reuse it for a
+    // minute so repeat navigation between blog pages is instant.
+    defaultPreload: "intent",
+    defaultPreloadStaleTime: 60_000,
+    defaultStaleTime: 60_000,
   });
 
   return router;

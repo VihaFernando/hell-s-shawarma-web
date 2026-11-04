@@ -66,6 +66,7 @@ const NAV_ITEMS = [
   { label: "Featured", href: "/#blends" },
   { label: "Gallery", href: "/gallery" },
   { label: "Locations", href: "/#contact" },
+  { label: "Blog", href: "/blog" },
 ];
 
 function Navbar() {
