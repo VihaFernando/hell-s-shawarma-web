@@ -49,3 +49,6 @@ src/routeTree.gen.ts
 .cache/
 .eslintcache
 .prettier-cache
+
+# Local Netlify folder
+.netlify
