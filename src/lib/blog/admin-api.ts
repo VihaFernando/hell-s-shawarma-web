@@ -106,6 +106,27 @@ export async function slugTaken(slug: string, exceptId: string | null) {
 
 // ------------------------------------------------------------ Netlify Functions
 
+/** Password sign-in through /api/blog-login, which rate-limits per IP and per account. */
+export async function signInWithPassword(email: string, password: string) {
+  let res: Response;
+  try {
+    res = await fetch("/api/blog-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+  } catch {
+    throw new Error("Couldn't reach the server. Check your connection.");
+  }
+  const body = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(body?.error ?? `Sign in failed (${res.status}).`);
+  const { error } = await getSupabase().auth.setSession({
+    access_token: body.access_token,
+    refresh_token: body.refresh_token,
+  });
+  if (error) throw error;
+}
+
 async function callFunction<T>(name: string, init: RequestInit = {}): Promise<T> {
   const { data } = await getSupabase().auth.getSession();
   const token = data.session?.access_token;

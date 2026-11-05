@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/blog/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getMyMembership } from "@/lib/blog/admin-api";
+import { getMyMembership, signInWithPassword } from "@/lib/blog/admin-api";
 import { getSupabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/admin/login")({
@@ -40,8 +40,7 @@ function LoginPage() {
         setMode("login");
         return;
       }
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      await signInWithPassword(email, password);
       const member = await getMyMembership();
       if (!member || member.disabled) {
         await sb.auth.signOut();

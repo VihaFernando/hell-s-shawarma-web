@@ -96,146 +96,150 @@ async function deliverInvite(event, { email, name, password, invitedBy }) {
   };
 }
 
-export const handler = withErrors(async (event) => {
-  const { user: me, member: meMember } = await requireMember(event, ["users.manage"]);
-  const myName = meMember.display_name || meMember.email;
-  const body = parseBody(event);
+export const handler = withErrors(
+  async (event) => {
+    const { user: me, member: meMember } = await requireMember(event, ["users.manage"]);
+    const myName = meMember.display_name || meMember.email;
+    const body = parseBody(event);
 
-  if (event.httpMethod === "GET") {
-    return jsonResponse(200, { members: await listMembers() });
-  }
+    if (event.httpMethod === "GET") {
+      return jsonResponse(200, { members: await listMembers() });
+    }
 
-  if (event.httpMethod === "POST" && body.action === "invite") {
-    const email = String(body.email ?? "")
-      .trim()
-      .toLowerCase();
-    const name = String(body.display_name ?? "")
-      .trim()
-      .slice(0, 80);
-    if (!EMAIL_RE.test(email)) throw new HttpError(400, "Enter a valid email address.");
-    const permissions = cleanPermissions(body.permissions ?? []);
-    if (!permissions.length)
-      throw new HttpError(400, "Give the new member at least one permission.");
+    if (event.httpMethod === "POST" && body.action === "invite") {
+      const email = String(body.email ?? "")
+        .trim()
+        .toLowerCase();
+      const name = String(body.display_name ?? "")
+        .trim()
+        .slice(0, 80);
+      if (!EMAIL_RE.test(email)) throw new HttpError(400, "Enter a valid email address.");
+      const permissions = cleanPermissions(body.permissions ?? []);
+      if (!permissions.length)
+        throw new HttpError(400, "Give the new member at least one permission.");
 
-    const password = tempPassword();
-    let created;
-    try {
-      created = await authAdmin("users", {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-          email_confirm: true,
-          user_metadata: { display_name: name },
-        }),
-      });
-    } catch (err) {
-      if (/already|registered|exists/i.test(err.message)) {
-        throw new HttpError(409, "Someone with that email already has an account.");
+      const password = tempPassword();
+      let created;
+      try {
+        created = await authAdmin("users", {
+          method: "POST",
+          body: JSON.stringify({
+            email,
+            password,
+            email_confirm: true,
+            user_metadata: { display_name: name },
+          }),
+        });
+      } catch (err) {
+        if (/already|registered|exists/i.test(err.message)) {
+          throw new HttpError(409, "Someone with that email already has an account.");
+        }
+        throw err;
       }
-      throw err;
+
+      try {
+        await serviceRest("blog_members", {
+          method: "POST",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            user_id: created.id,
+            email,
+            display_name: name,
+            permissions,
+            must_change_password: true,
+            invited_by: me.id,
+            invited_at: new Date().toISOString(),
+          }),
+        });
+      } catch (err) {
+        // Don't leave an orphaned login behind if the membership row fails.
+        await authAdmin(`users/${created.id}`, { method: "DELETE" }).catch(() => {});
+        throw err;
+      }
+
+      const invite = await deliverInvite(event, { email, name, password, invitedBy: myName });
+      return jsonResponse(200, { member: await getMember(created.id), invite });
     }
 
-    try {
-      await serviceRest("blog_members", {
-        method: "POST",
-        headers: { Prefer: "return=minimal" },
-        body: JSON.stringify({
-          user_id: created.id,
-          email,
-          display_name: name,
-          permissions,
-          must_change_password: true,
-          invited_by: me.id,
-          invited_at: new Date().toISOString(),
-        }),
-      });
-    } catch (err) {
-      // Don't leave an orphaned login behind if the membership row fails.
-      await authAdmin(`users/${created.id}`, { method: "DELETE" }).catch(() => {});
-      throw err;
-    }
-
-    const invite = await deliverInvite(event, { email, name, password, invitedBy: myName });
-    return jsonResponse(200, { member: await getMember(created.id), invite });
-  }
-
-  if (event.httpMethod === "POST" && body.action === "reset") {
-    const target = await getMember(body.user_id);
-    if (!target) throw new HttpError(404, "Member not found.");
-    if (target.user_id === me.id)
-      throw new HttpError(400, "Change your own password from your account instead.");
-    const password = tempPassword();
-    await authAdmin(`users/${target.user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ password }),
-    });
-    await serviceRest(`blog_members?user_id=eq.${target.user_id}`, {
-      method: "PATCH",
-      headers: { Prefer: "return=minimal" },
-      body: JSON.stringify({ must_change_password: true, invited_at: new Date().toISOString() }),
-    });
-    const invite = await deliverInvite(event, {
-      email: target.email,
-      name: target.display_name,
-      password,
-      invitedBy: myName,
-    });
-    return jsonResponse(200, { member: await getMember(target.user_id), invite });
-  }
-
-  if (event.httpMethod === "PATCH") {
-    const target = await getMember(body.user_id);
-    if (!target) throw new HttpError(404, "Member not found.");
-    const patch = {};
-    if (typeof body.display_name === "string")
-      patch.display_name = body.display_name.trim().slice(0, 80);
-    if (body.permissions !== undefined) patch.permissions = cleanPermissions(body.permissions);
-    if (typeof body.disabled === "boolean") patch.disabled = body.disabled;
-
-    const self = target.user_id === me.id;
-    if (self && patch.disabled) throw new HttpError(400, "You can't disable your own account.");
-    if (self && patch.permissions && !patch.permissions.includes("users.manage")) {
-      throw new HttpError(400, "You can't remove your own user-management permission.");
-    }
-    const losesManager =
-      target.permissions.includes("users.manage") &&
-      (patch.disabled === true ||
-        (patch.permissions && !patch.permissions.includes("users.manage")));
-    if (losesManager && (await activeManagers(target.user_id)) === 0) {
-      throw new HttpError(400, "At least one active member must be able to manage users.");
-    }
-
-    if (typeof patch.disabled === "boolean" && patch.disabled !== target.disabled) {
-      // A ban also blocks sign-in and token refresh, not just blog access.
+    if (event.httpMethod === "POST" && body.action === "reset") {
+      const target = await getMember(body.user_id);
+      if (!target) throw new HttpError(404, "Member not found.");
+      if (target.user_id === me.id)
+        throw new HttpError(400, "Change your own password from your account instead.");
+      const password = tempPassword();
       await authAdmin(`users/${target.user_id}`, {
         method: "PUT",
-        body: JSON.stringify({ ban_duration: patch.disabled ? "876000h" : "none" }),
+        body: JSON.stringify({ password }),
       });
+      await serviceRest(`blog_members?user_id=eq.${target.user_id}`, {
+        method: "PATCH",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({ must_change_password: true, invited_at: new Date().toISOString() }),
+      });
+      const invite = await deliverInvite(event, {
+        email: target.email,
+        name: target.display_name,
+        password,
+        invitedBy: myName,
+      });
+      return jsonResponse(200, { member: await getMember(target.user_id), invite });
     }
-    await serviceRest(`blog_members?user_id=eq.${target.user_id}`, {
-      method: "PATCH",
-      headers: { Prefer: "return=minimal" },
-      body: JSON.stringify(patch),
-    });
-    return jsonResponse(200, { member: await getMember(target.user_id) });
-  }
 
-  if (event.httpMethod === "DELETE") {
-    const id = event.queryStringParameters?.user_id;
-    const target = id ? await getMember(id) : null;
-    if (!target) throw new HttpError(404, "Member not found.");
-    if (target.user_id === me.id) throw new HttpError(400, "You can't remove yourself.");
-    if (
-      target.permissions.includes("users.manage") &&
-      (await activeManagers(target.user_id)) === 0
-    ) {
-      throw new HttpError(400, "At least one active member must be able to manage users.");
+    if (event.httpMethod === "PATCH") {
+      const target = await getMember(body.user_id);
+      if (!target) throw new HttpError(404, "Member not found.");
+      const patch = {};
+      if (typeof body.display_name === "string")
+        patch.display_name = body.display_name.trim().slice(0, 80);
+      if (body.permissions !== undefined) patch.permissions = cleanPermissions(body.permissions);
+      if (typeof body.disabled === "boolean") patch.disabled = body.disabled;
+
+      const self = target.user_id === me.id;
+      if (self && patch.disabled) throw new HttpError(400, "You can't disable your own account.");
+      if (self && patch.permissions && !patch.permissions.includes("users.manage")) {
+        throw new HttpError(400, "You can't remove your own user-management permission.");
+      }
+      const losesManager =
+        target.permissions.includes("users.manage") &&
+        (patch.disabled === true ||
+          (patch.permissions && !patch.permissions.includes("users.manage")));
+      if (losesManager && (await activeManagers(target.user_id)) === 0) {
+        throw new HttpError(400, "At least one active member must be able to manage users.");
+      }
+
+      if (typeof patch.disabled === "boolean" && patch.disabled !== target.disabled) {
+        // A ban also blocks sign-in and token refresh, not just blog access.
+        await authAdmin(`users/${target.user_id}`, {
+          method: "PUT",
+          body: JSON.stringify({ ban_duration: patch.disabled ? "876000h" : "none" }),
+        });
+      }
+      await serviceRest(`blog_members?user_id=eq.${target.user_id}`, {
+        method: "PATCH",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify(patch),
+      });
+      return jsonResponse(200, { member: await getMember(target.user_id) });
     }
-    // Deleting the login cascades to blog_members; their posts stay (created_by -> null).
-    await authAdmin(`users/${target.user_id}`, { method: "DELETE" });
-    return jsonResponse(200, { ok: true });
-  }
 
-  return jsonResponse(405, { error: "Method not allowed" });
-});
+    if (event.httpMethod === "DELETE") {
+      const id = event.queryStringParameters?.user_id;
+      const target = id ? await getMember(id) : null;
+      if (!target) throw new HttpError(404, "Member not found.");
+      if (target.user_id === me.id) throw new HttpError(400, "You can't remove yourself.");
+      if (
+        target.permissions.includes("users.manage") &&
+        (await activeManagers(target.user_id)) === 0
+      ) {
+        throw new HttpError(400, "At least one active member must be able to manage users.");
+      }
+      // Deleting the login cascades to blog_members; their posts stay (created_by -> null).
+      await authAdmin(`users/${target.user_id}`, { method: "DELETE" });
+      return jsonResponse(200, { ok: true });
+    }
+
+    return jsonResponse(405, { error: "Method not allowed" });
+  },
+  // Invites and resets create accounts and passwords: keep this tight.
+  { name: "users", limit: 30, windowSec: 60 },
+);

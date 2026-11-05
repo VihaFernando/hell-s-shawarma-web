@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  type ErrorComponentProps,
   Outlet,
   Link,
   createRootRouteWithContext,
@@ -7,7 +8,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, useCallback, type ReactNode } from "react";
+import { useEffect, useCallback, useMemo, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -40,7 +41,12 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error: caught, reset }: ErrorComponentProps) {
+  // Router types the thrown value as unknown.
+  const error = useMemo(
+    () => (caught instanceof Error ? caught : new Error(String(caught))),
+    [caught],
+  );
   console.error(error);
   const router = useRouter();
   useEffect(() => {

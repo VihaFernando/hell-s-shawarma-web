@@ -5,22 +5,26 @@
 
 import { jsonResponse, requireMember, triggerBuild, withErrors } from "./lib/blog-admin.js";
 
-export const handler = withErrors(async (event) => {
-  if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
-  const { user } = await requireMember(event, [
-    "posts.publish",
-    "posts.delete",
-    "categories.manage",
-    "site.rebuild",
-  ]);
+// Each call fires a Netlify build (build minutes), so keep it low.
+export const handler = withErrors(
+  async (event) => {
+    if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
+    const { user } = await requireMember(event, [
+      "posts.publish",
+      "posts.delete",
+      "categories.manage",
+      "site.rebuild",
+    ]);
 
-  let reason = "content update";
-  try {
-    reason = String(JSON.parse(event.body || "{}").reason || reason).slice(0, 100);
-  } catch {
-    // keep default
-  }
+    let reason = "content update";
+    try {
+      reason = String(JSON.parse(event.body || "{}").reason || reason).slice(0, 100);
+    } catch {
+      // keep default
+    }
 
-  const triggeredAt = await triggerBuild(`${reason} (${user.email})`);
-  return jsonResponse(200, { ok: true, triggeredAt });
-});
+    const triggeredAt = await triggerBuild(`${reason} (${user.email})`);
+    return jsonResponse(200, { ok: true, triggeredAt });
+  },
+  { name: "rebuild", limit: 5, windowSec: 60 },
+);

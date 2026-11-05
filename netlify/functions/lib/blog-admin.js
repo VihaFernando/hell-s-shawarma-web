@@ -4,6 +4,8 @@
 // Env: VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY,
 //      NETLIFY_BUILD_HOOK_URL
 
+import { rateLimit } from "./rate-limit.js";
+
 export const SITE_URL = "https://hellsshawarma.lk";
 
 export function jsonResponse(statusCode, payload) {
@@ -165,10 +167,22 @@ export async function triggerBuild(reason) {
   return at;
 }
 
-/** Wraps a handler so HttpErrors become JSON responses. */
-export function withErrors(fn) {
+// Per-IP default for every admin function; pass a tighter one for sensitive ones.
+const DEFAULT_LIMIT = { name: "admin", limit: 120, windowSec: 60 };
+
+/**
+ * Wraps a handler: rate-limits per IP before any work (or Supabase call), and turns
+ * HttpErrors into JSON responses. `limit` = { name, limit, windowSec }.
+ */
+export function withErrors(fn, limit = DEFAULT_LIMIT) {
   return async (event, context) => {
     try {
+      const retryAfter = await rateLimit(event, limit);
+      if (retryAfter) {
+        const res = jsonResponse(429, { error: "Too many requests. Try again shortly." });
+        res.headers["Retry-After"] = String(retryAfter);
+        return res;
+      }
       return await fn(event, context);
     } catch (err) {
       const status = err instanceof HttpError ? err.statusCode : 500;

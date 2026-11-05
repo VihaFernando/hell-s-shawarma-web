@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/blog/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getMyMembership, setInitialPassword } from "@/lib/blog/admin-api";
+import { getMyMembership, setInitialPassword, signInWithPassword } from "@/lib/blog/admin-api";
 import { getSupabase } from "@/lib/supabase";
 
 // First sign-in after an invite (or an admin password reset): the member must
@@ -62,8 +62,7 @@ function SetPasswordPage() {
       // Start a fresh session with the new password.
       const sb = getSupabase();
       await sb.auth.signOut();
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      await signInWithPassword(email, password);
       toast.success("Password set. Welcome to the team!");
       navigate({ to: "/admin", replace: true });
     } catch (err) {

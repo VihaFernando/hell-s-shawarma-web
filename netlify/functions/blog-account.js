@@ -28,32 +28,36 @@ function validatePassword(pw) {
   }
 }
 
-export const handler = withErrors(async (event) => {
-  if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
-  const user = await requireUser(event);
-  const member = await getMember(user.id);
-  if (!member || member.disabled)
-    throw new HttpError(403, "This account doesn't have blog access.");
+// Password changes: guards against guessing/abusing the temp-password flow.
+export const handler = withErrors(
+  async (event) => {
+    if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
+    const user = await requireUser(event);
+    const member = await getMember(user.id);
+    if (!member || member.disabled)
+      throw new HttpError(403, "This account doesn't have blog access.");
 
-  const { action, password } = parseBody(event);
-  if (action !== "set-password") throw new HttpError(400, "Unknown action.");
-  if (!member.must_change_password) throw new HttpError(400, "Your password is already set.");
-  if (
-    member.invited_at &&
-    Date.now() - new Date(member.invited_at).getTime() > INVITE_EXPIRES_DAYS * 864e5
-  ) {
-    throw new HttpError(403, "This invite has expired. Ask an admin to send a new one.");
-  }
-  validatePassword(password);
+    const { action, password } = parseBody(event);
+    if (action !== "set-password") throw new HttpError(400, "Unknown action.");
+    if (!member.must_change_password) throw new HttpError(400, "Your password is already set.");
+    if (
+      member.invited_at &&
+      Date.now() - new Date(member.invited_at).getTime() > INVITE_EXPIRES_DAYS * 864e5
+    ) {
+      throw new HttpError(403, "This invite has expired. Ask an admin to send a new one.");
+    }
+    validatePassword(password);
 
-  await authAdmin(`users/${user.id}`, { method: "PUT", body: JSON.stringify({ password }) });
-  await serviceRest(`blog_members?user_id=eq.${user.id}`, {
-    method: "PATCH",
-    headers: { Prefer: "return=minimal" },
-    body: JSON.stringify({
-      must_change_password: false,
-      password_changed_at: new Date().toISOString(),
-    }),
-  });
-  return jsonResponse(200, { ok: true });
-});
+    await authAdmin(`users/${user.id}`, { method: "PUT", body: JSON.stringify({ password }) });
+    await serviceRest(`blog_members?user_id=eq.${user.id}`, {
+      method: "PATCH",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({
+        must_change_password: false,
+        password_changed_at: new Date().toISOString(),
+      }),
+    });
+    return jsonResponse(200, { ok: true });
+  },
+  { name: "account", limit: 10, windowSec: 60 },
+);

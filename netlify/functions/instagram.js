@@ -5,6 +5,7 @@
 // caches the result in-memory for 1 hour so we don't hit the API on every load.
 
 import { getInstagramStore, BLOB_KEY } from "./lib/instagram-store.js";
+import { rateLimit } from "./lib/rate-limit.js";
 
 const GRAPH_VERSION = "v25.0";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
@@ -13,7 +14,11 @@ const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 // across instances/regions, but that's fine for a "don't hammer the API" cache.
 let cache = { data: null, fetchedAt: 0 };
 
-export const handler = async () => {
+export const handler = async (event) => {
+  if (await rateLimit(event, { name: "instagram", limit: 30, windowSec: 60 })) {
+    return jsonResponse(429, { error: "rate_limited", message: "Too many requests." });
+  }
+
   const { IG_BUSINESS_ACCOUNT_ID, CLIENT_IG_USERNAME } = process.env;
 
   if (!IG_BUSINESS_ACCOUNT_ID || !CLIENT_IG_USERNAME) {

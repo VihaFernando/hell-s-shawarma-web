@@ -7,26 +7,19 @@
 
 import { getStore } from "@netlify/blobs";
 
+import { rateLimit } from "./lib/rate-limit.js";
+
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 const BLOB_STORE = "reviews";
 const BLOB_KEY = "google-place-reviews";
 
-const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const RATE_LIMIT_MAX = 20;
-// In-memory is fine here: this only needs to blunt abuse against a single warm
-// instance, not enforce a global cap — the Blobs cache is what actually
-// protects the Google API budget.
-const requestLog = new Map();
+const RATE_LIMIT_MAX = 20; // per IP per minute; the Blobs cache is what protects the Google quota
 
 export const handler = async (event) => {
   const headers = event.headers ?? {};
   const userAgent = headers["user-agent"] ?? headers["User-Agent"] ?? "";
   const origin = headers["origin"] ?? headers["Origin"] ?? "";
   const referer = headers["referer"] ?? headers["Referer"] ?? "";
-  const clientIp =
-    headers["x-nf-client-connection-ip"] ??
-    headers["x-forwarded-for"]?.split(",")[0]?.trim() ??
-    "unknown";
 
   if (!isBrowserUserAgent(userAgent)) {
     return jsonResponse(403, { error: "forbidden", message: "Request rejected." });
@@ -37,7 +30,8 @@ export const handler = async (event) => {
     return jsonResponse(403, { error: "forbidden", message: "Request rejected." });
   }
 
-  if (isRateLimited(clientIp)) {
+  // Shared across function instances (the old in-memory Map was per instance).
+  if (await rateLimit(event, { name: "reviews", limit: RATE_LIMIT_MAX, windowSec: 60 })) {
     return jsonResponse(429, {
       error: "rate_limited",
       message: "Too many requests. Please try again shortly.",
@@ -163,19 +157,6 @@ function safeHost(value) {
   } catch {
     return null;
   }
-}
-
-function isRateLimited(clientIp) {
-  const now = Date.now();
-  const entry = requestLog.get(clientIp);
-
-  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
-    requestLog.set(clientIp, { windowStart: now, count: 1 });
-    return false;
-  }
-
-  entry.count += 1;
-  return entry.count > RATE_LIMIT_MAX;
 }
 
 function jsonResponse(statusCode, payload) {
