@@ -3,6 +3,7 @@
 // the publishable key instead of pulling supabase-js into the public bundle;
 // Row Level Security only exposes published posts to this key anyway.
 
+import { sanitizeHtml } from "./sanitize";
 import { BLOG_PAGE_SIZE, type BlogCategory, type PostCard, type PostWithCategory } from "./types";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
@@ -68,7 +69,9 @@ export async function fetchPost(slug: string) {
   const { data } = await rest<PostWithCategory[]>(
     `blog_posts?select=*,${CATEGORY_EMBED}&slug=eq.${encodeURIComponent(slug)}&${publicFilter()}&limit=1`,
   );
-  return data[0] ?? null;
+  const post = data[0];
+  // Stored HTML is never trusted: a member can write rows straight to Supabase, bypassing the editor.
+  return post ? { ...post, content: sanitizeHtml(post.content) } : null;
 }
 
 // Same-category posts first, topped up with the latest posts.

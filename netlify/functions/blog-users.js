@@ -17,6 +17,7 @@ import {
   HttpError,
   INVITE_EXPIRES_DAYS,
   jsonResponse,
+  parseBody,
   requireMember,
   serviceRest,
   SITE_URL,
@@ -98,7 +99,7 @@ async function deliverInvite(event, { email, name, password, invitedBy }) {
 export const handler = withErrors(async (event) => {
   const { user: me, member: meMember } = await requireMember(event, ["users.manage"]);
   const myName = meMember.display_name || meMember.email;
-  const body = event.body ? JSON.parse(event.body) : {};
+  const body = parseBody(event);
 
   if (event.httpMethod === "GET") {
     return jsonResponse(200, { members: await listMembers() });

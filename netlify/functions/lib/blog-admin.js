@@ -43,7 +43,11 @@ export async function serviceRest(path, init = {}) {
       ...init.headers,
     },
   });
-  if (!res.ok) throw new HttpError(502, `Supabase ${res.status}: ${await res.text()}`);
+  if (!res.ok) {
+    // Upstream bodies can name tables/columns: log them, never return them.
+    console.error(`Supabase ${res.status} on ${path.split("?")[0]}:`, await res.text());
+    throw new HttpError(502, "Database request failed.");
+  }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
@@ -75,7 +79,25 @@ export async function requireUser(event) {
   return res.json();
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Returns the id if it is a UUID, else throws 400 (ids are interpolated into REST filters). */
+export function requireUuid(id) {
+  if (typeof id !== "string" || !UUID_RE.test(id)) throw new HttpError(400, "Invalid id.");
+  return id;
+}
+
+/** JSON.parse that answers 400 instead of leaking a parser error as a 500. */
+export function parseBody(event) {
+  try {
+    return event.body ? JSON.parse(event.body) : {};
+  } catch {
+    throw new HttpError(400, "Invalid request body.");
+  }
+}
+
 export async function getMember(userId) {
+  requireUuid(userId);
   const rows = await serviceRest(`blog_members?select=*&user_id=eq.${userId}`);
   return rows?.[0] ?? null;
 }

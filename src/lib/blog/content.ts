@@ -2,12 +2,11 @@
 // browser only). Public pages render the stored result as-is, so prerendering
 // needs no DOM library. Safe to run repeatedly on its own output.
 
-import DOMPurify from "dompurify";
-
 import { SITE_URL } from "@/lib/seo";
 
 import { slugify } from "./format";
 import { cloudinaryBase, isCloudinary, transformImage } from "./images";
+import { sanitizeHtml } from "./sanitize";
 import type { TocItem } from "./types";
 
 const EMBED_HOSTS = [
@@ -37,14 +36,7 @@ export type ProcessedContent = {
   text: string;
 };
 
-function sanitize(html: string) {
-  return DOMPurify.sanitize(html, {
-    ADD_TAGS: ["iframe"],
-    ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading", "target", "srcset", "sizes"],
-    FORBID_TAGS: ["style", "script", "form", "input", "button"],
-    FORBID_ATTR: ["style"],
-  });
-}
+const sanitize = sanitizeHtml;
 
 function isInternal(href: string) {
   if (href.startsWith("/") || href.startsWith("#")) return true;

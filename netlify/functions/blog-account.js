@@ -9,6 +9,7 @@ import {
   HttpError,
   INVITE_EXPIRES_DAYS,
   jsonResponse,
+  parseBody,
   requireUser,
   serviceRest,
   withErrors,
@@ -34,7 +35,7 @@ export const handler = withErrors(async (event) => {
   if (!member || member.disabled)
     throw new HttpError(403, "This account doesn't have blog access.");
 
-  const { action, password } = JSON.parse(event.body || "{}");
+  const { action, password } = parseBody(event);
   if (action !== "set-password") throw new HttpError(400, "Unknown action.");
   if (!member.must_change_password) throw new HttpError(400, "Your password is already set.");
   if (
