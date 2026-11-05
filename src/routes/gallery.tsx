@@ -2,18 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Flame, Menu as MenuIcon, X, ChevronLeft, ChevronRight } from "lucide-react";
-import logoImage from "@/assets/logo2.png";
+import logoImage from "@/assets/logo2.webp";
 import { pageSeo } from "@/lib/seo";
 
-const photoModules = import.meta.glob("../assets/photos/*.JPG", {
+const photoModules = import.meta.glob("../assets/photos/*.webp", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
 
 const PHOTOS = Object.keys(photoModules)
   .sort((a, b) => {
-    const numA = parseFloat(a.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
-    const numB = parseFloat(b.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
+    const numA = parseFloat(a.match(/g(\d+(?:-\d+)?)\.webp$/)?.[1].replace("-", ".") ?? "0");
+    const numB = parseFloat(b.match(/g(\d+(?:-\d+)?)\.webp$/)?.[1].replace("-", ".") ?? "0");
     return numA - numB;
   })
   .map((key) => photoModules[key]);

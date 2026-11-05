@@ -7,7 +7,7 @@ import {
   SITE_NAME,
   WEBSITE_ID,
 } from "../seo";
-import defaultArticleImage from "@/assets/hero.png";
+import defaultArticleImage from "@/assets/hero.webp";
 
 import { truncate } from "./format";
 import { GOOGLE_IMAGE_SIZES, googleImage, isCloudinary, ogImage } from "./images";

@@ -16,32 +16,32 @@ import { InstagramFeed } from "@/components/InstagramFeed";
 import { GoogleReviews } from "@/components/GoogleReviews";
 import { InfluencerReels } from "@/components/InfluencerReels";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import heroImage from "@/assets/hero.png";
+import heroImage from "@/assets/hero.webp";
 import { jsonLd, pageSeo, restaurantsJsonLd } from "@/lib/seo";
-import logoImage from "@/assets/logo2.png";
-import logo2Image from "@/assets/logo2.png";
+import logoImage from "@/assets/logo2.webp";
+import logo2Image from "@/assets/logo2.webp";
 import menuChicken from "@/assets/menu-chicken.jpg";
 import menuBeef from "@/assets/menu-beef.jpg";
 
-import special1 from "@/assets/special1.png";
-import special2 from "@/assets/special2.png";
-import special3 from "@/assets/special3.png";
-const photoModules = import.meta.glob("../assets/photos/*.JPG", {
+import special1 from "@/assets/special1.webp";
+import special2 from "@/assets/special2.webp";
+import special3 from "@/assets/special3.webp";
+const photoModules = import.meta.glob("../assets/photos/*.webp", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
 
 const PHOTOS = Object.keys(photoModules)
   .sort((a, b) => {
-    const numA = parseFloat(a.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
-    const numB = parseFloat(b.match(/g(\d+(?:-\d+)?)\.JPG$/)?.[1].replace("-", ".") ?? "0");
+    const numA = parseFloat(a.match(/g(\d+(?:-\d+)?)\.webp$/)?.[1].replace("-", ".") ?? "0");
+    const numB = parseFloat(b.match(/g(\d+(?:-\d+)?)\.webp$/)?.[1].replace("-", ".") ?? "0");
     return numA - numB;
   })
   .map((k) => photoModules[k]);
-import fireIcon from "@/assets/fire.png";
-import burgerIcon from "@/assets/burger.png";
-import starIcon from "@/assets/star.png";
-import halalIcon from "@/assets/halal-certified-icon.png";
+import fireIcon from "@/assets/fire.webp";
+import burgerIcon from "@/assets/burger.webp";
+import starIcon from "@/assets/star.webp";
+import halalIcon from "@/assets/halal-certified-icon.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({

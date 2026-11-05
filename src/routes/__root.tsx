@@ -13,7 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import donJoseFont from "../assets/fonts/DonJose_Black.otf?url";
 import latoFont from "../assets/fonts/Lato-Black.ttf?url";
-import defaultShareImage from "../assets/hero.png";
+import defaultShareImage from "../assets/hero.webp";
 import { absoluteUrl, jsonLd, organizationJsonLd } from "../lib/seo";
 import { ROBOTS_INDEX } from "../lib/blog/seo";
 import { themeBootScript } from "../lib/blog/theme";

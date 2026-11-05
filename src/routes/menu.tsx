@@ -28,13 +28,13 @@ function TikTokIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-import logoImage from "@/assets/logo2.png";
-import menuBg from "@/assets/menu.png";
-import snackPackImg from "@/assets/snack-pack.png";
-import chickenShawarmaImg from "@/assets/photos/g9.JPG";
-import hummusPlateImg from "@/assets/photos/g1.JPG";
-import shawarmaPlateImg from "@/assets/photos/g3.JPG";
-import beefShawarmaImg from "@/assets/photos/g8.JPG";
+import logoImage from "@/assets/logo2.webp";
+import menuBg from "@/assets/menu.webp";
+import snackPackImg from "@/assets/snack-pack.webp";
+import chickenShawarmaImg from "@/assets/photos/g9.webp";
+import hummusPlateImg from "@/assets/photos/g1.webp";
+import shawarmaPlateImg from "@/assets/photos/g3.webp";
+import beefShawarmaImg from "@/assets/photos/g8.webp";
 import menuData from "@/assets/menu.json";
 import { pageSeo } from "@/lib/seo";
 

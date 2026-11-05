@@ -3,7 +3,7 @@ import { Loader2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
-import logoImage from "@/assets/logo2.png";
+import logoImage from "@/assets/logo2.webp";
 import { ThemeToggle } from "@/components/blog/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

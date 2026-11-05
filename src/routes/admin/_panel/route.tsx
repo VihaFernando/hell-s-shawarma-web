@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { ExternalLink, FileText, FolderTree, Images, LogOut, Users } from "lucide-react";
 
-import logoImage from "@/assets/logo2.png";
+import logoImage from "@/assets/logo2.webp";
 import { DeployStatus } from "@/components/admin/DeployStatus";
 import { ThemeToggle } from "@/components/blog/ThemeToggle";
 import { can } from "@/lib/blog/permissions";
